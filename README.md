@@ -41,14 +41,17 @@ Résultats :
 
 1. Copier `models/_template.py` en `models/mon_modele.py`.
 2. Définir la palette `COLORS` et la fonction `build(pal)` avec les primitives de
-   `lib/roblox.py` : `box`, `cylinder`, `cone`, `ico`, `cut_below`, `jitter`…
+   `lib/roblox.py` :
+   - formes : `box` (avec `bevel_width`), `cylinder`, `cone`, `ico`, `torus`
+   - formes libres : `loft` (relie des sections), `tube` (suit un chemin, rayon variable), `ring`
+   - retouches : `bevel`, `smooth` (ombrage lisse), `cut_below`, `jitter`
 3. Peindre chaque pièce : `pal.paint(objet, "nom_couleur")`.
 4. `python build.py mon_modele`
 
 Conventions :
 
 - Z vers le haut dans Blender (converti automatiquement en Y pour Roblox).
-- Style low-poly, une seule texture palette par modèle → léger et performant.
+- Style low-poly détaillé (biseaux, rivets, planches…), une seule texture palette par modèle → léger et performant.
 - Limite Roblox : 20 000 triangles par MeshPart (vérifiée au build).
 
 ## Structure

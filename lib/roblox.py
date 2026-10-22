@@ -110,11 +110,97 @@ def _from_bmesh(name, bm, location=(0, 0, 0), rotation=(0, 0, 0)):
     return _link(obj)
 
 
-def box(name, size, location=(0, 0, 0), rotation=(0, 0, 0)):
+def box(name, size, location=(0, 0, 0), rotation=(0, 0, 0), bevel_width=0.0):
     bm = bmesh.new()
     bmesh.ops.create_cube(bm, size=1.0)
     bmesh.ops.scale(bm, vec=size, verts=bm.verts)
+    obj = _from_bmesh(name, bm, location, rotation)
+    if bevel_width:
+        bevel(obj, bevel_width)
+    return obj
+
+
+def loft(name, rings, location=(0, 0, 0), rotation=(0, 0, 0), closed=False, cap=True):
+    """Relie une suite d'anneaux de points (même nombre de points chacun).
+
+    Un anneau d'un seul point fait une pointe. `closed` relie le dernier
+    anneau au premier (tore). `cap` ferme les extrémités.
+    """
+    bm = bmesh.new()
+    vrings = [[bm.verts.new(p) for p in ring] for ring in rings]
+    pairs = list(zip(vrings, vrings[1:]))
+    if closed:
+        pairs.append((vrings[-1], vrings[0]))
+    for a, b in pairs:
+        n = max(len(a), len(b))
+        for i in range(n):
+            j = (i + 1) % n
+            if len(a) == 1:
+                bm.faces.new((a[0], b[i], b[j]))
+            elif len(b) == 1:
+                bm.faces.new((a[i], a[j], b[0]))
+            else:
+                bm.faces.new((a[i], a[j], b[j], b[i]))
+    if cap and not closed:
+        for ring in (vrings[0], vrings[-1]):
+            if len(ring) >= 3:
+                bm.faces.new(ring)
     return _from_bmesh(name, bm, location, rotation)
+
+
+def ring(radius, z=0.0, segments=8, center=(0, 0), noise=0.0, seed=0, scale=(1, 1)):
+    """Anneau horizontal de points (pour `loft`)."""
+    import random
+    rnd = random.Random(seed)
+    pts = []
+    for i in range(segments):
+        a = 2 * math.pi * i / segments
+        rr = radius * (1 + rnd.uniform(-noise, noise))
+        pts.append((center[0] + math.cos(a) * rr * scale[0],
+                    center[1] + math.sin(a) * rr * scale[1], z))
+    return pts
+
+
+def tube(name, points, radius, segments=8, closed=False, cap=True):
+    """Tube qui suit un chemin de points. `radius` : nombre ou liste par point
+    (0 = pointe)."""
+    from mathutils import Vector
+    pts = [Vector(p) for p in points]
+    radii = radius if isinstance(radius, (list, tuple)) else [radius] * len(pts)
+    rings, normal = [], None
+    for i, p in enumerate(pts):
+        if closed:
+            t = pts[(i + 1) % len(pts)] - pts[i - 1]
+        else:
+            t = pts[min(i + 1, len(pts) - 1)] - pts[max(i - 1, 0)]
+        t.normalize()
+        if normal is None:
+            ref = Vector((0, 0, 1)) if abs(t.z) < 0.9 else Vector((1, 0, 0))
+            normal = t.cross(ref).normalized()
+        else:
+            normal = (normal - t * normal.dot(t)).normalized()
+        binormal = t.cross(normal)
+        if radii[i] <= 0:
+            rings.append([tuple(p)])
+            continue
+        rings.append([tuple(p + (normal * math.cos(a) + binormal * math.sin(a)) * radii[i])
+                      for a in (2 * math.pi * k / segments for k in range(segments))])
+    return loft(name, rings, closed=closed, cap=cap)
+
+
+def torus(name, major, minor, segments=16, minor_segments=6, arc=2 * math.pi,
+          location=(0, 0, 0), rotation=(0, 0, 0)):
+    """Tore (anneau) dans le plan XY. `arc` < 2π donne un arc ouvert."""
+    full = abs(arc - 2 * math.pi) < 1e-6
+    n = segments if full else segments + 1
+    path = [(math.cos(arc * i / segments) * major, math.sin(arc * i / segments) * major, 0)
+            for i in range(n)]
+    obj = tube(name, path, minor, minor_segments, closed=full)
+    obj.location = location
+    if any(rotation):
+        from mathutils import Euler
+        obj.data.transform(Euler(rotation).to_matrix().to_4x4())
+    return obj
 
 
 def cylinder(name, radius, depth, segments=8, location=(0, 0, 0),
@@ -131,10 +217,35 @@ def cone(name, radius, depth, segments=8, location=(0, 0, 0), rotation=(0, 0, 0)
     return cylinder(name, radius, depth, segments, location, rotation, radius_top=0)
 
 
-def ico(name, radius, subdivisions=1, location=(0, 0, 0)):
+def ico(name, radius, subdivisions=1, location=(0, 0, 0), scale=(1, 1, 1)):
     bm = bmesh.new()
     bmesh.ops.create_icosphere(bm, subdivisions=subdivisions, radius=radius)
+    bmesh.ops.scale(bm, vec=scale, verts=bm.verts)
     return _from_bmesh(name, bm, location)
+
+
+def bevel(obj, width, segments=1):
+    """Biseaute toutes les arêtes (adoucit les angles des boîtes)."""
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    bmesh.ops.bevel(bm, geom=bm.edges[:] + bm.verts[:], offset=width,
+                    offset_type="OFFSET", segments=segments, profile=0.5,
+                    affect="EDGES", clamp_overlap=True)
+    bm.to_mesh(obj.data)
+    bm.free()
+
+
+def smooth(obj, angle=40):
+    """Ombrage lisse, en gardant nettes les arêtes plus vives que `angle`°."""
+    limit = math.radians(angle)
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    for f in bm.faces:
+        f.smooth = True
+    for e in bm.edges:
+        e.smooth = e.is_manifold and e.calc_face_angle(0) <= limit
+    bm.to_mesh(obj.data)
+    bm.free()
 
 
 def cut_below(obj, z=0.0):
@@ -240,7 +351,7 @@ def export_obj(obj, path):
     )
 
 
-def render_preview(obj, path, resolution=512):
+def render_preview(obj, path, resolution=768):
     """Rend un aperçu PNG (Cycles CPU, fonctionne sans GPU)."""
     scene = bpy.context.scene
     dims = obj.dimensions
@@ -272,7 +383,7 @@ def render_preview(obj, path, resolution=512):
 
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
-    scene.cycles.samples = 32
+    scene.cycles.samples = 64
     scene.render.resolution_x = scene.render.resolution_y = resolution
     scene.render.film_transparent = True
     scene.render.image_settings.file_format = "PNG"
