@@ -56,15 +56,15 @@ Conventions :
 
 ## Créatures animables (squelettes mythiques)
 
-| T-Rex infernal | Pose de test (rig) |
+| T-Rex démoniaque | Pose de test (rig) |
 |---|---|
 | ![trex](previews/skeleton_trex.png) | ![trex pose](previews/skeleton_trex_pose.png) |
 
-Les créatures sont modélisées **en voxels** (`lib/voxel.py`, style MagicaVoxel) : on remplit
-une grille avec des formes (`ellipsoid`, `capsule`, `path`, `loft_y`, `box`), on creuse avec
-`carve`, on ajoute des fissures de lave avec `veins`. Chaque voxel porte une couleur (3 nuances
-automatiques pour le grain) et un **os** du rig. Le maillage ne garde que les faces visibles
-et fusionne les faces voisines → peu de triangles.
+Les créatures sont **sculptées avec des metaballs** (`lib/sculpt.py`) : on empile boules,
+capsules et ellipsoïdes qui fusionnent en un corps massif et continu. Chaque volume est lié à
+un os ; chaque sommet reçoit les poids des 2 os les plus proches (skinning doux), donc la peau
+se plie proprement aux articulations. Les plaques, cornes, griffes et dents sont des pièces à
+part pour garder des contours nets.
 
 Un modèle de créature renvoie un `Rig` depuis `build(pal)` (voir `models/skeleton_trex.py`,
 `lib/creature.py`).

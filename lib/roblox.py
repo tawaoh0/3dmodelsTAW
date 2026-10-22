@@ -397,15 +397,15 @@ def render_preview(obj, path, resolution=1024, dark=False, view=(0.8, -1.0, 0.6)
 
     world = bpy.data.worlds.new("World")
     world.use_nodes = True
-    bg = (0.02, 0.015, 0.02, 1) if dark else (0.6, 0.7, 0.85, 1)
+    bg = (0.16, 0.16, 0.2, 1) if dark else (0.6, 0.7, 0.85, 1)
     world.node_tree.nodes["Background"].inputs["Color"].default_value = bg
     world.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.8
     scene.world = world
     if dark:
-        sun_data.energy = 2.5
+        sun_data.energy = 3.5
         # Lumière d'appoint pour lire les formes sur fond sombre
         fill_data = bpy.data.lights.new("Fill", "SUN")
-        fill_data.energy = 1.5
+        fill_data.energy = 2.0
         fill = bpy.data.objects.new("Fill", fill_data)
         fill.rotation_euler = (math.radians(60), 0, math.radians(200))
         _link(fill)

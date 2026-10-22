@@ -124,6 +124,8 @@ def finalize(rig, name):
     """Fusionne les pièces (corps / lumineux), crée l'armature et la lie aux meshes."""
     meshes = [o for o in bpy.context.scene.objects if o.type == "MESH"]
     for o in meshes:
+        if o.vertex_groups:
+            continue   # poids déjà calculés (lib.sculpt)
         assert "bone" in o, f"pièce sans os : {o.name} (utiliser rig.add)"
         vg = o.vertex_groups.new(name=o["bone"])
         vg.add(range(len(o.data.vertices)), 1.0, "REPLACE")
