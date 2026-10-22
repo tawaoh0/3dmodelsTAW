@@ -54,7 +54,7 @@ def build(name, preview):
 
 
 # Vue de 3/4 plus de profil : les créatures sont souvent longues
-CREATURE_VIEW = (1.0, -0.55, 0.4)
+CREATURE_VIEW = (1.0, -0.4, 0.3)
 
 
 def build_creature(name, module, pal, rig, preview):

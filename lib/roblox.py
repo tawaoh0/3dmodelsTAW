@@ -364,7 +364,7 @@ def export_obj(obj, path):
     )
 
 
-def render_preview(obj, path, resolution=768, dark=False, view=(0.8, -1.0, 0.6)):
+def render_preview(obj, path, resolution=1024, dark=False, view=(0.8, -1.0, 0.6)):
     """Rend un aperçu PNG (Cycles CPU, fonctionne sans GPU).
 
     `dark=True` : fond sombre opaque, pour faire ressortir les parties lumineuses.

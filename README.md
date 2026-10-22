@@ -60,8 +60,14 @@ Conventions :
 |---|---|
 | ![trex](previews/skeleton_trex.png) | ![trex pose](previews/skeleton_trex_pose.png) |
 
-Un modèle de créature renvoie un `Rig` depuis `build(pal)` (voir `models/skeleton_trex.py`
-et `lib/creature.py`). Chaque pièce est attachée à un os avec `rig.add(obj, os, couleur)`.
+Les créatures sont modélisées **en voxels** (`lib/voxel.py`, style MagicaVoxel) : on remplit
+une grille avec des formes (`ellipsoid`, `capsule`, `path`, `loft_y`, `box`), on creuse avec
+`carve`, on ajoute des fissures de lave avec `veins`. Chaque voxel porte une couleur (3 nuances
+automatiques pour le grain) et un **os** du rig. Le maillage ne garde que les faces visibles
+et fusionne les faces voisines → peu de triangles.
+
+Un modèle de créature renvoie un `Rig` depuis `build(pal)` (voir `models/skeleton_trex.py`,
+`lib/creature.py`).
 
 Le build produit dans `exports/<creature>/` :
 

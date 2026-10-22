@@ -13,7 +13,7 @@ local TweenService = game:GetService("TweenService")
 
 local model = script.Parent
 
-local GLOW = Color3.fromRGB(255, 42, 16)
+local GLOW = Color3.fromRGB(255, 48, 16)
 local GLOW_HOT = Color3.fromRGB(255, 176, 48)
 
 -- Réglages des particules selon le nom de l'os FX_ (le premier motif trouvé gagne)
