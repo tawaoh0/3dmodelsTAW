@@ -225,3 +225,73 @@ def rotate_obj(obj, axis, angle, pivot):
     m = Matrix.Translation(pivot) @ Matrix.Rotation(angle, 4, axis) @ Matrix.Translation(-pivot)
     obj.data.transform(m)
     return obj
+
+
+# ---------------------------------------------------------------- ailes
+
+
+def membrane(name, outline, thickness=0.05):
+    """Membrane d'aile (2 faces, visible des deux côtés dans Roblox).
+
+    `outline` : [(position, {os: poids})] ; triangulée en éventail depuis le
+    1er point. Les poids sont posés directement (pas de `rig.add` d'os unique) :
+    la membrane s'étire entre les doigts quand l'aile bouge.
+    """
+    import bmesh
+    pts = [Vector(p) for p, _ in outline]
+    normal = Vector()
+    for i, p in enumerate(pts):            # normale de Newell
+        q = pts[(i + 1) % len(pts)]
+        normal += Vector(((p.y - q.y) * (p.z + q.z), (p.z - q.z) * (p.x + q.x),
+                          (p.x - q.x) * (p.y + q.y)))
+    normal.normalize()
+    bm = bmesh.new()
+    front = [bm.verts.new(p + normal * thickness / 2) for p in pts]
+    back = [bm.verts.new(p - normal * thickness / 2) for p in pts]
+    n = len(pts)
+    for i in range(1, n - 1):
+        bm.faces.new((front[0], front[i], front[i + 1]))
+        bm.faces.new((back[0], back[i + 1], back[i]))
+    for i in range(n):
+        j = (i + 1) % n
+        bm.faces.new((front[i], back[i], back[j], front[j]))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    mesh = bpy.data.meshes.new(name)
+    bm.to_mesh(mesh)
+    bm.free()
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.scene.collection.objects.link(obj)
+    groups = {}
+    for i, (_, weights) in enumerate(outline):
+        for bone, w in weights.items():
+            if bone not in groups:
+                groups[bone] = obj.vertex_groups.new(name=bone)
+            groups[bone].add([i, i + n], w, "REPLACE")
+    return obj
+
+
+def tattered_edge(a, b, wa, wb, toward, depth=0.35, notches=4, seed=0):
+    """Points d'un bord de membrane festonné et déchiré entre deux pointes.
+
+    Le bord se creuse vers `toward` (arc) avec des encoches irrégulières.
+    Renvoie [(position, poids)] sans les extrémités.
+    """
+    import random
+    rnd = random.Random(seed)
+    a, b, toward = Vector(a), Vector(b), Vector(toward)
+    out = []
+    steps = notches * 2 + 1
+    for k in range(1, steps):
+        t = k / steps
+        p = a.lerp(b, t)
+        pull = math.sin(t * math.pi) * depth
+        if k % 2 == 0:   # encoche : on creuse davantage
+            pull += rnd.uniform(0.15, 0.4) * depth
+        p = p.lerp(toward, pull / max(1e-6, (toward - p).length) * 1.0)
+        w = {}
+        for bone, val in wa.items():
+            w[bone] = w.get(bone, 0) + val * (1 - t)
+        for bone, val in wb.items():
+            w[bone] = w.get(bone, 0) + val * t
+        out.append((tuple(p), w))
+    return out

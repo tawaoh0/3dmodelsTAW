@@ -59,18 +59,16 @@ CREATURE_VIEW = (1.0, -0.4, 0.3)
 
 def build_creature(name, module, pal, rig, preview):
     """Créature animable : FBX avec armature + script d'effets Roblox."""
-    body, glow, arm = creature.finalize(rig, name)
+    parts, arm = creature.finalize(rig, name)
 
     out_dir = os.path.join(ROOT, "exports", name)
     os.makedirs(out_dir, exist_ok=True)
     pal.save(os.path.join(out_dir, f"{name}_palette.png"))
-    creature.export_fbx([arm, body, glow], os.path.join(out_dir, f"{name}.fbx"))
+    creature.export_fbx([arm] + parts, os.path.join(out_dir, f"{name}.fbx"))
     creature.write_effects_script(name, module.COLORS,
                                   os.path.join(out_dir, f"{name}_effects.server.lua"))
 
-    for part in (body, glow):
-        if part is None:
-            continue
+    for part in parts:
         info = roblox.stats(part)
         status = "OK" if info["triangles"] <= roblox.MAX_TRIANGLES else "TROP DE TRIANGLES"
         print(f"[{part.name}] {info['triangles']} triangles, "
@@ -79,13 +77,13 @@ def build_creature(name, module, pal, rig, preview):
 
     if preview:
         os.makedirs(os.path.join(ROOT, "previews"), exist_ok=True)
-        roblox.render_preview(body, os.path.join(ROOT, "previews", f"{name}.png"),
-                              dark=True, view=CREATURE_VIEW)
+        roblox.render_preview(parts, os.path.join(ROOT, "previews", f"{name}.png"),
+                              dark=True, view=getattr(module, "VIEW", CREATURE_VIEW))
         # Pose de test : vérifie que chaque pièce suit bien son os
         if getattr(module, "TEST_POSE", None):
             creature.pose(arm, module.TEST_POSE)
-            roblox.render_preview(body, os.path.join(ROOT, "previews", f"{name}_pose.png"),
-                                  dark=True, view=CREATURE_VIEW)
+            roblox.render_preview(parts, os.path.join(ROOT, "previews", f"{name}_pose.png"),
+                                  dark=True, view=getattr(module, "VIEW", CREATURE_VIEW))
 
 
 def main():

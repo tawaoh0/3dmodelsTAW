@@ -60,6 +60,10 @@ Conventions :
 |---|---|
 | ![trex](previews/skeleton_trex.png) | ![trex pose](previews/skeleton_trex_pose.png) |
 
+| Dragon squelette ailé | Pose de test (rig) |
+|---|---|
+| ![dragon](previews/skeleton_dragon.png) | ![dragon pose](previews/skeleton_dragon_pose.png) |
+
 Les créatures sont des **squelettes démoniaques** construits os par os avec `lib/anatomy.py` :
 crâne en sections avec de vraies ouvertures (booléens), os longs à condyles, vertèbres à épines
 en lame, côtes, os plats, griffes et cornes annelées, cristaux. Chaque pièce est rigide et
@@ -70,8 +74,10 @@ Un modèle de créature renvoie un `Rig` depuis `build(pal)` (voir `models/skele
 
 Le build produit dans `exports/<creature>/` :
 
-- `<creature>.fbx` : armature (os `Root` à la racine) + 2 meshes skinnés :
-  `<creature>` (os, cornes, griffes) et `<creature>_Glow` (yeux, runes, cristaux).
+- `<creature>.fbx` : armature (os `Root` à la racine) + meshes skinnés :
+  `<creature>` (corps), éventuellement des pièces en plus (`<creature>_Head`,
+  `<creature>_Wings`… pour rester sous 20 000 triangles par MeshPart), et
+  `<creature>_Glow` (yeux, runes, cristaux).
 - `<creature>_effects.server.lua` : script d'effets avec la couleur de la créature.
 - `previews/<creature>_pose.png` : rendu dans une pose de test, pour vérifier que
   chaque pièce suit bien son os.

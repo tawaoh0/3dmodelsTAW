@@ -35,11 +35,18 @@ class Rig:
         loc = Vector(location)
         return self.bone(f"FX_{name}", loc, loc + Vector((0, 0, 0.3)), parent)
 
-    def add(self, obj, bone, color, glow=False):
-        """Peint `obj` et le rattache à l'os `bone`."""
+    def add(self, obj, bone, color, glow=False, part=None):
+        """Peint `obj` et le rattache à l'os `bone`.
+
+        `part` : nom de la pièce Roblox (MeshPart) qui la contiendra, pour
+        répartir une grosse créature sur plusieurs meshes (≤ 20 000 triangles
+        chacun). Par défaut : le corps.
+        """
         assert bone in self.bones, f"os inconnu : {bone}"
         self.pal.paint(obj, color, glow=glow)
         obj["bone"] = bone
+        if part:
+            obj["part"] = part
         return obj
 
 
@@ -121,7 +128,8 @@ def rib(name, top, half_width, depth, side, forward=Vector((0, -1, 0)), radius=0
 # ---------------------------------------------------------------- finalisation
 
 def finalize(rig, name):
-    """Fusionne les pièces (corps / lumineux), crée l'armature et la lie aux meshes."""
+    """Fusionne les pièces par mesh (corps, pièces `part`, lumineux), crée
+    l'armature et la lie aux meshes. Renvoie ([meshes], armature)."""
     meshes = [o for o in bpy.context.scene.objects if o.type == "MESH"]
     for o in meshes:
         if o.vertex_groups:
@@ -130,10 +138,14 @@ def finalize(rig, name):
         vg = o.vertex_groups.new(name=o["bone"])
         vg.add(range(len(o.data.vertices)), 1.0, "REPLACE")
 
-    body_parts = [o for o in meshes if not o.get("glow")]
-    glow_parts = [o for o in meshes if o.get("glow")]
-    body = r.join(body_parts, name)
-    glow = r.join(glow_parts, f"{name}_Glow") if glow_parts else None
+    groups = {}
+    for o in meshes:
+        key = f"{name}_Glow" if o.get("glow") else (
+            f"{name}_{o['part']}" if o.get("part") else name)
+        groups.setdefault(key, []).append(o)
+    # Le corps en premier, le mesh lumineux en dernier
+    keys = sorted(groups, key=lambda k: (k != name, k.endswith("_Glow"), k))
+    parts = [r.join(groups[k], k) for k in keys]
 
     arm_data = bpy.data.armatures.new(f"{name}_Rig")
     arm = bpy.data.objects.new(f"{name}_Rig", arm_data)
@@ -149,13 +161,11 @@ def finalize(rig, name):
             eb.parent = arm_data.edit_bones[parent]
     bpy.ops.object.mode_set(mode="OBJECT")
 
-    for mesh in (body, glow):
-        if mesh is None:
-            continue
+    for mesh in parts:
         mesh.parent = arm
         mod = mesh.modifiers.new("Armature", "ARMATURE")
         mod.object = arm
-    return body, glow, arm
+    return parts, arm
 
 
 def pose(arm, rotations):

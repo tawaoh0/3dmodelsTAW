@@ -369,11 +369,24 @@ def render_preview(obj, path, resolution=1024, dark=False, view=(0.8, -1.0, 0.6)
 
     `dark=True` : fond sombre opaque, pour faire ressortir les parties lumineuses.
     `view` : direction (depuis le modèle) d'où regarde la caméra.
+    `obj` : un objet ou une liste d'objets à cadrer ensemble.
     """
     from mathutils import Vector
     scene = bpy.context.scene
-    corners = [obj.matrix_world @ Vector(c) for c in obj.bound_box]
-    center = sum(corners, Vector()) / 8
+    objs = obj if isinstance(obj, (list, tuple)) else [obj]
+    # Sommets réels (après déformation par l'armature) pour un cadrage serré
+    dg = bpy.context.evaluated_depsgraph_get()
+    corners = []
+    for o in objs:
+        ev = o.evaluated_get(dg)
+        mesh = ev.to_mesh()
+        step = max(1, len(mesh.vertices) // 4000)
+        corners += [o.matrix_world @ mesh.vertices[i].co
+                    for i in range(0, len(mesh.vertices), step)]
+        ev.to_mesh_clear()
+    lo = Vector([min(p[i] for p in corners) for i in range(3)])
+    hi = Vector([max(p[i] for p in corners) for i in range(3)])
+    center = (lo + hi) / 2
 
     cam_data = bpy.data.cameras.new("PreviewCam")
     cam = bpy.data.objects.new("PreviewCam", cam_data)
@@ -384,7 +397,7 @@ def render_preview(obj, path, resolution=1024, dark=False, view=(0.8, -1.0, 0.6)
     right, up = rot @ Vector((1, 0, 0)), rot @ Vector((0, 1, 0))
     tan = math.tan(cam_data.angle / 2)
     dist = max(max(abs((c - center).dot(right)), abs((c - center).dot(up))) / tan
-               + (c - center).dot(d) for c in corners) * 1.08
+               + (c - center).dot(d) for c in corners) * 1.04
     cam.location = center + d * dist
     cam.rotation_euler = rot.to_euler()
     scene.camera = cam
