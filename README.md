@@ -54,11 +54,39 @@ Conventions :
 - Style low-poly détaillé (biseaux, rivets, planches…), une seule texture palette par modèle → léger et performant.
 - Limite Roblox : 20 000 triangles par MeshPart (vérifiée au build).
 
+## Créatures animables (squelettes mythiques)
+
+| T-Rex infernal | Pose de test (rig) |
+|---|---|
+| ![trex](previews/skeleton_trex.png) | ![trex pose](previews/skeleton_trex_pose.png) |
+
+Un modèle de créature renvoie un `Rig` depuis `build(pal)` (voir `models/skeleton_trex.py`
+et `lib/creature.py`). Chaque pièce est attachée à un os avec `rig.add(obj, os, couleur)`.
+
+Le build produit dans `exports/<creature>/` :
+
+- `<creature>.fbx` : armature (os `Root` à la racine) + 2 meshes skinnés :
+  `<creature>` (os, cornes, griffes) et `<creature>_Glow` (yeux, runes, cristaux).
+- `<creature>_effects.server.lua` : script d'effets avec la couleur de la créature.
+- `previews/<creature>_pose.png` : rendu dans une pose de test, pour vérifier que
+  chaque pièce suit bien son os.
+
+### Dans Roblox Studio
+
+1. **Import 3D** du `.fbx`, **File Dimensions : Studs**, rig type *Custom* : Studio
+   crée un Model avec les MeshParts, les `Bone` et un `AnimationController`.
+2. Glisser `<creature>_effects.server.lua` comme **Script** dans ce Model :
+   les pièces `_Glow` passent en Neon avec une lumière qui pulse, et des flammes et
+   braises apparaissent sur chaque os `FX_*` (yeux, cœur, bout de queue…).
+3. Animer avec l'**Animation Editor** (marche, morsure, rugissement…).
+
 ## Structure
 
 ```
 build.py           # point d'entrée : génère, exporte, rend les aperçus
 lib/roblox.py      # primitives, palette, export FBX/OBJ, rendu
+lib/creature.py    # rig, os, export animable, script d'effets
+lib/CreatureEffects.server.lua  # modèle du script d'effets Roblox
 models/*.py        # un fichier par modèle
 exports/           # fichiers prêts pour Roblox
 previews/          # aperçus PNG

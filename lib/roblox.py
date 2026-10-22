@@ -49,14 +49,15 @@ class Palette:
         img.pixels = pixels
         self.image = img
         self.material = self._make_material()
+        self.glow_material = self._make_material(glow=True)
 
     def uv(self, name):
         i = self.names.index(name)
         cx, cy = i % self.cols, i // self.cols
         return ((cx + 0.5) / self.cols, (cy + 0.5) / self.rows)
 
-    def _make_material(self):
-        mat = bpy.data.materials.new("PaletteMat")
+    def _make_material(self, glow=False):
+        mat = bpy.data.materials.new("GlowMat" if glow else "PaletteMat")
         mat.use_nodes = True
         nt = mat.node_tree
         bsdf = nt.nodes.get("Principled BSDF")
@@ -65,10 +66,18 @@ class Palette:
         tex.interpolation = "Closest"
         nt.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
         bsdf.inputs["Roughness"].default_value = 0.8
+        if glow:
+            # Émissif dans les aperçus ; dans Roblox → matériau Neon (script d'effets)
+            nt.links.new(tex.outputs["Color"], bsdf.inputs["Emission Color"])
+            bsdf.inputs["Emission Strength"].default_value = 6.0
         return mat
 
-    def paint(self, obj, name):
-        """Assigne la couleur `name` à toutes les faces de `obj`."""
+    def paint(self, obj, name, glow=False):
+        """Assigne la couleur `name` à toutes les faces de `obj`.
+
+        `glow=True` : pièce lumineuse (yeux, runes…), exportée dans un mesh à part.
+        """
+        obj["glow"] = glow
         u, v = self.uv(name)
         mesh = obj.data
         if not mesh.uv_layers:
@@ -76,7 +85,7 @@ class Palette:
         for loop in mesh.uv_layers.active.data:
             loop.uv = (u, v)
         mesh.materials.clear()
-        mesh.materials.append(self.material)
+        mesh.materials.append(self.glow_material if glow else self.material)
 
     def save(self, path):
         self.image.filepath_raw = path
@@ -281,7 +290,11 @@ def flat_shade(obj):
 
 def join_all(name):
     """Fusionne tous les meshes de la scène en un seul objet `name`."""
-    objs = [o for o in bpy.context.scene.objects if o.type == "MESH"]
+    return join([o for o in bpy.context.scene.objects if o.type == "MESH"], name)
+
+
+def join(objs, name):
+    """Fusionne les objets `objs` en un seul objet `name`."""
     bpy.ops.object.select_all(action="DESELECT")
     for o in objs:
         o.select_set(True)
@@ -351,22 +364,29 @@ def export_obj(obj, path):
     )
 
 
-def render_preview(obj, path, resolution=768):
-    """Rend un aperçu PNG (Cycles CPU, fonctionne sans GPU)."""
+def render_preview(obj, path, resolution=768, dark=False, view=(0.8, -1.0, 0.6)):
+    """Rend un aperçu PNG (Cycles CPU, fonctionne sans GPU).
+
+    `dark=True` : fond sombre opaque, pour faire ressortir les parties lumineuses.
+    `view` : direction (depuis le modèle) d'où regarde la caméra.
+    """
+    from mathutils import Vector
     scene = bpy.context.scene
-    dims = obj.dimensions
-    radius = (dims.length / 2) or 1.0
-    center = (0, 0, dims.z / 2)
+    corners = [obj.matrix_world @ Vector(c) for c in obj.bound_box]
+    center = sum(corners, Vector()) / 8
 
     cam_data = bpy.data.cameras.new("PreviewCam")
     cam = bpy.data.objects.new("PreviewCam", cam_data)
     _link(cam)
-    # Distance pour que la sphère englobante tienne dans le champ de vision
-    from mathutils import Vector
-    dist = radius / math.sin(cam_data.angle / 2) * 1.05
-    offset = Vector((0.8, -1.0, 0.6)).normalized() * dist
-    cam.location = Vector(center) + offset
-    cam.rotation_euler = (-offset).to_track_quat("-Z", "Y").to_euler()
+    # Distance minimale pour que les 8 coins de la boîte englobante soient dans le cadre
+    d = Vector(view).normalized()
+    rot = (-d).to_track_quat("-Z", "Y")
+    right, up = rot @ Vector((1, 0, 0)), rot @ Vector((0, 1, 0))
+    tan = math.tan(cam_data.angle / 2)
+    dist = max(max(abs((c - center).dot(right)), abs((c - center).dot(up))) / tan
+               + (c - center).dot(d) for c in corners) * 1.08
+    cam.location = center + d * dist
+    cam.rotation_euler = rot.to_euler()
     scene.camera = cam
 
     sun_data = bpy.data.lights.new("Sun", "SUN")
@@ -377,18 +397,29 @@ def render_preview(obj, path, resolution=768):
 
     world = bpy.data.worlds.new("World")
     world.use_nodes = True
-    world.node_tree.nodes["Background"].inputs["Color"].default_value = (0.6, 0.7, 0.85, 1)
+    bg = (0.02, 0.015, 0.02, 1) if dark else (0.6, 0.7, 0.85, 1)
+    world.node_tree.nodes["Background"].inputs["Color"].default_value = bg
     world.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.8
     scene.world = world
+    if dark:
+        sun_data.energy = 2.5
+        # Lumière d'appoint pour lire les formes sur fond sombre
+        fill_data = bpy.data.lights.new("Fill", "SUN")
+        fill_data.energy = 1.5
+        fill = bpy.data.objects.new("Fill", fill_data)
+        fill.rotation_euler = (math.radians(60), 0, math.radians(200))
+        _link(fill)
 
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
     scene.cycles.samples = 64
     scene.render.resolution_x = scene.render.resolution_y = resolution
-    scene.render.film_transparent = True
+    scene.render.film_transparent = not dark
     scene.render.image_settings.file_format = "PNG"
     scene.render.filepath = path
     bpy.ops.render.render(write_still=True)
 
     bpy.data.objects.remove(cam)
     bpy.data.objects.remove(sun)
+    if dark:
+        bpy.data.objects.remove(fill)
