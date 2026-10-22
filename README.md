@@ -56,15 +56,14 @@ Conventions :
 
 ## Créatures animables (squelettes mythiques)
 
-| T-Rex démoniaque | Pose de test (rig) |
+| T-Rex squelette démoniaque | Pose de test (rig) |
 |---|---|
 | ![trex](previews/skeleton_trex.png) | ![trex pose](previews/skeleton_trex_pose.png) |
 
-Les créatures sont **sculptées avec des metaballs** (`lib/sculpt.py`) : on empile boules,
-capsules et ellipsoïdes qui fusionnent en un corps massif et continu. Chaque volume est lié à
-un os ; chaque sommet reçoit les poids des 2 os les plus proches (skinning doux), donc la peau
-se plie proprement aux articulations. Les plaques, cornes, griffes et dents sont des pièces à
-part pour garder des contours nets.
+Les créatures sont des **squelettes démoniaques** construits os par os avec `lib/anatomy.py` :
+crâne en sections avec de vraies ouvertures (booléens), os longs à condyles, vertèbres à épines
+en lame, côtes, os plats, griffes et cornes annelées, cristaux. Chaque pièce est rigide et
+rattachée à un os du rig.
 
 Un modèle de créature renvoie un `Rig` depuis `build(pal)` (voir `models/skeleton_trex.py`,
 `lib/creature.py`).
