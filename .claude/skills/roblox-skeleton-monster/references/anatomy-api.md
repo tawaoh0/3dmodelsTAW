@@ -60,6 +60,17 @@ c.Chain(points).at(t) -> (point, tangente)              # t de 0 à 1 le long d'
 un contour de points tous pondérés `{"Head": 1}` donne une plaque nette et fine, bien plus
 élégante qu'un `blade` épais qui fait « couvercle ».
 
+## Pièces détaillées (`lib/marine.py`, importé `as mr`) — posent directement sur le rig
+
+| Fonction | Usage |
+|---|---|
+| `fin(rig, name, root, edge, bone, part, rays=8)` | Nageoire / voile / couronne riche : membrane au bord déchiré, rayons articulés à nœuds, épine d'attaque à piques, radiaux à la racine, pointes lumineuses. `root` = points sur le corps, `edge` = bord libre (de l'avant vers l'arrière). |
+| `spiky_orbit(rig, name, centre, axe, rayon, bone)` | Orbite à double anneau + couronne de piques. |
+| `scutes(rig, name, points, normales, bone)` | Rangée d'écailles osseuses en losange posées sur une surface. |
+| `scar(rig, name, a, b, bone)` | Cicatrice / fissure lumineuse en zigzag. |
+| `hook(rig, name, base, direction, bone)` | Hameçon rouillé + maillons de chaîne. |
+| `along(polyligne, f)` | Point à la fraction f d'une polyligne. |
+
 ## Primitives (`lib/roblox.py`, importé `as r`)
 
 `r.ico(name, rayon, subdivisions, location, scale)`, `r.box(name, taille, location, rotation,
@@ -87,6 +98,10 @@ Chacune a coûté au moins une itération. `check_model.py` détecte celles marq
   avant d'un plan engendré par `X` (largeur) et `U` (hauteur) vaut `X.cross(U)`, pas
   `U.cross(X)`. Vérifier sur le gros plan de face : si on voit les détails à travers les
   trous, ils sont derrière.
+- **Points lumineux « ligne latérale » qui flottent** (auto) : les poser au bout des
+  apophyses transverses (`p + side·size·1.0 + up·size·0.5`), seulement là où elles existent.
+- **Cou trop fin sous une grosse tête** : le profil de taille d'un serpent doit rester épais
+  jusqu'au cou (ne pas le faire retomber à zéro au bout avant de la colonne).
 - **Tête qui regarde le ciel** au bout d'un cou qui monte : ne pas orienter la tête selon la
   tangente du cou ; mélanger avec l'horizontale, ex. `f = (tangente * 0.25 + (0, -1, -0.15))`.
 - **Côtes de serpent qui ressemblent à des pattes** : les enrouler autour du corps (4 points,

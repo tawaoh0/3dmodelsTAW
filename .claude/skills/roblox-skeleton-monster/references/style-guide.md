@@ -28,6 +28,7 @@ corrige un rendu qui a été refusé.
 | Crâne du dragon = crâne du T-Rex | « la tête est trop la même » | Un crâne conçu pour chaque créature |
 | Crâne en coin droit et pointu | « manque de grand relief / de parties, toute droite et pointue » | Profil ondulé + grosses pièces en relief (voir ci-dessous) |
 | T-Rex, dragon, raptor tous ivoire + cornes noires annelées balayées + cœur cristal | « ils se ressemblent trop tous entre eux » | Une identité complète par créature (section suivante) |
+| Mégalodon et Léviathan v1 : têtes lisses, nageoires plates à 4 rayons, crête en bande continue | « pas assez détaillé, je ne veux pas voir le gros trait rouge tout le long » | `lib/marine.py` : nageoires riches (`fin`), orbites hérissées, écailles, cicatrices ; **jamais de longue bande de membrane d'une seule couleur** sur le corps, des éléments espacés à la place |
 | Museaux qui finissent sur une face plate ; crânes « reptile standard » | « les visages sont encore trop génériques, le nez se coupe net » | Bout de museau arrondi (`loft_profile` le fait par défaut) + crâne inspiré d'un **vrai animal** lié au thème |
 | Hydre avec 3 crânes différents (royal, serpent, brute) | « je veux que les 3 têtes soient les mêmes, travaille-les plus » | Différencier les **créatures** entre elles, pas les têtes d'une même créature ; une seule tête très détaillée, répétée |
 
@@ -104,6 +105,12 @@ d'environ 1 stud² sans détail. Pour chaque grande surface, combiner au moins 3
 | Bosses et rugosités | bosses sus-orbitaires, bosses de pommettes, nodules sur le museau | `r.ico(subdivisions=1)` aplatis |
 | Éléments du milieu de vie | balanes, coraux (créatures marines), lianes et mousse (jungle), stalactites (glace), chaînes (gothique) | `barnacle`/`coral` dans `abyss_kraken.py`, `a.oriented` pour poser selon une normale |
 | Ornements « éléments supplémentaires » | bagues d'or sur les cornes, diadème avec gemme sertie, boucles d'oreille, couronne de piques à gemmes, collier hérissé, barbe d'épines | `ring_around`, `spiral_points` / `claw_point` pour poser sur une corne, `crystal` + anneau de sertissage |
+
+Repères chiffrés (ce que l'utilisateur a validé) : tête **≥ 150 pièces** pour une créature
+du pack Abysses (mégalodon 299, léviathan 192), nageoire = **membrane + 8-14 rayons articulés +
+épine d'attaque + radiaux + pointes lumineuses** (`marine.fin`), corps = au moins 3 rangées
+d'éléments répétés le long de la colonne (épines dorsales, ligne latérale lumineuse, plaques
+ventrales, côtes à piques…).
 
 Quand l'utilisateur demande « plus de détails / d'éléments supplémentaires », ajouter une
 couche d'**ornements** en plus des détails osseux : c'est ce qui a fait la différence sur

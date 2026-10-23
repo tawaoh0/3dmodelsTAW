@@ -21,7 +21,7 @@ Le style a été validé par l'utilisateur après plusieurs essais ratés. Lire
 ## 1. Préparer le projet
 
 Le projet doit contenir la boîte à outils (`build.py`, `lib/roblox.py`, `lib/creature.py`,
-`lib/anatomy.py`, `lib/CreatureEffects.server.lua`). Si `lib/anatomy.py` est absent, ou si
+`lib/anatomy.py`, `lib/marine.py`, `lib/CreatureEffects.server.lua`). Si `lib/anatomy.py` est absent, ou si
 `bpy` n'est pas installé :
 
 ```bash
