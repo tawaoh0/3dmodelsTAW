@@ -237,6 +237,28 @@ gelé (thème `wraith`). Pièces : corps, Head, Arms, Legs.
 
 ![wendigo profil](previews/ice_wendigo_head.png) ![wendigo face](previews/ice_wendigo_head_front.png)
 
+| Ours polaire titan squelette | Pose de test (rig) |
+|---|---|
+| ![ours](previews/ice_bear.png) | ![ours pose](previews/ice_bear_pose.png) |
+
+Crâne d'ours large et massif (front plat, museau court et carré, petits yeux, molaires
+broyeuses), tête portée bas sous une bosse de garrot, armure de plaques de glacier, crinière
+de pics de glace, pattes plantigrades à griffes de glace géantes, cœur de nuit polaire
+(thème `polar`). Pièces : corps, Head, Legs.
+
+![ours profil](previews/ice_bear_head.png) ![ours face](previews/ice_bear_head_front.png)
+
+| Dragon de givre squelette (wyverne) | Pose de test (rig) |
+|---|---|
+| ![dragon de givre](previews/ice_dragon.png) | ![dragon de givre pose](previews/ice_dragon_pose.png) |
+
+Crâne de varan à couronne de cornes de cristal, dents recourbées dentelées, buste massif
+(grande cage, énorme bréchet, plastron de cristal), ailes de cristal incrustées d'éclats,
+dressé sur ses pattes arrière, massue de cristaux au bout de la queue (thème `crystal`).
+Pièces : corps, Head, Wings, Tail.
+
+![dragon de givre profil](previews/ice_dragon_head.png) ![dragon de givre face](previews/ice_dragon_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |

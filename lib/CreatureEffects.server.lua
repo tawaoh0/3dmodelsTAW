@@ -103,6 +103,16 @@ local THEMES = {
 		extra = { name = "Frost", texture = SPARKLES, accel = Vector3.new(0, -0.5, 0),
 			speed = NumberRange.new(0.2, 0.6), lifetime = NumberRange.new(1.5, 3), size = 0.1 },
 	},
+	polar = { -- souffle glacé + gros flocons de la nuit polaire
+		main = { texture = SMOKE, accel = Vector3.new(0, -0.5, 0), speed = 0.8, rot = 30, light = 0.6 },
+		extra = { name = "Snowflakes", texture = SPARKLES, accel = Vector3.new(0, -1.5, 0),
+			speed = NumberRange.new(0.3, 0.8), lifetime = NumberRange.new(2, 3.5), size = 0.22 },
+	},
+	crystal = { -- éclats de cristal qui scintillent + paillettes de givre qui tombent
+		main = { texture = SPARKLES, accel = Vector3.new(0, 0.5, 0), speed = 0.6, rot = 200, light = 1.1 },
+		extra = { name = "IceShards", texture = SPARKLES, accel = Vector3.new(0, -6, 0),
+			speed = NumberRange.new(0.5, 1.5), lifetime = NumberRange.new(0.6, 1.2), size = 0.15 },
+	},
 	gold = { -- poussière d'or scintillante
 		main = { texture = SPARKLES, accel = Vector3.new(0, 1, 0), speed = 0.8, rot = 120, light = 1 },
 		extra = { name = "GoldDust", texture = SPARKLES, accel = Vector3.new(0, -1, 0),
