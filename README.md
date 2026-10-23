@@ -183,6 +183,27 @@ os d'obsidienne fendus de veines de lave, cœur de magma, poings hérissés de b
 
 ![golem profil](previews/hell_golem_head.png) ![golem face](previews/hell_golem_head_front.png)
 
+| Salamandre géante squelette | Pose de test (rig) |
+|---|---|
+| ![salamandre](previews/hell_salamander.png) | ![salamandre pose](previews/hell_salamander_pose.png) |
+
+Crâne plat de salamandre géante en cadre ajouré (yeux suspendus dans les fenêtres), gueule en
+U à dents coniques + rangée au palais, branchies de feu, glandes de poison lumineuses, os
+ocre tachetés de noir, crête de flammes espacée jusqu'au bout de la queue (thème `sulfur`).
+Pièces : corps, Head, Tail, Legs.
+
+![salamandre profil](previews/hell_salamander_head.png) ![salamandre face](previews/hell_salamander_head_front.png)
+
+| Démon taureau squelette | Pose de test (rig) |
+|---|---|
+| ![taureau](previews/hell_bull.png) | ![taureau pose](previews/hell_bull_pose.png) |
+
+Crâne d'aurochs (chignon, orbites en manchon, chanfrein ajouré), cornes énormes cerclées
+d'or, anneau d'or dans le nez, défenses, bosse de garrot enflammée, chaînes brisées, sabots
+fendus, queue à touffe de feu (thème `hellfire`). Pièces : corps, Head, Arms, Legs.
+
+![taureau profil](previews/hell_bull_head.png) ![taureau face](previews/hell_bull_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |

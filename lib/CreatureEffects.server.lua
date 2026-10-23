@@ -78,6 +78,16 @@ local THEMES = {
 		extra = { name = "LavaDrips", texture = FIRE, accel = Vector3.new(0, -25, 0),
 			speed = NumberRange.new(0, 0.5), lifetime = NumberRange.new(0.4, 0.8), size = 0.3 },
 	},
+	sulfur = { -- fumée de soufre qui rampe au sol + flammèches qui sautent
+		main = { texture = SMOKE, accel = Vector3.new(0, 0.8, 0), speed = 0.4, rot = 20, light = 0.7 },
+		extra = { name = "Flamelets", texture = FIRE, accel = Vector3.new(0, 4, 0),
+			speed = NumberRange.new(0.5, 1.5), lifetime = NumberRange.new(0.3, 0.6), size = 0.35 },
+	},
+	hellfire = { -- grandes flammes cramoisies + cendres qui retombent
+		main = { texture = FIRE, accel = Vector3.new(0, 7, 0), speed = 1.2, rot = 120, light = 1.1 },
+		extra = { name = "Ash", texture = SMOKE, accel = Vector3.new(0, -1, 0),
+			speed = NumberRange.new(0.3, 1), lifetime = NumberRange.new(1.5, 2.5), size = 0.2 },
+	},
 	gold = { -- poussière d'or scintillante
 		main = { texture = SPARKLES, accel = Vector3.new(0, 1, 0), speed = 0.8, rot = 120, light = 1 },
 		extra = { name = "GoldDust", texture = SPARKLES, accel = Vector3.new(0, -1, 0),
