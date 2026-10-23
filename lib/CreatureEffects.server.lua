@@ -53,6 +53,16 @@ local THEMES = {
 		extra = { name = "Bubbles", texture = SPARKLES, accel = Vector3.new(0, 3, 0),
 			speed = NumberRange.new(0.3, 1), lifetime = NumberRange.new(1, 2), size = 0.12 },
 	},
+	vent = { -- fumée noire des cheminées hydrothermales qui monte vite + braises
+		main = { texture = SMOKE, accel = Vector3.new(0, 6, 0), speed = 1.2, rot = 60, light = 0.7 },
+		extra = { name = "Embers", texture = SPARKLES, accel = Vector3.new(0, 3, 0),
+			speed = NumberRange.new(1, 2.5), lifetime = NumberRange.new(1, 2), size = 0.2 },
+	},
+	lure = { -- points lumineux qui flottent lentement autour de l'appât + plancton
+		main = { texture = SPARKLES, accel = Vector3.new(0, 0.2, 0), speed = 0.15, rot = 20, light = 1 },
+		extra = { name = "Plankton", texture = SPARKLES, accel = Vector3.new(0, -0.3, 0),
+			speed = NumberRange.new(0.1, 0.5), lifetime = NumberRange.new(2, 4), size = 0.08 },
+	},
 	gold = { -- poussière d'or scintillante
 		main = { texture = SPARKLES, accel = Vector3.new(0, 1, 0), speed = 0.8, rot = 120, light = 1 },
 		extra = { name = "GoldDust", texture = SPARKLES, accel = Vector3.new(0, -1, 0),

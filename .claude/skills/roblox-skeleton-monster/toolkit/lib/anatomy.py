@@ -449,3 +449,22 @@ def band(name, points, heights, thickness, up=(0, 0, 1), offset=0.5):
     obj = r.loft(name, rings)
     r.smooth(obj, 35)
     return obj
+
+
+def surface_caster(obj):
+    """Lanceur de rayons sur la surface d'un objet (à créer AVANT d'y découper des trous).
+
+    `hit = surface_caster(carapace)` puis `hit(origine, direction)` → (point, normale) ou
+    (None, None). Sert à poser tubercules, rebords de fenêtres, cicatrices, cheminées pile sur
+    une surface courbe (carapace, crâne) sans deviner les hauteurs.
+    """
+    from mathutils.bvhtree import BVHTree
+    mw = obj.matrix_world
+    bvh = BVHTree.FromPolygons([mw @ v.co for v in obj.data.vertices],
+                               [tuple(p.vertices) for p in obj.data.polygons])
+
+    def hit(origin, direction=(0, 0, -1)):
+        loc, normal, _, _ = bvh.ray_cast(Vector(origin), Vector(direction).normalized(), 100)
+        return loc, normal
+
+    return hit

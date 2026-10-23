@@ -78,6 +78,22 @@ Céphalothorax + abdomen en `blade`/`loft_profile`, pattes à 4 segments (`long_
 condyles) avec os `Leg1_L…Leg4_R` (+ `Leg1b_L` pour le segment suivant), chélicères / pinces
 en `claw` épais, dard de queue segmenté. Exosquelette « os » ivoire, yeux multiples lumineux.
 
+Crabe / crustacé (`abyss_crab.py`) : carapace = `loft_profile` large **ajouré** de grandes
+fenêtres (`hole_along` vertical) avec rebords posés par `a.surface_caster` (lancer de rayons
+avant de découper), endosquelette en arches + cœur lumineux visibles par les fenêtres ;
+pattes `Leg{k}{L,R}_1-4` (méropodite haut en genou, dactyle en `claw` pointu, articulations
+en anneaux lumineux) ; pinces `Claw{L,R}_1-3` + doigt mobile `Finger{L,R}` avec rangées de
+`mr.tooth` (molaires larges sur la broyeuse) ; face : pédoncules oculaires, antennes en
+fouet, portes des maxillipèdes **ouvertes** pour montrer une bouche à couronnes de dents qui
+laissent voir la gorge lumineuse (dents trop longues = disque blanc illisible).
+
+## Poisson-gueule (baudroie, `abyss_angler.py`)
+
+Crâne large et plat court, mâchoires en U (`band` sur un arc, bas en prognathie, gueule
+grande ouverte) avec 2 rangées de longs crocs `mr.tooth` recourbés vers l'intérieur (pièce
+`Teeth`), canne-appât en chaîne d'os `Lure1-3` terminée par une esca lumineuse en cage,
+corps en boule de côtes, ventre lumineux qui éclaire la cage par l'intérieur.
+
 ## Humanoïde (liche, démon, chevalier squelette)
 
 Os type R15 pour réutiliser des animations : `Root, LowerTorso, UpperTorso, Head, Jaw,

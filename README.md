@@ -131,6 +131,25 @@ Le build produit dans `exports/<creature>/` :
 
 ![leviathan tête](previews/abyss_leviathan_head_front.png)
 
+| Crabe titan squelette | Pose de test (rig) |
+|---|---|
+| ![crabe](previews/abyss_crab.png) | ![crabe pose](previews/abyss_crab_pose.png) |
+
+Exosquelette d'obsidienne fissuré de lave, carapace ajourée sur un cœur de lave, 3 cheminées
+hydrothermales qui fument (thème `vent`), pinces asymétriques à grosses dents, bouche à double
+couronne de dents. Pièces : corps, Head, Legs, Claws.
+
+![crabe profil](previews/abyss_crab_head.png) ![crabe face](previews/abyss_crab_head_front.png)
+
+| Baudroie des abysses squelette | Pose de test (rig) |
+|---|---|
+| ![baudroie](previews/abyss_angler.png) | ![baudroie pose](previews/abyss_angler_pose.png) |
+
+Gueule géante en prognathie avec ~60 crocs vitreux, canne-appât articulée à esca lumineuse,
+proie squelettique qui brille dans le ventre (thème `lure`). Pièces : corps, Head, Teeth, Fins.
+
+![baudroie profil](previews/abyss_angler_head.png) ![baudroie face](previews/abyss_angler_head_front.png)
+
 ## Skill Claude : un monstre à partir d'une description
 
 La skill `roblox-skeleton-monster` permet à Claude de générer un squelette démoniaque

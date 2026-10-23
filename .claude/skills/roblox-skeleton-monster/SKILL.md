@@ -60,12 +60,18 @@ Créer `models/skeleton_<nom>.py` en partant de l'exemple le plus proche dans
 acide, `skeleton_dragon.py` quadrupède ailé multi-pièces, `skeleton_triceratops.py` quadrupède
 trapu à collerette percée et très détaillée, `skeleton_hydra.py` rampant à 3 têtes dans des
 repères locaux, multi-pièces, `abyss_kraken.py` céphalopode à tentacules et membranes, `abyss_megalodon.py` requin au
-chondrocrâne ajouré et rostre en barres, `abyss_leviathan.py` serpent au crâne de murène ajouré).
+chondrocrâne ajouré et rostre en barres, `abyss_leviathan.py` serpent au crâne de murène ajouré, `abyss_crab.py` arthropode à
+carapace ajourée + pattes + pinces, `abyss_angler.py` poisson tout en gueule à canne-appât).
 S'en inspirer pour la structure (rig → crâne → détails de tête → colonne → cage → membres),
 mais **concevoir un crâne neuf** : c'est la partie que l'utilisateur regarde en premier.
 Le crâne doit être **ajouré et fait d'os séparés** (boîte crânienne courte + barres de museau,
 plaques de mâchoire `a.band`, orbites traversantes, os de liaison) : un loft lisse couvert de
 petites pièces a été jugé « trop simple » (style guide, règle 6 du crâne).
+**Les dents doivent être travaillées, jamais « en os »** : grosses dents pleines et épaisses
+(`mr.tooth` : section lenticulaire, bords dentelés, courbure), couleur `tooth` claire et
+distincte des os, nombreuses, de tailles variées (crocs devant), plantées dans des gencives
+et des alvéoles. Interdit : lames plates fines, cônes d'os de la couleur du crâne, piques
+(« squelettes de dent ») — l'utilisateur l'a refusé.
 
 Viser dès le premier jet la **densité de détails** décrite dans le style guide : l'utilisateur
 a demandé à deux reprises « plus de détails » sur la tête et la collerette. Une fonction
@@ -78,7 +84,7 @@ Le module définit :
   (utilisées par le script d'effets) ;
 - `TEST_POSE` : rotations (degrés) d'os qui montrent que le rig marche (gueule ouverte,
   cou levé, une patte avancée, queue fléchie, aile repliée) ;
-- `EFFECT_THEME` : `fire`, `acid`, `souls`, `frost`, `abyss`, `blood` ou `gold` (particules du script Roblox) ;
+- `EFFECT_THEME` : `fire`, `acid`, `souls`, `frost`, `abyss`, `blood`, `gold`, `vent` (fumée noire + braises) ou `lure` (points lumineux flottants) (particules du script Roblox) ;
 - `VIEW` : direction de caméra des aperçus, choisie pour qu'aucune grande pièce n'en cache
   une autre (ailes vues de face, collerette pas masquée par les cornes) ;
 - `build(pal)` qui renvoie le `Rig`.

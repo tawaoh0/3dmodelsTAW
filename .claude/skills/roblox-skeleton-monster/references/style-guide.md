@@ -39,12 +39,12 @@ corrige un rendu qui a été refusé.
 Avant de modéliser, lister les créatures déjà présentes dans `models/` et remplir ce tableau
 pour la nouvelle, en choisissant pour **chaque ligne** une valeur qu'aucune autre n'utilise :
 
-| Axe | T-Rex | Dragon | Raptor | Tricératops | Hydre | Kraken | Mégalodon | Léviathan | Idées libres |
-|---|---|---|---|---|---|---|---|---|---|
-| Matière / couleur des os | ivoire `#ddd0b8` | ivoire froid `#dcd3c8` | vert-gris rongé `#c4c9a0` + cratères lumineux | givré blanc-bleuté `#d6e4ec` + grappes de cristaux | dorés `#e3c068` + pièces d'or incrustées | blanchis vert d'eau `#c9d8cf` + balanes et coraux rouges | ardoise sombre `#56616c`, dents claires | nacre lavande `#e7e1ef` | os calcinés noirs fissurés de lave, obsidienne, os dorés, os rouges sanglants, os translucides |
-| Cornes / pointes | 2 grandes cornes annelées noires recourbées | couronne : 2 cornes plaquées + collerette palmée | **aucune corne** : éventails de piquants-plumes + crêtes jumelles dentelées | 3 cornes de **glace facettée** + collerette percée bordée d'éclats | **cornes de bélier en spirale** (bronze sombre) baguées d'or, 3 têtes identiques | pas de cornes : crochets noirs sur bras et massues, crête frontale | harpons rouillés + chaînes plantés dans le dos | couronne et crête de rayons, moustaches |  ramures, lames, couronne de piques, épines dorsales en voile |
-| Silhouette / posture | massif bipède, tête énorme | quadrupède ailé, cou en S dressé | petit bipède ramassé prêt à bondir | quadrupède trapu et bas, tête baissée pour charger, sabots | corps rampant, pattes de crocodile, 3 cous en éventail | manteau-cage dressé, 8 bras au sol, 2 tentacules levés | horizontale en nage, dorsale, queue en croissant | serpent, queue au sol, avant dressé | dressé sur 2 pattes, rampant au sol, enroulé, voûté, multi-têtes |
-| Thème d'effets (`EFFECT_THEME`) | `fire` + cœur cristal | `fire` violet + cœur cristal | `acid` + poche d'acide, gouttes | `frost` + cœur en grappe de glace, stalactites | `gold` + idole de cristal, pièces en orbite, gemmes | `abyss` + photophores cyan partout, organe lumineux, bulles | `blood` rouge, branchies rougeoyantes | `souls` magenta, seconde mâchoire lumineuse | `souls`, lave, sang, ombre |
+| Axe | T-Rex | Dragon | Raptor | Tricératops | Hydre | Kraken | Mégalodon | Léviathan | Crabe titan | Baudroie | Idées libres |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Matière / couleur des os | ivoire `#ddd0b8` | ivoire froid `#dcd3c8` | vert-gris rongé `#c4c9a0` + cratères lumineux | givré blanc-bleuté `#d6e4ec` + grappes de cristaux | dorés `#e3c068` + pièces d'or incrustées | blanchis vert d'eau `#c9d8cf` + balanes et coraux rouges | ardoise sombre `#56616c`, dents claires | nacre lavande `#e7e1ef` | obsidienne `#3a3230` fissurée de lave, rebords rouille | brun tourbe `#7d6a55`, crocs vitreux | os calcinés noirs fissurés de lave, obsidienne, os dorés, os rouges sanglants, os translucides |
+| Cornes / pointes | 2 grandes cornes annelées noires recourbées | couronne : 2 cornes plaquées + collerette palmée | **aucune corne** : éventails de piquants-plumes + crêtes jumelles dentelées | 3 cornes de **glace facettée** + collerette percée bordée d'éclats | **cornes de bélier en spirale** (bronze sombre) baguées d'or, 3 têtes identiques | pas de cornes : crochets noirs sur bras et massues, crête frontale | harpons rouillés + chaînes plantés dans le dos | couronne et crête de rayons, moustaches | pas de cornes : 3 cheminées hydrothermales soufrées + dents de carapace | canne-appât articulée + esca, épines sphénotiques |  ramures, lames, couronne de piques, épines dorsales en voile |
+| Silhouette / posture | massif bipède, tête énorme | quadrupède ailé, cou en S dressé | petit bipède ramassé prêt à bondir | quadrupède trapu et bas, tête baissée pour charger, sabots | corps rampant, pattes de crocodile, 3 cous en éventail | manteau-cage dressé, 8 bras au sol, 2 tentacules levés | horizontale en nage, dorsale, queue en croissant | serpent, queue au sol, avant dressé | large et bas sur 8 longues pattes, pinces asymétriques | boule, tout en gueule, prognathe | dressé sur 2 pattes, rampant au sol, enroulé, voûté, multi-têtes |
+| Thème d'effets (`EFFECT_THEME`) | `fire` + cœur cristal | `fire` violet + cœur cristal | `acid` + poche d'acide, gouttes | `frost` + cœur en grappe de glace, stalactites | `gold` + idole de cristal, pièces en orbite, gemmes | `abyss` + photophores cyan partout, organe lumineux, bulles | `blood` rouge, branchies rougeoyantes | `souls` magenta, seconde mâchoire lumineuse | `vent` orange, cœur de lave vu par les fenêtres | `lure` citron vert, proie lumineuse dans le ventre | `souls`, lave, sang, ombre |
 
 Le cœur lumineux, les runes et la pointe de queue prennent aussi la forme du thème : cristal
 pour le feu, poche à bulles pour l'acide, flamme spectrale pour les âmes, stalactites pour le
@@ -156,6 +156,9 @@ tricératops final en a 131 pour 6 000 triangles. `check_model.py` prévient sou
 ## Contrôle qualité (à vérifier sur les images à chaque itération)
 
 - [ ] `check_model.py` affiche « Contrôle OK » (rien ne flotte, budget respecté).
+- [ ] **Dents** pleines, épaisses, dentelées (`mr.tooth`), couleur `tooth` distincte des os,
+      nombreuses et de tailles variées, dans des gencives / alvéoles. Si elles ressemblent à
+      des piques ou à des lames d'os fines → à refaire (« pas des dents en os »).
 - [ ] Sur les 3 gros plans : les détails sont sur la face visible des plaques, rien n'est
       masqué par l'angle de vue, aucune grande surface n'est vide.
 - [ ] Pas de face noire ni de trou non voulu.
