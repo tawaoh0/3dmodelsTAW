@@ -7,7 +7,7 @@
 	  • passe les pièces « *_Glow » en matériau Neon de la couleur de lueur ;
 	  • ajoute une lumière qui pulse ;
 	  • attache des particules à chaque os nommé « FX_* », selon le thème
-	    de la créature (feu, acide, âmes, givre, abysses, or).
+	    de la créature (feu, acide, âmes, givre, abysses, sang, or).
 ]]
 
 local TweenService = game:GetService("TweenService")
@@ -47,6 +47,11 @@ local THEMES = {
 		main = { texture = SPARKLES, accel = Vector3.new(0, 0.6, 0), speed = 0.3, rot = 40, light = 1 },
 		extra = { name = "Bubbles", texture = SMOKE, accel = Vector3.new(0, 4, 0),
 			speed = NumberRange.new(0.5, 1.5), lifetime = NumberRange.new(1.5, 3), size = 0.12 },
+	},
+	blood = { -- nuage de sang qui s'étire et retombe lentement + petites bulles
+		main = { texture = SMOKE, accel = Vector3.new(0, -0.8, 0), speed = 0.35, rot = 25, light = 0.4 },
+		extra = { name = "Bubbles", texture = SPARKLES, accel = Vector3.new(0, 3, 0),
+			speed = NumberRange.new(0.3, 1), lifetime = NumberRange.new(1, 2), size = 0.12 },
 	},
 	gold = { -- poussière d'or scintillante
 		main = { texture = SPARKLES, accel = Vector3.new(0, 1, 0), speed = 0.8, rot = 120, light = 1 },

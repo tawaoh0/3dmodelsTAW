@@ -26,11 +26,20 @@ panneau intérieur doigt 4 → hanche → dos → épaule → coude, un propatag
 Bords avec `tattered_edge`. Wyverne : pas de pattes avant, les ailes servent de bras.
 Pièces : corps / `Head` / `Wings` pour tenir le budget. `VIEW = (0.4, -1, 0.8)`.
 
-## Serpent / naga / ver géant
+## Poisson / requin — exemple : `abyss_megalodon.py`
 
-Pas de pattes. Colonne longue en S posée au sol (z ≈ 0.5-1.5) avec 30-40 vertèbres réparties
-sur 8-10 os `Body1…BodyN` (une `Chain` sinueuse), côtes sur presque toute la longueur, tête
-levée. Naga : torse humanoïde dressé à l'avant. Budget : `part="Tail"` pour l'arrière.
+Colonne horizontale (`smooth_path`, ~40 vertèbres), crâne en rostre, mâchoires en fer à
+cheval (`horseshoe`) à 3 rangées de dents plates triangulaires (`blade` à `width_end` ≈ 0),
+arcs branchiaux, nageoires = membranes + rayons (`fin()` dans l'exemple), queue en croissant.
+Os : `Body1-5`, `Head`, `Jaw`, `Caudal`, `PecFin_L/R`.
+
+## Serpent / naga / ver géant — exemple : `abyss_leviathan.py`
+
+Pas de pattes. Colonne longue en S (`smooth_path`, ~70 vertèbres pour ~22 studs) : la queue
+ondule au sol, l'avant se dresse ; 10 os `Seg1…Seg10` de la queue vers le cou. Tête
+modélisée en repère local puis placée au bout du cou (voir piège « tête qui regarde le
+ciel »). Crête dorsale = une membrane par os, sommets pondérés sur leur os. Budget :
+`part="Tail"` pour l'arrière, `part="Head"`.
 
 ## Multi-têtes (hydre, cerbère) — exemple : `skeleton_hydra.py`
 

@@ -24,7 +24,7 @@ c.Chain(points).at(t) -> (point, tangente)              # t de 0 à 1 le long d'
   gueule, au cœur, au bout de queue.
 - `EFFECT_THEME` (module) : thème des particules du script Roblox — `fire`, `acid` (bulles
   + gouttes qui tombent), `souls` (volutes), `frost` (brume qui retombe + flocons), `abyss`
-  (lueurs qui dérivent + bulles), `gold`. Un nouveau thème = une entrée dans `THEMES` de
+  (lueurs qui dérivent + bulles), `blood` (nuage rouge qui retombe + bulles), `gold`. Un nouveau thème = une entrée dans `THEMES` de
   `lib/CreatureEffects.server.lua`.
 - `TEST_POSE` : `{"Jaw": (30, 0, 0), ...}` rotations XYZ en degrés dans l'espace de l'os.
   X ouvre une mâchoire / plie une patte, Z balance une queue ou une aile.
@@ -87,6 +87,12 @@ Chacune a coûté au moins une itération. `check_model.py` détecte celles marq
   avant d'un plan engendré par `X` (largeur) et `U` (hauteur) vaut `X.cross(U)`, pas
   `U.cross(X)`. Vérifier sur le gros plan de face : si on voit les détails à travers les
   trous, ils sont derrière.
+- **Tête qui regarde le ciel** au bout d'un cou qui monte : ne pas orienter la tête selon la
+  tangente du cou ; mélanger avec l'horizontale, ex. `f = (tangente * 0.25 + (0, -1, -0.15))`.
+- **Côtes de serpent qui ressemblent à des pattes** : les enrouler autour du corps (4 points,
+  le dernier revient sous la colonne), pas vers le sol.
+- **Index de vertèbres codés en dur** (`SPINE[25]`) : dès qu'on change le nombre de vertèbres
+  (pour boucher les trous), tout se décale. Exprimer les positions en fraction de la colonne.
 - **Longs membres qui passent devant le visage** (tentacules, cous, bras levés) : les faire
   partir des côtés et s'écarter avant de monter ; vérifier sur le gros plan de face.
 - **Structure trop régulière** (cage de cerceaux et barreaux identiques) : préférer une
@@ -96,7 +102,9 @@ Chacune a coûté au moins une itération. `check_model.py` détecte celles marq
 - **Pièce volontairement suspendue** (pièces d'or en orbite, runes flottantes non
   lumineuses) : `obj["float_ok"] = True` avant `rig.add`, sinon `check_model.py` la refuse.
 - **Écarts entre vertèbres en bout de queue** (auto) : la queue s'affine mais l'espacement
-  reste constant. Prendre `n ≥ longueur / (0.8 × taille moyenne)` vertèbres.
+  reste constant. Prendre `n ≥ longueur / (0.8 × taille moyenne)` vertèbres, et une taille
+  minimale en bout (≈ 0.15) ; s'y prendre dès le premier jet (c'est l'erreur la plus
+  fréquente des créatures longues : requin, serpent, hydre).
 - **Ergot, sternum ou petite pièce décollés** (auto) : les décaler d'une distance inférieure
   à leur propre rayon par rapport à l'os porteur.
 

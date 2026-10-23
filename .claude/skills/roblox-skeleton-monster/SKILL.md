@@ -74,7 +74,7 @@ Le module définit :
   (utilisées par le script d'effets) ;
 - `TEST_POSE` : rotations (degrés) d'os qui montrent que le rig marche (gueule ouverte,
   cou levé, une patte avancée, queue fléchie, aile repliée) ;
-- `EFFECT_THEME` : `fire`, `acid`, `souls`, `frost`, `abyss` ou `gold` (particules du script Roblox) ;
+- `EFFECT_THEME` : `fire`, `acid`, `souls`, `frost`, `abyss`, `blood` ou `gold` (particules du script Roblox) ;
 - `VIEW` : direction de caméra des aperçus, choisie pour qu'aucune grande pièce n'en cache
   une autre (ailes vues de face, collerette pas masquée par les cornes) ;
 - `build(pal)` qui renvoie le `Rig`.
@@ -92,7 +92,10 @@ budget de triangles par pièce Roblox et une tête trop peu détaillée. Corrige
 « Contrôle OK ». Les « info » sur des lueurs suspendues (œil au centre d'une orbite, éclats
 autour du cœur) sont acceptables si c'est voulu.
 
-**b. Rendus**, puis **regarder chaque image** avec l'outil de lecture d'image :
+**b. Rendus**, puis **regarder chaque image** avec l'outil de lecture d'image. Pour économiser
+(l'utilisateur le demande) : vue d'ensemble + 1 gros plan de face suffisent ; le `trio` et la
+pose seulement si quelque chose semble faux. Plusieurs créatures peuvent être construites et
+contrôlées dans la même passe (`build.py a b`).
 
 ```bash
 <python> build.py skeleton_<nom>

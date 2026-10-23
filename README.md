@@ -119,6 +119,18 @@ Le build produit dans `exports/<creature>/` :
 
 ![kraken profil](previews/abyss_kraken_head.png) ![kraken face](previews/abyss_kraken_head_front.png)
 
+| Mégalodon squelette | Pose de test (rig) |
+|---|---|
+| ![megalodon](previews/abyss_megalodon.png) | ![megalodon pose](previews/abyss_megalodon_pose.png) |
+
+![megalodon tête](previews/abyss_megalodon_head_front.png)
+
+| Léviathan squelette | Pose de test (rig) |
+|---|---|
+| ![leviathan](previews/abyss_leviathan.png) | ![leviathan pose](previews/abyss_leviathan_pose.png) |
+
+![leviathan tête](previews/abyss_leviathan_head_front.png)
+
 ## Skill Claude : un monstre à partir d'une description
 
 La skill `roblox-skeleton-monster` permet à Claude de générer un squelette démoniaque

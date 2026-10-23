@@ -202,7 +202,7 @@ def export_fbx(objs, path):
 def write_effects_script(name, colors, path, theme="fire"):
     """Génère le script Luau d'effets avec les couleurs et le thème de la créature.
 
-    `theme` : fire (défaut), acid, souls, frost, abyss, gold.
+    `theme` : fire (défaut), acid, souls, frost, abyss, blood, gold.
     """
     with open(os.path.join(ROOT, "lib", "CreatureEffects.server.lua")) as f:
         src = f.read()
