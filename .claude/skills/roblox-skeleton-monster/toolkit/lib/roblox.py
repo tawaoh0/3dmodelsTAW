@@ -417,10 +417,13 @@ def render_preview(obj, path, resolution=1024, dark=False, view=(0.8, -1.0, 0.6)
     if dark:
         sun_data.energy = 3.5
         # Lumière d'appoint pour lire les formes sur fond sombre
+        # Lumière d'appoint depuis la caméra : débouche les ombres portées, sinon une
+        # surface à l'ombre prend la teinte du fond et semble manquer sur l'aperçu
         fill_data = bpy.data.lights.new("Fill", "SUN")
         fill_data.energy = 2.0
+        fill_data.use_shadow = False
         fill = bpy.data.objects.new("Fill", fill_data)
-        fill.rotation_euler = (math.radians(60), 0, math.radians(200))
+        fill.rotation_euler = rot.to_euler()
         _link(fill)
 
     scene.render.engine = "CYCLES"

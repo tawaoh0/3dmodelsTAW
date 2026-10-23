@@ -55,7 +55,8 @@ Lire `references/anatomy-api.md` pour les fonctions disponibles et leurs pièges
 
 Créer `models/skeleton_<nom>.py` en partant de l'exemple le plus proche dans
 `toolkit/models/` (`skeleton_trex.py` bipède massif, `skeleton_raptor.py` bipède agile thème
-acide, `skeleton_dragon.py` quadrupède ailé multi-pièces).
+acide, `skeleton_dragon.py` quadrupède ailé multi-pièces, `skeleton_triceratops.py` quadrupède
+trapu à collerette percée).
 S'en inspirer pour la structure (rig → crâne → colonne → cage → membres), mais **concevoir
 un crâne neuf** : c'est la partie que l'utilisateur regarde en premier, et deux créatures au
 crâne semblable ont été rejetées.

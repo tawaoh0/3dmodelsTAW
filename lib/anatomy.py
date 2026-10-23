@@ -189,6 +189,15 @@ def claw(name, base, direction, length, radius, curl=0.35, segments=6):
     return obj
 
 
+def claw_point(base, direction, length, curl, t):
+    """Point et tangente à la fraction `t` d'une `claw` courbée (pour y poser une pointe,
+    une goutte, un anneau… exactement sur la courbe)."""
+    base, d = Vector(base), Vector(direction).normalized()
+    _, up = _basis(d)
+    point = base + d * length * t - up * curl * length * t * t
+    return point, (d * length - up * 2 * curl * length * t).normalized()
+
+
 def ridged_horn(name, points, radius, ridges=6, depth=0.12, segments=8):
     """Corne démoniaque annelée qui suit `points`, effilée jusqu'à la pointe."""
     pts = [Vector(p) for p in points]

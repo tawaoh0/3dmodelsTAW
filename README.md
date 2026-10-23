@@ -72,6 +72,12 @@ Conventions :
 
 ![raptor tête](previews/skeleton_raptor_head.png) ![raptor tête face](previews/skeleton_raptor_head_front.png)
 
+| Tricératops squelette givré | Pose de test (rig) |
+|---|---|
+| ![triceratops](previews/skeleton_triceratops.png) | ![triceratops pose](previews/skeleton_triceratops_pose.png) |
+
+![triceratops tête](previews/skeleton_triceratops_head.png) ![triceratops tête face](previews/skeleton_triceratops_head_front.png)
+
 Les créatures sont des **squelettes démoniaques** construits os par os avec `lib/anatomy.py` :
 crâne en sections avec de vraies ouvertures (booléens), os longs à condyles, vertèbres à épines
 en lame, côtes, os plats, griffes et cornes annelées, cristaux. Chaque pièce est rigide et

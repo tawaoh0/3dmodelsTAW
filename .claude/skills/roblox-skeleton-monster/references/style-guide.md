@@ -34,12 +34,12 @@ corrige un rendu qui a été refusé.
 Avant de modéliser, lister les créatures déjà présentes dans `models/` et remplir ce tableau
 pour la nouvelle, en choisissant pour **chaque ligne** une valeur qu'aucune autre n'utilise :
 
-| Axe | T-Rex (feu) | Dragon (âmes) | Raptor (acide) | Idées libres |
-|---|---|---|---|---|
-| Matière / couleur des os | ivoire `#ddd0b8` | ivoire froid `#dcd3c8` | vert-gris rongé `#c4c9a0` + cratères lumineux | os calcinés noirs fissurés de lave, obsidienne, os givrés bleutés, os dorés, os rouges sanglants, os translucides |
-| Cornes / pointes | 2 grandes cornes annelées recourbées | couronne : 2 cornes plaquées + collerette palmée | **aucune corne** : éventails de piquants-plumes + crêtes jumelles dentelées | cornes de bélier enroulées, ramures, lames, couronne de piques, cornes cristallines, épines dorsales en voile |
-| Silhouette / posture | massif, tête énorme, horizontal | quadrupède ailé, cou en S dressé | petit, ramassé prêt à bondir, queue relevée | dressé sur 2 pattes, rampant au sol, enroulé, voûté |
-| Thème d'effets (`EFFECT_THEME`) | `fire` + cœur cristal | `fire` violet + cœur cristal | `acid` + poche d'acide bouillonnante, gouttes | `frost` (stalactites de glace), `gold` (pièces, éclats dorés), `souls` |
+| Axe | T-Rex | Dragon | Raptor | Tricératops | Idées libres |
+|---|---|---|---|---|---|
+| Matière / couleur des os | ivoire `#ddd0b8` | ivoire froid `#dcd3c8` | vert-gris rongé `#c4c9a0` + cratères lumineux | givré blanc-bleuté `#d6e4ec` + grappes de cristaux | os calcinés noirs fissurés de lave, obsidienne, os dorés, os rouges sanglants, os translucides |
+| Cornes / pointes | 2 grandes cornes annelées noires recourbées | couronne : 2 cornes plaquées + collerette palmée | **aucune corne** : éventails de piquants-plumes + crêtes jumelles dentelées | 3 cornes de **glace facettée** + collerette percée bordée d'éclats | cornes de bélier enroulées, ramures, lames, couronne de piques, épines dorsales en voile |
+| Silhouette / posture | massif bipède, tête énorme | quadrupède ailé, cou en S dressé | petit bipède ramassé prêt à bondir | quadrupède trapu et bas, tête baissée pour charger, sabots | dressé sur 2 pattes, rampant au sol, enroulé, voûté, multi-têtes |
+| Thème d'effets (`EFFECT_THEME`) | `fire` + cœur cristal | `fire` violet + cœur cristal | `acid` + poche d'acide, gouttes | `frost` + cœur en grappe de glace, stalactites | `gold` (pièces, éclats dorés), `souls` |
 
 Le cœur lumineux, les runes et la pointe de queue prennent aussi la forme du thème : cristal
 pour le feu, poche à bulles pour l'acide, flamme spectrale pour les âmes, stalactites pour le

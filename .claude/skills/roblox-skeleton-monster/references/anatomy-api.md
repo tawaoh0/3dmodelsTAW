@@ -41,6 +41,7 @@ c.Chain(points).at(t) -> (point, tangente)              # t de 0 à 1 le long d'
 | `rib(name, racine, demi_largeur, profondeur, côté, sweep, radius)` | Côte. |
 | `blade(name, a, b, largeur, épaisseur, width_end, normal, bevel, mid)` | Os plat : omoplate, ilium, arcade, crête, collerette, chevrons. `normal` = direction de l'épaisseur. |
 | `claw(name, base, direction, longueur, rayon, curl=0.35, segments=6)` | Griffe, croc, petite corne, épine. `curl` > 0 recourbe vers le bas, < 0 vers le haut. |
+| `claw_point(base, direction, longueur, curl, t)` | Point + tangente à la fraction `t` d'une `claw` courbée : pour poser une pointe lumineuse, une goutte ou un anneau **sur** la courbe. |
 | `ridged_horn(name, points, rayon, ridges=6)` | Grande corne annelée qui suit un chemin. |
 | `crystal(name, centre, rayon, hauteur, sides=6)` | Cristal facetté (cœur, éclats). |
 | `membrane(name, [(pos, {os: poids})], thickness)` | Membrane 2 faces (aile, collerette) ; triangulée en éventail depuis le 1er point. Peindre avec `rig.pal.paint(m, "membrane")` puis `m["part"] = "Wings"`. |
@@ -71,6 +72,13 @@ MeshPart distinct qui partage le même squelette.
 
 - **Pièce qui flotte loin du modèle** : rotation d'un `ico` créé avec `location=` autour de sa
   position monde. Pivot `(0, 0, 0)`.
+- **Pointe / goutte à côté d'une corne courbée** : ne pas la placer sur la ligne droite
+  `base + d·L·t` ; utiliser `claw_point` (la courbe s'écarte de la droite de `curl·L·t²`).
+- **Membrane percée par booléen qui perd des faces** : le contour doit être convexe et ne pas
+  se recouper (ex. centre + demi-ovale), sinon `cut` interprète mal l'intérieur.
+- **Élément qui semble flotter sur l'aperçu** : vérifier d'abord avec un gros plan sous un
+  autre angle ; souvent sa base est simplement cachée par une autre pièce. Corriger alors
+  `VIEW` ou supprimer l'élément mal placé (ex. pointes horizontales au bas d'une collerette).
 - **Pièce invisible** : un os plat dont `normal` est parallèle à `b - a` (largeur nulle).
 - **Aile vue par la tranche** dans l'aperçu : changer `VIEW` (ex. `(0.4, -1, 0.8)`).
 - **Mâchoire qui ne s'ouvre pas bien** : la tête de l'os `Jaw` doit être à l'articulation
