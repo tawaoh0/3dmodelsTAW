@@ -1,7 +1,7 @@
 """Dragon squelette ailé démoniaque (≈ 20 studs de long, 18 d'envergure) — créature animable.
 
-Crâne en coin au museau crochu, crête osseuse, yeux en fente, longues cornes
-plaquées en arrière et collerette de piques palmée, long cou en S, quatre pattes griffues,
+Crâne sculpté (dôme, arcades en surplomb, pommettes en arche, bourrelets nasaux,
+bosse des narines), yeux en fente, longues cornes et collerette de piques palmée, long cou en S, quatre pattes griffues,
 deux ailes à quatre doigts tendues d'une membrane violette déchirée, queue
 terminée par une lame de cristal. Lueurs violettes : yeux, gorge, cœur, runes.
 
@@ -53,12 +53,16 @@ NECK = [(0, -2.3, 5.25), (0, -3.1, 5.7), (0, -3.6, 6.5), (0, -4.2, 7.15), (0, -4
 TAIL = [(0, 1.6, 4.9), (0, 3.8, 4.5), (0, 6.2, 3.8), (0, 8.4, 3.0), (0, 10.4, 2.5),
         (0, 12.3, 2.6)]
 
-# Crâne en coin : (y, demi-largeur dessus, joues, bord dentaire, z dessus, z bord dentaire)
-SKULL = [(-4.7, 0.7, 1.05, 0.8, 7.95, 7.0), (-5.2, 0.62, 0.95, 0.72, 8.05, 6.96),
-         (-5.9, 0.42, 0.66, 0.55, 7.82, 6.98), (-6.7, 0.3, 0.46, 0.4, 7.52, 7.0),
-         (-7.5, 0.22, 0.34, 0.32, 7.34, 7.02), (-8.1, 0.12, 0.2, 0.2, 7.22, 7.05)]
-JAW = [(-4.75, 0.5, 0.85, 0.7, 6.97, 6.5), (-5.7, 0.42, 0.68, 0.55, 6.95, 6.45),
-       (-6.8, 0.3, 0.45, 0.36, 6.95, 6.56), (-8.0, 0.12, 0.2, 0.18, 6.95, 6.72)]
+# Crâne : (y, demi-largeur dessus, joues, bord dentaire, z dessus, z bord dentaire).
+# Profil ondulé : dôme crânien, arcades, creux nasal, bosse des narines, bout arrondi.
+SKULL = [(-4.6, 0.75, 1.0, 0.78, 8.05, 7.0), (-5.0, 0.8, 1.08, 0.8, 8.3, 6.95),
+         (-5.45, 0.78, 1.0, 0.74, 8.42, 6.95), (-5.9, 0.55, 0.78, 0.62, 8.05, 6.96),
+         (-6.4, 0.42, 0.6, 0.52, 7.72, 6.98), (-6.95, 0.44, 0.58, 0.5, 7.8, 7.0),
+         (-7.5, 0.46, 0.56, 0.48, 7.86, 7.0), (-7.95, 0.36, 0.46, 0.4, 7.6, 7.02),
+         (-8.2, 0.2, 0.3, 0.28, 7.35, 7.05)]
+JAW = [(-4.6, 0.55, 0.9, 0.75, 6.97, 6.35), (-5.4, 0.5, 0.82, 0.66, 6.95, 6.3),
+       (-6.4, 0.4, 0.62, 0.52, 6.95, 6.4), (-7.4, 0.36, 0.5, 0.44, 6.95, 6.5),
+       (-8.05, 0.22, 0.32, 0.28, 6.95, 6.62)]
 
 # Aile gauche (x > 0) ; l'aile droite est le miroir
 WING_ROOT = Vector((0.7, -1.5, 5.7))
@@ -91,7 +95,7 @@ def build_rig(rig):
     rig.bone("Chest", (0, -0.3, 5.05), (0, -2.3, 5.25), "Hips")
     rig.bone("Neck1", (0, -2.3, 5.25), (0, -3.6, 6.5), "Chest")
     rig.bone("Neck2", (0, -3.6, 6.5), (0, -4.75, 7.4), "Neck1")
-    rig.bone("Head", (0, -4.75, 7.4), (0, -8.1, 7.2), "Neck2")
+    rig.bone("Head", (0, -4.75, 7.4), (0, -8.2, 7.3), "Neck2")
     rig.bone("Jaw", (0, -4.85, 6.95), (0, -8.0, 6.8), "Head")
     parent = "Hips"
     for i in range(5):
@@ -109,7 +113,7 @@ def build_rig(rig):
         for i, tip in enumerate(TIPS):
             rig.bone(f"WingFinger{i + 1}_{side}", mirror(WRIST, s), mirror(tip, s),
                      f"Wing2_{side}")
-        rig.fx(f"Eye{side}", (s * 0.55, -5.45, 7.6), "Head")
+        rig.fx(f"Eye{side}", (s * 0.58, -5.5, 7.62), "Head")
     rig.fx("Mouth", (0, -5.6, 6.95), "Head")
     rig.fx("Heart", (0, -1.0, 3.95), "Chest")
     rig.fx("TailTip", (0, 13.3, 2.6), "Tail5")
@@ -120,63 +124,77 @@ def build_rig(rig):
 def build_head(rig):
     head = dict(part="Head")
 
-    # Crâne en coin : large à l'arrière, museau long et pointu, profil bas
+    # Crâne au profil ondulé : dôme crânien, arcades, creux nasal, bosse des narines
     skull = a.loft_profile("Skull", SKULL)
     tilt = -0.3   # fentes inclinées (avant plus bas) → regard mauvais
     cutters = []
-    for center, ry, rz in (((0, -5.45, 7.6), 0.42, 0.17),      # orbites en fente
-                           ((0, -6.5, 7.28), 0.5, 0.14),       # fenêtres antorbitales
-                           ((0, -4.85, 7.42), 0.14, 0.3),      # fenêtres temporales
-                           ((0, -7.85, 7.25), 0.12, 0.08)):    # narines
+    for center, ry, rz in (((0, -5.5, 7.62), 0.38, 0.19),      # orbites en fente
+                           ((0, -6.6, 7.33), 0.42, 0.14),      # fenêtres antorbitales
+                           ((0, -4.85, 7.5), 0.14, 0.32),      # fenêtres temporales
+                           ((0, -7.9, 7.42), 0.13, 0.1)):      # narines
         cutter = a.hole_x(center, ry, rz)
         a.rotate_obj(cutter, "X", tilt, center)
         cutters.append(cutter)
     a.cut(skull, cutters)
     rig.add(skull, "Head", "bone", **head)
 
-    # Crête sagittale (quille osseuse sur le dessus du crâne)
-    keel = a.blade("Keel", (0, -4.9, 8.05), (0, -7.3, 7.35), 0.32, 0.12, width_end=0.12,
-                   normal=(1, 0, 0), bevel=0.02)
-    rig.add(keel, "Head", "bone_shade", **head)
-    # Bec crochu au bout du museau + ergot sous le menton
-    rig.add(a.claw("Beak", (0, -8.05, 7.22), (0, -0.7, -1), 0.5, 0.17, curl=0.25),
-            "Head", "horn", **head)
-    # Rangée de cornes sur le museau, de plus en plus grandes vers les yeux
-    for k, (y, size) in enumerate(((-7.55, 0.22), (-7.05, 0.3), (-6.5, 0.4))):
-        z = width_at(SKULL, y, 4) - 0.02
-        rig.add(a.claw(f"NoseHorn{k}", (0, y, z), (0, 0.55, 1), size, 0.06 + size * 0.2,
-                       curl=-0.15), "Head", "horn", **head)
+    # Crête pariétale en éventail à l'arrière du crâne
+    rig.add(a.blade("Parietal", (0, -4.75, 8.05), (0, -4.2, 8.75), 1.35, 0.18, width_end=0.6,
+                    mid=1.45, normal=(0, 1, 0.4)), "Head", "bone_shade", **head)
+    # Petite crête au milieu du dôme
+    rig.add(a.blade("Sagittal", (0, -5.75, 8.38), (0, -4.75, 8.3), 0.16, 0.12, width_end=0.26,
+                    normal=(1, 0, 0), bevel=0.02), "Head", "bone_shade", **head)
 
     for s in (-1, 1):
-        # Arcade sourcilière en lame, prolongée par une pointe vers l'arrière
-        brow = a.blade(f"Brow{s}", (s * 0.32, -6.0, 7.85), (s * 0.82, -4.95, 8.1), 0.3, 0.1,
-                       width_end=0.2, normal=(0, 0.3, 1), bevel=0.02)
-        rig.add(brow, "Head", "bone_shade", **head)
-        rig.add(a.claw(f"BrowSpike{s}", (s * 0.82, -4.95, 8.1), (s * 0.5, 1, 0.25), 0.45, 0.08,
-                       curl=-0.1), "Head", "horn", **head)
-        # Œil en fente
-        eye = r.ico(f"Eye{s}", 0.15, subdivisions=2, location=(s * 0.55, -5.45, 7.6),
-                    scale=(0.6, 2.2, 0.9))
+        # Arcade sourcilière : lourde corniche en surplomb au-dessus de l'œil
+        rig.add(a.blade(f"Brow{s}", (s * 0.25, -6.05, 8.12), (s * 1.12, -4.95, 8.3), 0.42, 0.22,
+                        width_end=0.3, mid=0.55, normal=(0, 0.25, 1)), "Head", "bone_shade",
+                **head)
+        rig.add(a.claw(f"BrowSpike{s}", (s * 1.1, -4.95, 8.3), (s * 0.6, 1, 0.3), 0.6, 0.12,
+                       curl=-0.15), "Head", "horn", **head)
+        # Pommette : arche épaisse qui ressort sur la joue, avec deux piques
+        cheek = [(s * 0.72, -6.15, 7.2), (s * 1.08, -5.6, 7.18), (s * 1.22, -5.0, 7.3),
+                 (s * 1.05, -4.45, 7.6)]
+        arch = r.tube(f"Zygomatic{s}", cheek, [0.12, 0.17, 0.18, 0.13], segments=7)
+        r.smooth(arch, 40)
+        rig.add(arch, "Head", "bone_shade", **head)
+        for k, (p, length) in enumerate(((cheek[1], 0.35), (cheek[2], 0.5))):
+            rig.add(a.claw(f"CheekSpike{s}{k}", p, (s * 0.8, 0.7, -0.15), length, 0.08,
+                           curl=-0.1), "Head", "horn", **head)
+        # Bourrelet nasal : crête noueuse le long du museau
+        ridge = [(s * 0.26, y, width_at(SKULL, y, 4) + 0.05) for y in (-7.75, -7.2, -6.6, -6.05)]
+        nasal = r.tube(f"Nasal{s}", ridge, [0.1, 0.13, 0.1, 0.12], segments=6)
+        r.smooth(nasal, 40)
+        rig.add(nasal, "Head", "bone_shade", **head)
+        # Bosse autour de la narine + narine sombre
+        rig.add(r.ico(f"NostrilBoss{s}", 0.22, subdivisions=1, location=(s * 0.34, -7.8, 7.62),
+                      scale=(0.9, 1.4, 0.8)), "Head", "bone_shade", **head)
+        rig.add(r.ico(f"NostrilPit{s}", 0.09, subdivisions=1, location=(s * 0.4, -8.0, 7.6),
+                      scale=(0.8, 1, 1.3)), "Head", "horn", **head)
+
+        # Œil en fente sous l'arcade
+        eye = r.ico(f"Eye{s}", 0.15, subdivisions=2, location=(s * 0.58, -5.5, 7.62),
+                    scale=(0.6, 2.1, 0.95))
         a.rotate_obj(eye, "X", tilt, (0, 0, 0))   # sommets locaux, centrés sur l'œil
         rig.add(eye, "Head", "glow", glow=True)
 
-        # Deux longues cornes plaquées vers l'arrière
-        horn = a.ridged_horn(f"Horn{s}", [(s * 0.5, -4.95, 8.0), (s * 0.7, -4.0, 8.45),
-                                          (s * 0.9, -2.9, 8.7), (s * 1.0, -1.8, 8.65),
-                                          (s * 1.0, -1.0, 8.35)], 0.27, ridges=7)
+        # Deux longues cornes annelées qui partent du haut du dôme vers l'arrière
+        horn = a.ridged_horn(f"Horn{s}", [(s * 0.5, -5.0, 8.3), (s * 0.75, -4.1, 8.8),
+                                          (s * 0.95, -3.0, 9.05), (s * 1.05, -1.9, 8.95),
+                                          (s * 1.05, -1.1, 8.6)], 0.3, ridges=7)
         rig.add(horn, "Head", "horn", **head)
-        rig.add(a.claw(f"HornTip{s}", (s * 1.0, -1.02, 8.36), (0, 0.6, -0.5), 0.2, 0.06),
+        rig.add(a.claw(f"HornTip{s}", (s * 1.05, -1.12, 8.61), (0, 0.6, -0.5), 0.2, 0.06),
                 "Head", "horn_tip", **head)
 
         # Collerette : éventail de piques reliées par une membrane déchirée
-        bases = [Vector((s * 0.95, -4.8, 7.85 - k * 0.32)) for k in range(4)]
+        bases = [Vector((s * 1.0, -4.7, 7.95 - k * 0.32)) for k in range(4)]
         dirs = [Vector((s * 0.55, 0.55, 0.75)), Vector((s * 0.75, 0.7, 0.25)),
                 Vector((s * 0.75, 0.7, -0.2)), Vector((s * 0.55, 0.6, -0.6))]
         tips = []
-        for k, (b, d, length) in enumerate(zip(bases, dirs, (1.25, 1.15, 0.95, 0.7))):
+        for k, (b, d, length) in enumerate(zip(bases, dirs, (1.3, 1.2, 1.0, 0.75))):
             tip = b + d.normalized() * length
             tips.append(tip)
-            rig.add(a.claw(f"Frill{s}{k}", b, d, length, 0.09 - k * 0.012, curl=-0.05),
+            rig.add(a.claw(f"Frill{s}{k}", b, d, length, 0.1 - k * 0.012, curl=-0.05),
                     "Head", "horn", **head)
         outline = [(tuple(bases[0]), {"Head": 1})]
         for k in range(4):
@@ -191,35 +209,41 @@ def build_head(rig):
         rig.pal.paint(frill, "membrane")
         frill["part"] = "Head"
 
-        # Épines à l'arrière de la mâchoire
-        rig.add(a.claw(f"JawSpike{s}", (s * 0.6, -4.95, 6.6), (s * 0.6, 0.7, -0.4), 0.4, 0.09,
+        # Mâchoire : apophyse coronoïde qui remonte derrière + épine à l'angle
+        rig.add(a.blade(f"Coronoid{s}", (s * 0.62, -5.15, 6.75), (s * 0.66, -4.85, 7.25), 0.4,
+                        0.12, width_end=0.22, normal=(1, 0, 0)), "Jaw", "bone_shade", **head)
+        rig.add(a.claw(f"JawSpike{s}", (s * 0.65, -4.75, 6.45), (s * 0.6, 0.7, -0.45), 0.5, 0.1,
                        curl=-0.1), "Jaw", "horn", **head)
 
-    rig.add(a.claw("ChinSpike", (0, -7.5, 6.62), (0, 0.1, -1), 0.4, 0.11, curl=0.15),
+    # Cornes de nez : une grande sur la bosse des narines, une petite devant les yeux
+    for k, (y, size) in enumerate(((-7.45, 0.5), (-6.85, 0.3))):
+        rig.add(a.claw(f"NoseHorn{k}", (0, y, width_at(SKULL, y, 4) - 0.03), (0, 0.45, 1), size,
+                       0.08 + size * 0.2, curl=-0.2), "Head", "horn", **head)
+    rig.add(a.claw("ChinSpike", (0, -7.6, 6.5), (0, 0.15, -1), 0.45, 0.12, curl=0.15),
             "Jaw", "horn", **head)
-    # Rune du front, entre les arcades
-    rune = r.box("Rune", (0.12, 0.12, 0.05), location=(0, -5.75, width_at(SKULL, -5.75, 4) + 0.03),
+    # Rune sur le dôme
+    rune = r.box("Rune", (0.13, 0.13, 0.05), location=(0, -5.2, width_at(SKULL, -5.2, 4) + 0.02),
                  rotation=(0, 0, 0.785))
     rig.add(rune, "Head", "glow", glow=True)
     rig.add(r.ico("Throat", 0.28, subdivisions=2, location=(0, -5.1, 6.95), scale=(1.3, 1, 0.6)),
             "Head", "glow", glow=True)
 
-    # Crocs : longs devant (crocs de vipère), plus courts vers l'arrière
+    # Crocs : deux paires de grands crocs devant, rangée plus courte derrière
     for jaw, sections, z, direction, bone in ((False, SKULL, 7.03, (0, 0.2, -1), "Head"),
                                               (True, JAW, 6.93, (0, -0.2, 1), "Jaw")):
-        y, k = -7.85, 0
+        y, k = -7.9, 0
         while y < -5.3:
             for s in (-1, 1):
                 x = s * width_at(sections, y) * (0.72 if jaw else 0.88)
-                length = (0.55 if k == 0 else 0.36 - 0.02 * k) * (0.8 if jaw else 1)
+                length = (0.62 if k in (0, 3) else 0.36 - 0.015 * k) * (0.8 if jaw else 1)
                 rig.add(a.claw(f"Tooth{bone}{s}{k}", (x, y, z), direction, length,
-                               0.075 if jaw else 0.085, curl=-0.06, segments=4),
+                               0.085 if jaw else 0.095, curl=-0.06, segments=4),
                         bone, "tooth", **head)
             y += 0.32
             k += 1
 
     jaw = a.loft_profile("Jaw", JAW)
-    a.cut(jaw, [a.hole_x((0, -5.5, 6.72), 0.35, 0.1)])
+    a.cut(jaw, [a.hole_x((0, -5.6, 6.65), 0.38, 0.12)])
     rig.add(jaw, "Jaw", "bone", **head)
 
 

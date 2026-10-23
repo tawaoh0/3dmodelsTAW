@@ -64,7 +64,7 @@ Conventions :
 |---|---|
 | ![dragon](previews/skeleton_dragon.png) | ![dragon pose](previews/skeleton_dragon_pose.png) |
 
-![dragon tête](previews/skeleton_dragon_head.png)
+![dragon tête](previews/skeleton_dragon_head.png) ![dragon tête face](previews/skeleton_dragon_head_front.png)
 
 Les créatures sont des **squelettes démoniaques** construits os par os avec `lib/anatomy.py` :
 crâne en sections avec de vraies ouvertures (booléens), os longs à condyles, vertèbres à épines
