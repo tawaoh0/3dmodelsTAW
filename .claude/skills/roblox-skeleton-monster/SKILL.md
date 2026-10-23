@@ -59,9 +59,13 @@ Créer `models/skeleton_<nom>.py` en partant de l'exemple le plus proche dans
 `toolkit/models/` (`skeleton_trex.py` bipède massif, `skeleton_raptor.py` bipède agile thème
 acide, `skeleton_dragon.py` quadrupède ailé multi-pièces, `skeleton_triceratops.py` quadrupède
 trapu à collerette percée et très détaillée, `skeleton_hydra.py` rampant à 3 têtes dans des
-repères locaux, multi-pièces, `abyss_kraken.py` céphalopode à tentacules et membranes).
+repères locaux, multi-pièces, `abyss_kraken.py` céphalopode à tentacules et membranes, `abyss_megalodon.py` requin au
+chondrocrâne ajouré et rostre en barres, `abyss_leviathan.py` serpent au crâne de murène ajouré).
 S'en inspirer pour la structure (rig → crâne → détails de tête → colonne → cage → membres),
 mais **concevoir un crâne neuf** : c'est la partie que l'utilisateur regarde en premier.
+Le crâne doit être **ajouré et fait d'os séparés** (boîte crânienne courte + barres de museau,
+plaques de mâchoire `a.band`, orbites traversantes, os de liaison) : un loft lisse couvert de
+petites pièces a été jugé « trop simple » (style guide, règle 6 du crâne).
 
 Viser dès le premier jet la **densité de détails** décrite dans le style guide : l'utilisateur
 a demandé à deux reprises « plus de détails » sur la tête et la collerette. Une fonction

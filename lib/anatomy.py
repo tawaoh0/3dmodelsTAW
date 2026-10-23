@@ -420,3 +420,32 @@ def tattered_edge(a, b, wa, wb, toward, depth=0.35, notches=4, seed=0):
             w[bone] = w.get(bone, 0) + val * t
         out.append((tuple(p), w))
     return out
+
+
+def band(name, points, heights, thickness, up=(0, 0, 1), offset=0.5):
+    """Plaque épaisse qui suit un chemin (mâchoire de requin, crête, arcade en visière).
+
+    Section rectangulaire : `heights` (nombre ou liste par point) le long de `up` (vecteur ou
+    liste par point), `thickness` perpendiculaire. `offset` : 0 = la plaque part du chemin
+    vers +up, 1 = vers -up, 0.5 = centrée. Plus « os » qu'un tube : arêtes vives, faces plates.
+    """
+    pts = [Vector(p) for p in points]
+    n = len(pts)
+    hs = heights if isinstance(heights, (list, tuple)) else [heights] * n
+    ths = thickness if isinstance(thickness, (list, tuple)) else [thickness] * n
+    ups = up if isinstance(up[0], (list, tuple, Vector)) else [up] * n
+    rings = []
+    for i, p in enumerate(pts):
+        t = (pts[min(i + 1, n - 1)] - pts[max(i - 1, 0)]).normalized()
+        u = Vector(ups[i])
+        u = (u - t * u.dot(t)).normalized()
+        w = t.cross(u).normalized()
+        lo, hi = -hs[i] * offset, hs[i] * (1 - offset)
+        # 6 points : léger renflement au milieu de la hauteur pour casser l'effet planche
+        mid = (lo + hi) / 2
+        rings.append([tuple(p + u * hz + w * sw * ths[i] / 2)
+                      for hz, sw in ((lo, -1), (lo, 1), (mid, 1.3), (hi, 1), (hi, -1),
+                                     (mid, -1.3))])
+    obj = r.loft(name, rings)
+    r.smooth(obj, 35)
+    return obj

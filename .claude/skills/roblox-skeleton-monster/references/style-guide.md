@@ -29,6 +29,7 @@ corrige un rendu qui a été refusé.
 | Crâne en coin droit et pointu | « manque de grand relief / de parties, toute droite et pointue » | Profil ondulé + grosses pièces en relief (voir ci-dessous) |
 | T-Rex, dragon, raptor tous ivoire + cornes noires annelées balayées + cœur cristal | « ils se ressemblent trop tous entre eux » | Une identité complète par créature (section suivante) |
 | Mégalodon et Léviathan v1 : têtes lisses, nageoires plates à 4 rayons, crête en bande continue | « pas assez détaillé, je ne veux pas voir le gros trait rouge tout le long » | `lib/marine.py` : nageoires riches (`fin`), orbites hérissées, écailles, cicatrices ; **jamais de longue bande de membrane d'une seule couleur** sur le corps, des éléments espacés à la place |
+| Mégalodon et Léviathan v2 : crâne = un seul loft lisse couvert de petites pièces (300 pièces !) | « les corps sont bien mais les têtes sont trop simples » | Le nombre de pièces ne suffit pas : **le crâne doit être ajouré et fait d'os séparés** (voir « Crâne ajouré » ci-dessous) |
 | Museaux qui finissent sur une face plate ; crânes « reptile standard » | « les visages sont encore trop génériques, le nez se coupe net » | Bout de museau arrondi (`loft_profile` le fait par défaut) + crâne inspiré d'un **vrai animal** lié au thème |
 | Hydre avec 3 crânes différents (royal, serpent, brute) | « je veux que les 3 têtes soient les mêmes, travaille-les plus » | Différencier les **créatures** entre elles, pas les têtes d'une même créature ; une seule tête très détaillée, répétée |
 
@@ -88,6 +89,22 @@ Un bon crâne combine :
    - hydre / serpent : crânes plats en losange, crochets à venin, capuchon de côtes ;
    - loup / chien des enfers : museau court et haut, crocs énormes, crête dorsale de flammes.
 5. **Deux paires de crocs plus longs** à l'avant et une rangée plus courte derrière.
+
+6. **Crâne ajouré, fait d'os séparés** (leçon Mégalodon / Léviathan v2) : un gros loft lisse
+   reste « trop simple » même couvert de 300 petites pièces. Le loft ne sert qu'à la **boîte
+   crânienne** (courte) ; tout le reste est en os séparés avec du **vide visible** entre eux :
+   - orbites et fenêtres **traversantes** (`hole_x` assez grand pour voir le fond à travers) ;
+   - museau / rostre en **barres** (`tube`) qui convergent vers un nœud arrondi, reliées
+     par des entretoises (requin : 3 barres rostrales ; murène : barre ethmoïde) ;
+   - mâchoires en **plaques** (`a.band`, plus hautes à l'arrière) et non en tubes-boudins,
+     avec arête externe, alvéoles, pores ; dentaires gauche/droit séparés en V (on voit à
+     travers la gueule) ;
+   - os de liaison visibles : hyomandibulaire / carré vers la charnière, piliers pré- et
+     post-orbitaires, processus coronoïde, rétro-articulaire, opercule en éventail strié ;
+   - grosses masses en relief : visières sus-orbitaires (`band` horizontale à piques),
+     capsules nasales bombées, crête sus-occipitale haute et **percée**.
+   Requin : chondrocrâne + rostre tripode + palatocarré/Meckel. Poisson osseux : boîte
+   crânienne + crête + maxillaire/dentaire + opercule + 2e mâchoire pharyngienne.
 
 ## Densité de détails (demandé deux fois par l'utilisateur)
 

@@ -55,6 +55,7 @@ c.Chain(points).at(t) -> (point, tangente)              # t de 0 à 1 le long d'
 | `crystal(name, centre, rayon, hauteur, sides=6)` | Cristal facetté (cœur, éclats). |
 | `membrane(name, [(pos, {os: poids})], thickness)` | Membrane 2 faces (aile, collerette) ; triangulée en éventail depuis le 1er point. Peindre avec `rig.pal.paint(m, "membrane")` puis `m["part"] = "Wings"`. |
 | `tattered_edge(a, b, poids_a, poids_b, vers, depth, notches, seed)` | Points d'un bord déchiré festonné entre deux pointes, creusé vers `vers`. |
+| `band(name, points, heights, thickness, up=(0,0,1), offset=0.5)` | Plaque épaisse qui suit un chemin, hauteur variable selon `up` (`offset` 0 = monte depuis le chemin, 1 = descend). Mâchoires de requin, crêtes, visières sus-orbitaires, maxillaires/dentaires. Plus « os » qu'un tube. |
 
 `membrane` sert aussi aux **lames fines** (crêtes dentelées, voiles dorsales, nageoires) :
 un contour de points tous pondérés `{"Head": 1}` donne une plaque nette et fine, bien plus
