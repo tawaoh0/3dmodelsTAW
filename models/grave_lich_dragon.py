@@ -6,7 +6,7 @@ cornes, sur un corps de wyverne ; différent du dragon quadrupède (pack 1) et d
 (ailes de cristal dressées) : ici les **ailes déchirées retombent en cape**.
 
 Identité : os gris cendre violacé ; **cornes en spirale** noires + **couronne de fer à bougies** ;
-ailes en lambeaux tombantes ; **cercueil-phylactère** enchaîné au poitrail ; **lanterne d'âme**
+ailes en lambeaux tombantes ; **cercueil-phylactère** à gemme d'âme enchaîné au poitrail ; **lanterne d'âme**
 pendue au bout de la queue ; bougies coulantes sur le dos ; thème d'effets « necro »
 (âmes violettes + étincelles de chandelle).
 
@@ -324,10 +324,8 @@ def build_body(rig):
                               for dy in (0.08, -0.08)]), "Chest", "wood")
     rig.add(r.loft("CoffinLid", [[(cc.x + x * 0.8, cc.y + dy, cc.z + z * 0.85) for x, z in outline]
                                  for dy in (-0.07, -0.11)]), "Chest", "iron")
-    rig.add(r.box("CoffinCrossV", (0.05, 0.03, 0.34), location=cc + Vector((0, -0.12, 0.02))), "Chest",
-            "glow", glow=True)
-    rig.add(r.box("CoffinCrossH", (0.2, 0.03, 0.05), location=cc + Vector((0, -0.12, 0.1))), "Chest",
-            "glow", glow=True)
+    rig.add(a.crystal("CoffinSoul", cc + Vector((0, -0.12, 0.05)), 0.07, 0.3, sides=4), "Chest", "glow",
+            glow=True)
     for s in (-1, 1):
         chain(rig, f"CoffinChain{s}", mirror(WING_ROOT, s) + Vector((0, -0.1, -0.1)),
               cc + Vector((s * 0.12, 0, 0.4)), "Chest", sag=0.1)

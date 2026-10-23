@@ -133,6 +133,16 @@ local THEMES = {
 		extra = { name = "Petals", texture = SMOKE, accel = Vector3.new(0.4, -1, 0),
 			speed = NumberRange.new(0.2, 0.6), lifetime = NumberRange.new(2, 3), size = 0.2 },
 	},
+	nightmare = { -- flammes spectrales vert poison qui lèchent vers le haut + braises
+		main = { texture = FIRE, accel = Vector3.new(0, 3, 0), speed = 1, rot = 90, light = 1 },
+		extra = { name = "Embers", texture = SPARKLES, accel = Vector3.new(0, 2, 0),
+			speed = NumberRange.new(0.5, 1.5), lifetime = NumberRange.new(0.6, 1.2), size = 0.1 },
+	},
+	ravens = { -- plumes noires qui tombent en tournoyant + brume rouge sang
+		main = { texture = SMOKE, accel = Vector3.new(0, 0.5, 0), speed = 0.3, rot = 60, light = 0.5 },
+		extra = { name = "Feathers", texture = SPARKLES, accel = Vector3.new(0, -1.5, 0),
+			speed = NumberRange.new(0.3, 1), lifetime = NumberRange.new(1.5, 3), size = 0.25 },
+	},
 	necro = { -- âmes violettes qui s'élèvent en spirale + étincelles de chandelle
 		main = { texture = SMOKE, accel = Vector3.new(0, 3, 0), speed = 0.8, rot = 240, light = 0.9 },
 		extra = { name = "CandleSparks", texture = SPARKLES, accel = Vector3.new(0, 1.5, 0),

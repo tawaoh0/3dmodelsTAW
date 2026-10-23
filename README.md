@@ -322,10 +322,32 @@ lianes et mousse (thème `swamp`). Pièces : corps, Head, Tail, Legs.
 
 Wyverne-liche au crâne de markhor : cornes noires en tire-bouchon, couronne de fer à bougies
 coulantes, orbites lumineuses violettes, ailes en lambeaux tombant en cape, cercueil-phylactère
-à croix lumineuse enchaîné au poitrail, bougies sur le dos, lanterne d'âme pendue au bout de
+à gemme d'âme enchaîné au poitrail, bougies sur le dos, lanterne d'âme pendue au bout de
 la queue (thème `necro`). Pièces : corps, Head, Wings, Tail.
 
 ![liche profil](previews/grave_lich_dragon_head.png) ![liche face](previews/grave_lich_dragon_head_front.png)
+
+| Cheval cauchemar squelette | Pose de test (rig) |
+|---|---|
+| ![cheval cauchemar](previews/grave_horse.png) | ![cheval pose](previews/grave_horse_pose.png) |
+
+Crâne de cheval (orbites cerclées très en arrière, encoche naso-incisive, crête faciale,
+mandibule à angle arrondi, crocs à la place des incisives), crinière et queue de flammes
+spectrales vert poison, sabots en feu ferrés, fers brisés aux paturons, cercueil-selle sanglé
+de chaînes avec bougies (thème `nightmare`). Pièces : corps, Head, Legs.
+
+![cheval profil](previews/grave_horse_head.png) ![cheval face](previews/grave_horse_head_front.png)
+
+| Corbeau géant squelette | Pose de test (rig) |
+|---|---|
+| ![corbeau](previews/grave_raven.png) | ![corbeau pose](previews/grave_raven_pose.png) |
+
+Grand corbeau voûté : bec crochu noir à dents en scie, anneaux sclérotiques autour des yeux
+rouges, huppe de plumes, carène et côtes à processus uncinés, ailes repliées, perché sur une
+tombe brisée aux runes rouges avec bougie, anneau de fer brisé à la patte (thème `ravens`).
+Pièces : corps, Head, Wings.
+
+![corbeau profil](previews/grave_raven_head.png) ![corbeau face](previews/grave_raven_head_front.png)
 
 ## Bonus — Forêt maudite
 
