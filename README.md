@@ -66,11 +66,11 @@ Conventions :
 
 ![dragon tête](previews/skeleton_dragon_head.png) ![dragon tête face](previews/skeleton_dragon_head_front.png)
 
-| Raptor squelette toxique | Pose de test (rig) |
+| Raptor squelette rongé d'acide | Pose de test (rig) |
 |---|---|
 | ![raptor](previews/skeleton_raptor.png) | ![raptor pose](previews/skeleton_raptor_pose.png) |
 
-![raptor tête](previews/skeleton_raptor_head.png)
+![raptor tête](previews/skeleton_raptor_head.png) ![raptor tête face](previews/skeleton_raptor_head_front.png)
 
 Les créatures sont des **squelettes démoniaques** construits os par os avec `lib/anatomy.py` :
 crâne en sections avec de vraies ouvertures (booléens), os longs à condyles, vertèbres à épines

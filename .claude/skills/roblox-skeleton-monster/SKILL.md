@@ -40,7 +40,12 @@ reste avec les conventions du style guide plutôt que de poser des questions. Ne
 si un choix change vraiment le modèle (ex. « araignée » : 8 pattes réalistes ou boss démon
 debout ?). Une question groupée maximum, avec une proposition par défaut.
 
-Annoncer en 3-4 lignes le plan : silhouette, signature du crâne, couleur, pièces Roblox.
+Regarder les créatures déjà présentes dans `models/` (et leurs aperçus) : la nouvelle doit
+s'en distinguer sur **4 axes** — couleur/matière des os, type de cornes et pointes,
+silhouette/posture, thème d'effets. Remplir le tableau « Identité » du style guide.
+
+Annoncer en 4-5 lignes le plan : silhouette et posture, signature du crâne, matière des os,
+cornes, thème d'effets, pièces Roblox.
 
 ## 3. Choisir un plan de corps et écrire le modèle
 
@@ -49,7 +54,8 @@ multi-têtes, arthropode, humanoïde) avec la liste d'os du rig et les ordres de
 Lire `references/anatomy-api.md` pour les fonctions disponibles et leurs pièges.
 
 Créer `models/skeleton_<nom>.py` en partant de l'exemple le plus proche dans
-`toolkit/models/` (`skeleton_trex.py` bipède, `skeleton_dragon.py` quadrupède ailé multi-pièces).
+`toolkit/models/` (`skeleton_trex.py` bipède massif, `skeleton_raptor.py` bipède agile thème
+acide, `skeleton_dragon.py` quadrupède ailé multi-pièces).
 S'en inspirer pour la structure (rig → crâne → colonne → cage → membres), mais **concevoir
 un crâne neuf** : c'est la partie que l'utilisateur regarde en premier, et deux créatures au
 crâne semblable ont été rejetées.
@@ -59,6 +65,7 @@ Le module définit :
   `membrane`, et obligatoirement `glow` + `glow_hot` (utilisées par le script d'effets) ;
 - `TEST_POSE` : rotations (degrés) d'os qui montrent que le rig marche (gueule ouverte,
   cou levé, une patte avancée, queue fléchie, aile repliée) ;
+- `EFFECT_THEME` : `fire`, `acid`, `souls`, `frost` ou `gold` (particules du script Roblox) ;
 - `VIEW` (optionnel) : direction de caméra des aperçus, ex. `(0.4, -1, 0.8)` pour voir des ailes ;
 - `build(pal)` qui renvoie le `Rig`.
 

@@ -66,7 +66,8 @@ def build_creature(name, module, pal, rig, preview):
     pal.save(os.path.join(out_dir, f"{name}_palette.png"))
     creature.export_fbx([arm] + parts, os.path.join(out_dir, f"{name}.fbx"))
     creature.write_effects_script(name, module.COLORS,
-                                  os.path.join(out_dir, f"{name}_effects.server.lua"))
+                                  os.path.join(out_dir, f"{name}_effects.server.lua"),
+                                  getattr(module, "EFFECT_THEME", "fire"))
 
     for part in parts:
         info = roblox.stats(part)

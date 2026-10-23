@@ -9,9 +9,9 @@ corrige un rendu qui a été refusé.
   bassin, os longs, phalanges. Pas de chair, pas de peau.
 - **Formes nettes et lisibles** façon « boss Roblox » : os épais, articulations renflées
   (condyles), arêtes franches, gros volumes qui se lisent de loin.
-- **Palette** : os ivoire (`#ddd0b8` / ombre `#a8977c`), dents plus claires (`#f4eee0`),
-  cornes et griffes presque noires (`#231a20`), pointes de corne teintées de la lueur,
-  disques intervertébraux sombres teintés de la lueur.
+- **Palette de base** : os clairs, dents plus claires, cornes et griffes presque noires,
+  pointes teintées de la lueur, disques intervertébraux sombres teintés de la lueur. La
+  teinte exacte des os change d'une créature à l'autre (voir « Identité »).
 - **Une teinte de lueur par créature** (rouge braise, violet, vert toxique, bleu glacé,
   or…) sur : yeux au fond des orbites, cœur de cristal dans la cage thoracique, runes
   (crâne, fémurs, avant-bras), gorge, pointe de queue.
@@ -27,6 +27,24 @@ corrige un rendu qui a été refusé.
 | Metaballs / corps en chair | « grosse boule de pâte à modeler » | Pièces osseuses distinctes, découpes booléennes |
 | Crâne du dragon = crâne du T-Rex | « la tête est trop la même » | Un crâne conçu pour chaque créature |
 | Crâne en coin droit et pointu | « manque de grand relief / de parties, toute droite et pointue » | Profil ondulé + grosses pièces en relief (voir ci-dessous) |
+| T-Rex, dragon, raptor tous ivoire + cornes noires annelées balayées + cœur cristal | « ils se ressemblent trop tous entre eux » | Une identité complète par créature (section suivante) |
+
+## Identité : chaque créature doit se distinguer sur 4 axes
+
+Avant de modéliser, lister les créatures déjà présentes dans `models/` et remplir ce tableau
+pour la nouvelle, en choisissant pour **chaque ligne** une valeur qu'aucune autre n'utilise :
+
+| Axe | T-Rex (feu) | Dragon (âmes) | Raptor (acide) | Idées libres |
+|---|---|---|---|---|
+| Matière / couleur des os | ivoire `#ddd0b8` | ivoire froid `#dcd3c8` | vert-gris rongé `#c4c9a0` + cratères lumineux | os calcinés noirs fissurés de lave, obsidienne, os givrés bleutés, os dorés, os rouges sanglants, os translucides |
+| Cornes / pointes | 2 grandes cornes annelées recourbées | couronne : 2 cornes plaquées + collerette palmée | **aucune corne** : éventails de piquants-plumes + crêtes jumelles dentelées | cornes de bélier enroulées, ramures, lames, couronne de piques, cornes cristallines, épines dorsales en voile |
+| Silhouette / posture | massif, tête énorme, horizontal | quadrupède ailé, cou en S dressé | petit, ramassé prêt à bondir, queue relevée | dressé sur 2 pattes, rampant au sol, enroulé, voûté |
+| Thème d'effets (`EFFECT_THEME`) | `fire` + cœur cristal | `fire` violet + cœur cristal | `acid` + poche d'acide bouillonnante, gouttes | `frost` (stalactites de glace), `gold` (pièces, éclats dorés), `souls` |
+
+Le cœur lumineux, les runes et la pointe de queue prennent aussi la forme du thème : cristal
+pour le feu, poche à bulles pour l'acide, flamme spectrale pour les âmes, stalactites pour le
+givre, lingots / pièces pour l'or. Vérifier sur les aperçus côte à côte que la nouvelle
+créature se reconnaît **en silhouette** (sans les couleurs) et **en couleur** (sans la forme).
 
 ## Le crâne : la pièce la plus importante
 
@@ -71,6 +89,8 @@ Un bon crâne combine :
 - [ ] Pas de face noire ni de trou non voulu.
 - [ ] Le crâne a un profil ondulé et ≥ 4 pièces en relief ; il ne ressemble à aucune
       créature déjà faite dans le projet.
+- [ ] Le tableau « Identité » est rempli : couleur des os, cornes, posture et thème
+      d'effets différents de toutes les créatures existantes.
 - [ ] La pose de test montre la gueule ouverte, une patte avancée, etc., et chaque pièce
       suit son os sans se détacher.
 - [ ] Les ailes (s'il y en a) sont visibles de face sur l'aperçu, pas par la tranche

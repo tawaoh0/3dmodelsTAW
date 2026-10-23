@@ -22,6 +22,8 @@ c.Chain(points).at(t) -> (point, tangente)              # t de 0 à 1 le long d'
   porte des poids par sommet.
 - Os `FX_*` : le script d'effets y accroche flammes et braises. En mettre aux yeux, à la
   gueule, au cœur, au bout de queue.
+- `EFFECT_THEME` (module) : thème des particules du script Roblox — `fire`, `acid` (bulles
+  + gouttes qui tombent), `souls` (volutes), `frost` (brume qui retombe + flocons), `gold`.
 - `TEST_POSE` : `{"Jaw": (30, 0, 0), ...}` rotations XYZ en degrés dans l'espace de l'os.
   X ouvre une mâchoire / plie une patte, Z balance une queue ou une aile.
 
@@ -43,6 +45,10 @@ c.Chain(points).at(t) -> (point, tangente)              # t de 0 à 1 le long d'
 | `crystal(name, centre, rayon, hauteur, sides=6)` | Cristal facetté (cœur, éclats). |
 | `membrane(name, [(pos, {os: poids})], thickness)` | Membrane 2 faces (aile, collerette) ; triangulée en éventail depuis le 1er point. Peindre avec `rig.pal.paint(m, "membrane")` puis `m["part"] = "Wings"`. |
 | `tattered_edge(a, b, poids_a, poids_b, vers, depth, notches, seed)` | Points d'un bord déchiré festonné entre deux pointes, creusé vers `vers`. |
+
+`membrane` sert aussi aux **lames fines** (crêtes dentelées, voiles dorsales, nageoires) :
+un contour de points tous pondérés `{"Head": 1}` donne une plaque nette et fine, bien plus
+élégante qu'un `blade` épais qui fait « couvercle ».
 
 ## Primitives (`lib/roblox.py`, importé `as r`)
 
