@@ -130,3 +130,30 @@ def hook(rig, name, base, direction, bone, chain=3, color="rust", **kw):
         rig.add(a.ring_around(f"{name}Link{j}", p, axis, 0.07, 0.018, segments=8), bone, color,
                 **kw)
         p = p + Vector((0.02, 0.02, -0.11))
+
+
+def tooth(name, base, tip, width, thickness, out, curl=0.06):
+    """Grosse dent pleine de requin : triangle épais à section lenticulaire, bords dentelés
+    (anneaux alternativement plus étroits), légère courbure vers l'intérieur (-out)."""
+    base, tip, out = Vector(base), Vector(tip), Vector(out)
+    d = tip - base
+    length = d.length
+    dn = d / length
+    w = dn.cross(out).normalized()
+    n = w.cross(dn).normalized()
+    if n.dot(out) < 0:
+        n = -n
+    rings = []
+    for k, t in enumerate((-0.08, 0.0, 0.16, 0.33, 0.5, 0.67, 0.84)):
+        c = base + d * t - n * curl * length * max(t, 0) ** 2
+        tt = max(t, 0)
+        ww = width * (1 - tt) ** 0.8 * (0.86 if k % 2 == 0 and k > 1 else 1.0)
+        th = thickness * (1 - 0.7 * tt)
+        if t < 0:
+            ww, th = width * 0.9, thickness * 0.9
+        rings.append([tuple(c + w * sx * ww / 2 + n * sy * th / 2)
+                      for sx, sy in ((-1, 0), (-0.5, 1), (0.5, 1), (1, 0), (0.5, -1), (-0.5, -1))])
+    rings.append([tuple(tip - n * curl * length)])
+    obj = r.loft(name, rings)
+    r.smooth(obj, 30)
+    return obj

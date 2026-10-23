@@ -66,6 +66,7 @@ un contour de points tous pondérés `{"Head": 1}` donne une plaque nette et fin
 | Fonction | Usage |
 |---|---|
 | `fin(rig, name, root, edge, bone, part, rays=8)` | Nageoire / voile / couronne riche : membrane au bord déchiré, rayons articulés à nœuds, épine d'attaque à piques, radiaux à la racine, pointes lumineuses. `root` = points sur le corps, `edge` = bord libre (de l'avant vers l'arrière). |
+| `tooth(name, base, tip, width, thickness, out, curl=0.06)` | Grosse dent **pleine** (renvoie l'objet) : triangle épais à section lenticulaire, bords dentelés, courbée vers `-out`. `out` = normale extérieure de la mâchoire. ~80 triangles : prévoir une pièce `Teeth` pour 90 dents. |
 | `spiky_orbit(rig, name, centre, axe, rayon, bone)` | Orbite à double anneau + couronne de piques. |
 | `scutes(rig, name, points, normales, bone)` | Rangée d'écailles osseuses en losange posées sur une surface. |
 | `scar(rig, name, a, b, bone)` | Cicatrice / fissure lumineuse en zigzag. |

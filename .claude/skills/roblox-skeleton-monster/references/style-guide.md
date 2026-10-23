@@ -30,6 +30,7 @@ corrige un rendu qui a été refusé.
 | T-Rex, dragon, raptor tous ivoire + cornes noires annelées balayées + cœur cristal | « ils se ressemblent trop tous entre eux » | Une identité complète par créature (section suivante) |
 | Mégalodon et Léviathan v1 : têtes lisses, nageoires plates à 4 rayons, crête en bande continue | « pas assez détaillé, je ne veux pas voir le gros trait rouge tout le long » | `lib/marine.py` : nageoires riches (`fin`), orbites hérissées, écailles, cicatrices ; **jamais de longue bande de membrane d'une seule couleur** sur le corps, des éléments espacés à la place |
 | Mégalodon et Léviathan v2 : crâne = un seul loft lisse couvert de petites pièces (300 pièces !) | « les corps sont bien mais les têtes sont trop simples » | Le nombre de pièces ne suffit pas : **le crâne doit être ajouré et fait d'os séparés** (voir « Crâne ajouré » ci-dessous) |
+| Mégalodon v3 : mâchoires en fer à cheval plat (seau carré), rostre long et pointu, dents en lames fines | « mâchoire trop carrée, nez trop pointu, je veux beaucoup de grosses dents, pas des squelettes de dent » | Mâchoires en U arrondi (`jaw_arc`), plaques inclinées en bol, ligne de gueule courbe et profil bombé ; museau court, large et arrondi ; dents **pleines** `mr.tooth` (épaisses, dentelées), 3 rangées nombreuses dans une pièce `Teeth` |
 | Museaux qui finissent sur une face plate ; crânes « reptile standard » | « les visages sont encore trop génériques, le nez se coupe net » | Bout de museau arrondi (`loft_profile` le fait par défaut) + crâne inspiré d'un **vrai animal** lié au thème |
 | Hydre avec 3 crânes différents (royal, serpent, brute) | « je veux que les 3 têtes soient les mêmes, travaille-les plus » | Différencier les **créatures** entre elles, pas les têtes d'une même créature ; une seule tête très détaillée, répétée |
 
@@ -89,6 +90,13 @@ Un bon crâne combine :
    - hydre / serpent : crânes plats en losange, crochets à venin, capuchon de côtes ;
    - loup / chien des enfers : museau court et haut, crocs énormes, crête dorsale de flammes.
 5. **Deux paires de crocs plus longs** à l'avant et une rangée plus courte derrière.
+   Les dents sont **pleines et épaisses** (`mr.tooth` : section lenticulaire, bords dentelés),
+   jamais des lames fines (« squelettes de dent »). Gueule de prédateur : beaucoup de dents
+   (requin : 3 rangées de 17/15/13 par mâchoire, rangées arrière couchées vers l'intérieur) ;
+   si le budget déborde, les mettre dans une pièce `part="Teeth"`.
+   Mâchoires : jamais un arc plat de hauteur constante (effet « seau carré ») ; ligne de gueule
+   courbe, plaques inclinées, profil bombé, plus profondes vers la charnière. Museau : court
+   et arrondi, pas une pointe.
 
 6. **Crâne ajouré, fait d'os séparés** (leçon Mégalodon / Léviathan v2) : un gros loft lisse
    reste « trop simple » même couvert de 300 petites pièces. Le loft ne sert qu'à la **boîte

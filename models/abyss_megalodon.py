@@ -9,7 +9,8 @@ Identité : os ardoise sombre et dents claires ; pas de cornes mais des harpons 
 rouillés plantés dans le corps et la mâchoire, avec leurs chaînes ; cicatrices rougeoyantes ;
 silhouette horizontale en nage ; lueur rouge sang, thème d'effets « blood ».
 
-3 pièces Roblox : corps, tête (crâne + mâchoires + branchies), nageoires, + lumineux.
+4 pièces Roblox : corps, tête (crâne + mâchoires + branchies), dents (Teeth), nageoires,
++ lumineux.
 Os : Root, Body1-5, Head, Jaw, Caudal, PecFin_L/R, + FX_*.
 """
 import math
@@ -56,7 +57,7 @@ SPINE = a.smooth_path([(0, -2.8, 3.1), (0, -1.0, 3.15), (0, 1.5, 3.2), (0, 4.0, 
 SKULL = [(-2.7, 0.45, 0.62, 0.55, 3.7, 2.85), (-3.2, 0.5, 0.7, 0.58, 3.85, 2.8),
          (-3.8, 0.44, 0.62, 0.5, 3.82, 2.85), (-4.35, 0.3, 0.42, 0.36, 3.62, 2.95)]
 EYE = (-3.75, 3.38)
-ROSTRUM_NODE = Vector((0, -5.75, 3.2))
+ROSTRUM_NODE = Vector((0, -5.3, 3.22))   # museau court, large et arrondi
 HEAD = dict(part="Head")
 
 
@@ -69,13 +70,22 @@ def body_bone(i):
     return f"Body{min(5, i * 5 // (len(SPINE) - 1) + 1)}"
 
 
-def horseshoe(width, length, z, y_back=-3.0, n=15):
-    """Arc en fer à cheval (mâchoire de requin) dans le plan horizontal z."""
+def jaw_arc(width, length, z_front, z_back, n=17, y_back=-3.0):
+    """Arc de mâchoire en U arrondi ; la ligne de gueule s'incurve (haute devant, qui rejoint
+    la charnière à l'arrière) au lieu d'un fer à cheval plat."""
     pts = []
     for i in range(n):
         th = -math.pi / 2 + math.pi * i / (n - 1)
-        pts.append(Vector((width * math.sin(th), y_back - length * math.cos(th), z)))
+        c = math.cos(th)
+        pts.append(Vector((width * math.sin(th) * (1 - 0.1 * c), y_back - length * c,
+                           z_back + (z_front - z_back) * c ** 1.5)))
     return pts
+
+
+def jaw_out(p, width, length, y_back=-3.0):
+    """Normale horizontale vers l'extérieur de l'arc (ellipse)."""
+    v = Vector((p.x / width ** 2, (p.y - y_back) / length ** 2, 0))
+    return v.normalized() if v.length > 1e-6 else Vector((0, -1, 0))
 
 
 def skull_surface(y, side, frac):
@@ -115,30 +125,49 @@ def build_skull(rig):
     a.cut(skull, [a.hole_x((0, EYE[0], EYE[1]), 0.3, 0.25),
                   a.hole_x((0, -2.97, 3.08), 0.15, 0.12)]
           + [a.hole_along((sx * 0.2, -3.05, 3.85), (0, 0, 1), (1, 0, 0), 0.07, 0.13, depth=0.3)
-             for sx in (-1, 1)])
+             for sx in (-1, 1)]
+          + [a.hole_along(skull_surface(-4.05, 0, 0), (0, 0.3, 1), (1, 0, 0), 0.15, 0.17,
+                          depth=0.25)])
     rig.add(skull, H, "bone", **HEAD)
     # Crête sagittale qui se prolonge en barre dorsale du rostre
     dorsal = [skull_surface(-2.8, 0, 0), skull_surface(-3.6, 0, 0), skull_surface(-4.2, 0, 0),
-              Vector((0, -4.8, 3.6)), Vector((0, -5.35, 3.4)), ROSTRUM_NODE]
+              Vector((0, -4.75, 3.58)), Vector((0, -5.1, 3.42)), ROSTRUM_NODE]
     rig.add(r.tube("RostrumDorsal", [tuple(p + Vector((0, 0, 0.03))) for p in dorsal],
                    [0.07, 0.09, 0.1, 0.09, 0.08, 0.07], segments=6), H, "bone", **HEAD)
     for i, yy in enumerate((-3.2, -3.9)):
         rig.add(a.claw(f"CrestSpike{i}", skull_surface(yy, 0, 0) + Vector((0, 0, 0.08)),
                        (0, 0.6, 1), 0.28, 0.05, curl=-0.1, segments=4), H, "horn", **HEAD)
-    rig.add(r.ico("RostralNode", 0.21, subdivisions=2, location=ROSTRUM_NODE,
-                  scale=(1.25, 1.1, 0.9)), H, "bone", **HEAD)
-    for i in range(6):   # ampoules de Lorenzini autour du nœud du rostre
-        ang = 0.5 + i * 0.45
-        rig.add(r.ico(f"NodePore{i}", 0.035, subdivisions=1,
-                      location=ROSTRUM_NODE + Vector((0.25 * math.cos(ang), -0.08,
-                                                      0.17 * math.sin(ang) - 0.03))), H, "ink",
+    rig.add(r.ico("RostralNode", 0.22, subdivisions=2, location=ROSTRUM_NODE,
+                  scale=(1.7, 1.25, 1.05)), H, "bone", **HEAD)
+    rig.add(r.tube("RostralRim", [tuple(ROSTRUM_NODE + Vector((0.4 * math.sin(t), -0.25 * math.cos(t),
+                                                               -0.06)))
+                                  for t in (-1.5, -0.9, -0.3, 0.3, 0.9, 1.5)], 0.035, segments=4),
+            H, "bone_shade", **HEAD)
+    for i in range(7):   # ampoules de Lorenzini sur le bout du museau
+        x = -0.3 + 0.1 * i
+        rig.add(r.ico(f"NodePore{i}", 0.032, subdivisions=1,
+                      location=ROSTRUM_NODE + Vector((x, -0.25 * math.sqrt(1 - (x / 0.42) ** 2),
+                                                      0.06 if i % 2 else -0.02))), H, "ink",
                 **HEAD)
+    # Fontanelle précérébrale (grande ouverture sur le dessus, à l'avant du crâne)
+    font = skull_surface(-4.05, 0, 0)
+    rig.add(a.ring_around("FontanelleRim", font, (0, 0.3, 1), 0.17, 0.04, segments=10), H,
+            "bone_shade", **HEAD)
     for s in (-1, 1):
         # Barres latérales du rostre + entretoises (vide visible entre les barres)
-        lat = [Vector((s * 0.3, -4.3, 2.98)), Vector((s * 0.29, -4.9, 3.0)),
-               Vector((s * 0.15, -5.45, 3.08)), ROSTRUM_NODE]
-        rig.add(r.tube(f"RostrumLat{s}", [tuple(p) for p in lat], [0.09, 0.085, 0.075, 0.06],
+        lat = [Vector((s * 0.3, -4.3, 2.98)), Vector((s * 0.33, -4.8, 3.05)),
+               Vector((s * 0.31, -5.12, 3.14)), ROSTRUM_NODE + Vector((s * 0.24, 0, -0.02))]
+        rig.add(r.tube(f"RostrumLat{s}", [tuple(p) for p in lat], [0.09, 0.085, 0.08, 0.07],
                        segments=6), H, "bone", **HEAD)
+        for k, t in enumerate((0.25, 0.55)):   # bagues calcifiées sur les barres
+            q, q2 = mr.along(lat, t), mr.along(lat, t + 0.05)
+            rig.add(a.ring_around(f"LatBand{s}{k}", q, q2 - q, 0.1, 0.03, segments=8), H,
+                    "bone_shade", **HEAD)
+        for k in range(3):   # foramens sur le flanc du crâne
+            yy = -2.85 - 0.22 * k
+            rig.add(r.ico(f"Foramen{s}{k}", 0.04, subdivisions=1,
+                          location=(s * a.side_width(SKULL, yy, 3.0), yy, 3.0 + 0.08 * k)), H,
+                    "ink", **HEAD)
         for k, t in enumerate((0.35, 0.65)):
             rig.add(r.tube(f"RostrumBrace{s}{k}", [tuple(mr.along(lat, t)),
                                                    tuple(mr.along(dorsal[2:], t))], 0.035,
@@ -146,10 +175,12 @@ def build_skull(rig):
         for i in range(5):
             p = mr.along(lat, 0.12 + 0.15 * i)
             rig.add(r.ico(f"Pore{s}{i}", 0.032, subdivisions=1,
-                          location=p + Vector((s * 0.08, 0, -0.02))), H, "ink", **HEAD)
+                          location=p + Vector((s * 0.085, 0, -0.02))), H, "ink", **HEAD)
         # Capsule nasale bombée + narine
         rig.add(r.ico(f"NasalCapsule{s}", 0.24, subdivisions=2, location=(s * 0.38, -4.45, 2.95),
                       scale=(1, 1.15, 0.75)), H, "bone", **HEAD)
+        rig.add(a.ring_around(f"NasalRidge{s}", (s * 0.38, -4.45, 2.98), (0, 0.2, 1), 0.25, 0.035,
+                              segments=10), H, "bone_shade", **HEAD)
         rig.add(a.ring_around(f"NostrilRim{s}", (s * 0.46, -4.62, 2.82), (s * 0.3, -0.5, -0.8),
                               0.1, 0.03, segments=8), H, "bone_shade", **HEAD)
         rig.add(r.ico(f"Nostril{s}", 0.07, subdivisions=1, location=(s * 0.46, -4.62, 2.82)), H,
@@ -161,6 +192,10 @@ def build_skull(rig):
         mr.spiky_orbit(rig, f"Orbit{s}", (s * x, EYE[0], EYE[1]), (s, 0, 0), 0.27, H, spikes=5,
                        **HEAD)
         shelf = [(s * 0.38, -4.3, 3.68), (s * 0.48, -3.75, 3.8), (s * 0.44, -3.2, 3.8)]
+        vu = Vector((s, 0, 0.3)).normalized()
+        rig.add(r.tube(f"VisorRim{s}", [tuple(Vector(q) + vu * h) for q, h
+                                        in zip(shelf, [0.2, 0.36, 0.26])], 0.04, segments=4), H,
+                "bone", **HEAD)
         rig.add(a.band(f"Visor{s}", shelf, [0.2, 0.36, 0.26], 0.08, up=(s, 0, 0.3), offset=0), H,
                 "bone_shade", **HEAD)
         for i, (yy, w) in enumerate(((-4.15, 0.24), (-3.85, 0.34), (-3.55, 0.34), (-3.3, 0.28))):
@@ -210,84 +245,111 @@ def build_skull(rig):
 
 
 def build_jaws(rig):
-    """Mâchoires en vraies plaques (palatocarré haut, cartilage de Meckel bas, plus hautes à
-    l'arrière), reliées au crâne par l'hyomandibulaire et le processus orbitaire."""
+    """Mâchoires arrondies : palatocarré et cartilage de Meckel en plaques qui s'évasent en
+    bol (inclinées), ligne de gueule incurvée, mâchoire basse renflée vers la charnière.
+    Beaucoup de grosses dents pleines et dentelées sur 3 rangées (pièce « Teeth »)."""
     H, J = "Head", "Jaw"
-    upper = horseshoe(0.78, 2.0, 2.62)
-    lower = horseshoe(0.82, 2.05, 2.25)
-    front = [1 - abs(i - 7) / 7 for i in range(15)]
-    up_h = [0.42 - 0.14 * f for f in front]
-    lo_h = [0.44 - 0.14 * f for f in front]
-    rig.add(a.band("UpperJaw", upper, up_h, 0.16, offset=0), H, "bone_shade", **HEAD)
-    rig.add(r.tube("UpperJawRim", [tuple(p + Vector((0, 0, h))) for p, h in zip(upper, up_h)],
-                   0.05, segments=5), H, "bone", **HEAD)
-    rig.add(a.band("LowerJaw", lower, lo_h, 0.18, offset=1), J, "bone", **HEAD)
-    rig.add(r.tube("LowerJawBase", [tuple(p - Vector((0, 0, h))) for p, h in zip(lower, lo_h)],
-                   0.06, segments=5), J, "bone_shade", **HEAD)
-    # Arête externe à mi-hauteur, pores, denticules sous le menton : la plaque n'est pas lisse
-    for s in (-1, 1):
-        idx = range(7, 15) if s > 0 else range(7, -1, -1)
-        ridge = [lower[i] + Vector((lower[i].x, lower[i].y + 3.0, 0)).normalized() * 0.1
-                 - Vector((0, 0, lo_h[i] * 0.55)) for i in idx]
-        rig.add(r.tube(f"LowerJawRidge{s}", [tuple(q) for q in ridge], 0.045, segments=4), J,
-                "bone_shade", **HEAD)
-        for k in range(2, 7):
-            q = ridge[k]
-            rig.add(a.claw(f"ChinDenticle{s}{k}", q - Vector((0, 0, 0.12)),
-                           Vector((q.x, q.y + 3.0, 0)).normalized() + Vector((0, 0.5, -0.6)),
-                           0.18, 0.035, curl=0, segments=4), J, "horn", **HEAD)
-            rig.add(r.ico(f"JawPore{s}{k}", 0.03, subdivisions=1,
-                          location=q + Vector((0, 0, 0.12)) + Vector((q.x, q.y + 3.0, 0)).normalized() * 0.01),
-                    J, "ink", **HEAD)
-    rig.add(r.ico("Symphysis", 0.13, subdivisions=1, location=lower[7] - Vector((0, 0.06, 0.3))),
-            J, "bone_shade", **HEAD)
+    teeth = dict(part="Teeth")
+    UW, UL, LW, LL = 0.8, 2.0, 0.84, 2.05
+    upper = jaw_arc(UW, UL, 2.88, 2.5)
+    lower = jaw_arc(LW, LL, 1.88, 2.3)
+    fr_u = [min(1.0, max(0.0, (-3.0 - p.y) / UL)) for p in upper]     # 1 devant, 0 à la charnière
+    fr_l = [min(1.0, max(0.0, (-3.0 - p.y) / LL)) for p in lower]
+    out_u = [jaw_out(p, UW, UL) for p in upper]
+    out_l = [jaw_out(p, LW, LL) for p in lower]
+    up_h = [0.26 + 0.2 * (1 - f) ** 1.5 + 0.08 * math.sin(math.pi * f) for f in fr_u]
+    # profond à l'arrière, ventre bombé sur les côtés, menton fin : profil courbe, pas une planche
+    lo_h = [0.28 + 0.3 * (1 - f) ** 1.5 + 0.16 * math.sin(math.pi * f) for f in fr_l]
+    up_u = [Vector((0, 0, 1)) - o * 0.35 for o in out_u]      # le haut rentre vers le crâne
+    lo_u = [Vector((0, 0, 1)) + o * 0.4 for o in out_l]       # le bas rentre : forme de bol
+    rig.add(a.band("UpperJaw", upper, up_h, [0.15 + 0.06 * (1 - f) for f in fr_u], up=up_u,
+                   offset=0), H, "bone_shade", **HEAD)
+    rig.add(r.tube("UpperJawRim", [tuple(p + u.normalized() * h) for p, u, h
+                                   in zip(upper, up_u, up_h)], 0.05, segments=5), H, "bone",
+            **HEAD)
+    rig.add(a.band("LowerJaw", lower, lo_h, [0.17 + 0.08 * (1 - f) for f in fr_l], up=lo_u,
+                   offset=1), J, "bone", **HEAD)
+    bottom = [p - u.normalized() * h for p, u, h in zip(lower, lo_u, lo_h)]
+    rig.add(r.tube("LowerJawBase", [tuple(q) for q in bottom], 0.06, segments=5), J,
+            "bone_shade", **HEAD)
+    rig.add(r.ico("Symphysis", 0.14, subdivisions=1, location=bottom[8] + Vector((0, -0.04, 0.05)),
+                  scale=(1.3, 1, 0.9)), J, "bone_shade", **HEAD)
+    # Arêtes externes (mi-hauteur), alvéoles, pores et denticules : aucune face lisse
+    for i in range(1, 16):
+        p, o = upper[i], out_u[i]
+        u = up_u[i].normalized()
+        rig.add(r.ico(f"SocketU{i}", 0.065, subdivisions=1, location=p + o * 0.1 + u * 0.08), H,
+                "bone", **HEAD)
+        p, o = lower[i], out_l[i]
+        u = lo_u[i].normalized()
+        rig.add(r.ico(f"SocketL{i}", 0.065, subdivisions=1, location=p + o * 0.11 - u * 0.08), J,
+                "bone", **HEAD)
+        if i % 2:
+            rig.add(r.ico(f"JawPore{i}", 0.03, subdivisions=1,
+                          location=p + o * 0.15 - u * lo_h[i] * 0.72), J, "ink", **HEAD)
+    rig.add(r.tube("UpperJawRidge", [tuple(p + o * 0.12 + u.normalized() * h * 0.6) for p, o, u, h
+                                     in zip(upper, out_u, up_u, up_h)], 0.04, segments=4), H,
+            "bone", **HEAD)
+    rig.add(r.tube("LowerJawRidge", [tuple(p + o * 0.14 - u.normalized() * h * 0.5) for p, o, u, h
+                                     in zip(lower, out_l, lo_u, lo_h)], 0.045, segments=4), J,
+            "bone_shade", **HEAD)
+    for i in (2, 4, 6, 10, 12, 14):
+        q = bottom[i]
+        rig.add(a.claw(f"ChinDenticle{i}", q, out_l[i] * 0.6 + Vector((0, 0.5, -0.7)), 0.2, 0.04,
+                       curl=0, segments=4), J, "horn", **HEAD)
     # Gencives sombres à l'intérieur des arcs
-    rig.add(r.tube("UpperGum", [tuple(Vector((p.x * 0.85, p.y * 0.98 - 0.06, 2.68))) for p in upper],
-                   0.07, segments=5), H, "gum", **HEAD)
-    rig.add(r.tube("LowerGum", [tuple(Vector((p.x * 0.85, p.y * 0.98 - 0.06, 2.2))) for p in lower],
-                   0.08, segments=5), J, "gum", **HEAD)
-    # Alvéoles en relief sur la face externe, et 3 rangées de dents triangulaires
-    for jaw_pts, dz, bone in ((upper, 0.14, H), (lower, -0.16, J)):
-        for i in range(1, 14):
-            p = jaw_pts[i]
-            out = Vector((p.x, p.y + 3.0, 0)).normalized()
-            rig.add(r.ico(f"Socket{bone}{i}", 0.06, subdivisions=1,
-                          location=p + out * 0.09 + Vector((0, 0, dz))), bone, "bone", **HEAD)
-    for row in range(3):
-        sc = 1 - 0.13 * row
-        for jaw_pts, down, bone in ((horseshoe(0.78 - 0.1 * row, 2.0 - 0.15 * row, 2.62), -1, H),
-                                    (horseshoe(0.82 - 0.1 * row, 2.05 - 0.15 * row, 2.25), 1, J)):
-            for i in range(1, 14):
-                p = jaw_pts[i]
-                size = (0.2 + 0.2 * front[i]) * sc
-                inward = Vector((-p.x, 0, 0)).normalized() * 0.2 if abs(p.x) > 1e-4 else Vector()
-                tip = p + Vector((0, 0, down * size)) + inward * row + Vector((0, 0.05 * row, 0))
-                rig.add(a.blade(f"Tooth{bone}{row}{i}", p, tip, size * 0.75, 0.035, width_end=0.01,
-                                normal=(p.x, -(p.y + 3.0), 0), bevel=0), bone, "tooth", **HEAD)
+    rig.add(r.tube("UpperGum", [tuple(p - o * 0.1 + Vector((0, 0, 0.05)))
+                                for p, o in zip(upper, out_u)], 0.08, segments=5), H, "gum",
+            **HEAD)
+    rig.add(r.tube("LowerGum", [tuple(p - o * 0.1 - Vector((0, 0, 0.05)))
+                                for p, o in zip(lower, out_l)], 0.09, segments=5), J, "gum",
+            **HEAD)
+    # 3 rangées de grosses dents (17 + 15 + 13 par mâchoire) ; les rangées de remplacement
+    # sont couchées vers l'intérieur, comme chez un vrai requin
+    for row, n in enumerate((19, 17, 15)):
+        sc = 1 - 0.18 * row
+        for (w, l, zf, zb), down, bone, big in (((UW, UL, 2.88, 2.5), -1, H, 1.0),
+                                                ((LW, LL, 1.88, 2.3), 1, J, 0.85)):
+            arc = jaw_arc(w - 0.1 * row, l - 0.14 * row, zf + down * 0.03 * row,
+                          zb + down * 0.03 * row, n=n)
+            for i in range(1, n - 1):
+                p = arc[i]
+                o = jaw_out(p, w - 0.1 * row, l - 0.14 * row)
+                f = max(0.0, (-3.0 - p.y) / l)
+                size = (0.24 + 0.24 * f) * sc * big
+                width = size * (0.82 if row == 0 else 0.75)
+                tip = p + Vector((0, 0, down * size)) - o * size * (0.12 + 0.45 * row)
+                rig.add(mr.tooth(f"Tooth{bone}{row}{i}", p, tip, width, width * 0.38, o),
+                        bone, "tooth", **teeth)
     for s in (-1, 1):
         # Charnière, hyomandibulaire, processus orbitaire, cartilages labiaux, cératohyal
         rig.add(r.ico(f"Hinge{s}", 0.2, subdivisions=1, location=(s * 0.8, -3.05, 2.42)), H,
                 "bone", **HEAD)
+        for k, dz in enumerate((0.16, -0.16)):
+            rig.add(r.ico(f"HingeKnob{s}{k}", 0.1, subdivisions=1,
+                          location=(s * 0.92, -3.1, 2.42 + dz)), H, "bone_shade", **HEAD)
         rig.add(r.tube(f"Hyomandibula{s}", [(s * 0.5, -2.75, 3.25), (s * 0.75, -2.85, 2.85),
-                                            (s * 0.82, -3.0, 2.48)], [0.1, 0.09, 0.11],
+                                            (s * 0.82, -3.0, 2.48)], [0.11, 0.09, 0.12],
                        segments=6), H, "bone", **HEAD)
-        rig.add(r.tube(f"OrbitalProcess{s}", [(s * 0.62, -4.2, 2.85), (s * 0.52, -4.32, 3.0),
-                                              (s * 0.4, -4.42, 3.02)], [0.1, 0.09, 0.08],
+        rig.add(r.tube(f"OrbitalProcess{s}", [(s * 0.62, -4.2, 2.95), (s * 0.52, -4.32, 3.05),
+                                              (s * 0.4, -4.42, 3.05)], [0.11, 0.09, 0.08],
                        segments=6), H, "bone_shade", **HEAD)
-        rig.add(r.tube(f"Labial{s}", [(s * 0.86, -3.25, 2.95), (s * 0.95, -3.45, 2.45),
-                                      (s * 0.88, -3.3, 1.9)], [0.04, 0.06, 0.04], segments=5),
+        rig.add(r.tube(f"Labial{s}", [(s * 0.88, -3.25, 2.95), (s * 0.97, -3.45, 2.45),
+                                      (s * 0.9, -3.3, 1.85)], [0.04, 0.06, 0.04], segments=5),
                 H, "bone_shade", **HEAD)
-        rig.add(r.tube(f"Ceratohyal{s}", [(s * 0.78, -3.1, 2.05), (s * 0.4, -3.5, 1.95),
-                                          (0, -3.9, 2.0)], 0.06, segments=5), J, "bone_shade",
+        rig.add(r.tube(f"Ceratohyal{s}", [(s * 0.78, -3.1, 2.0), (s * 0.4, -3.5, 1.9),
+                                          (0, -3.9, 1.92)], 0.06, segments=5), J, "bone_shade",
                 **HEAD)
         for k, dy in enumerate((-0.12, 0.1)):
-            rig.add(r.tube(f"Ligament{s}{k}", [(s * 0.78, -3.1 + dy, 2.7), (s * 0.84, -3.1 + dy, 2.42),
+            rig.add(r.tube(f"Ligament{s}{k}", [(s * 0.78, -3.1 + dy, 2.7), (s * 0.86, -3.1 + dy, 2.42),
                                                (s * 0.8, -3.1 + dy, 2.12)], 0.035, segments=4), J,
                     "gum", **HEAD)
         # Hameçons rouillés plantés dans la mâchoire, avec leur chaîne
-        mr.hook(rig, f"JawHook{s}", (s * 0.66, -4.4, 1.85), (s * 0.3, -0.4, -1), J, chain=3, **HEAD)
+        q = bottom[5 if s < 0 else 11]
+        mr.hook(rig, f"JawHook{s}", q + Vector((0, 0, 0.05)), (s * 0.3, -0.4, -1), J, chain=3,
+                **HEAD)
     # Langue osseuse (basihyal) et gorge rougeoyante
-    rig.add(a.blade("Tongue", (0, -3.2, 2.2), (0, -4.3, 2.18), 0.4, 0.08, width_end=0.22,
+    rig.add(a.blade("Tongue", (0, -3.2, 2.0), (0, -4.3, 1.86), 0.4, 0.08, width_end=0.22,
                     normal=(0, 0, 1)), J, "bone_shade", **HEAD)
     rig.add(r.ico("Throat", 0.3, subdivisions=2, location=(0, -3.4, 2.45), scale=(1.4, 1, 0.5)), H,
             "glow", glow=True)
