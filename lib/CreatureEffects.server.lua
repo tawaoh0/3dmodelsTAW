@@ -128,6 +128,16 @@ local THEMES = {
 		extra = { name = "Leaves", texture = SMOKE, accel = Vector3.new(0.5, -1.2, 0),
 			speed = NumberRange.new(0.3, 0.8), lifetime = NumberRange.new(2, 3), size = 0.25 },
 	},
+	orchid = { -- pollen lumineux qui tourbillonne + pétales qui tombent
+		main = { texture = SPARKLES, accel = Vector3.new(0, 0.6, 0), speed = 0.5, rot = 160, light = 1 },
+		extra = { name = "Petals", texture = SMOKE, accel = Vector3.new(0.4, -1, 0),
+			speed = NumberRange.new(0.2, 0.6), lifetime = NumberRange.new(2, 3), size = 0.2 },
+	},
+	swamp = { -- brume verte du marécage qui rampe + bulles de poison
+		main = { texture = SMOKE, accel = Vector3.new(0, 0.3, 0), speed = 0.3, rot = 20, light = 0.7 },
+		extra = { name = "Bubbles", texture = SPARKLES, accel = Vector3.new(0, 2, 0),
+			speed = NumberRange.new(0.3, 0.8), lifetime = NumberRange.new(1, 2), size = 0.12 },
+	},
 	gold = { -- poussière d'or scintillante
 		main = { texture = SPARKLES, accel = Vector3.new(0, 1, 0), speed = 0.8, rot = 120, light = 1 },
 		extra = { name = "GoldDust", texture = SPARKLES, accel = Vector3.new(0, -1, 0),

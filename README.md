@@ -293,6 +293,27 @@ plumes de jade, cœur-soleil d'or, posture de traque (thème `ruins`). Pièces :
 
 ![jaguar profil](previews/jungle_jaguar_head.png) ![jaguar face](previews/jungle_jaguar_head_front.png)
 
+| Mante religieuse géante squelette | Pose de test (rig) |
+|---|---|
+| ![mante](previews/jungle_mantis.png) | ![mante pose](previews/jungle_mantis_pose.png) |
+
+Mante-orchidée : tête triangulaire aux yeux composés lumineux cerclés d'or, longues antennes
+annelées, pattes ravisseuses à épines et griffes noires, élytres-pétales roses, abdomen en
+anneaux, lianes et mousse sur les pattes (thème `orchid`). Pièces : corps, Head, Arms, Legs, Wings.
+
+![mante profil](previews/jungle_mantis_head.png) ![mante face](previews/jungle_mantis_head_front.png)
+
+| Crocodile ancien squelette | Pose de test (rig) |
+|---|---|
+| ![crocodile](previews/jungle_crocodile.png) | ![crocodile pose](previews/jungle_crocodile_pose.png) |
+
+Deinosuchus de 11 studs : crâne plat ajouré (fenêtres, fosses du museau, orbites sur le dessus),
+mandibule courbe à fenêtre et symphyse arrondie, dents coniques entrecroisées, dos en
+ostéodermes de pierre gravés de glyphes lumineux, double crête caudale, gastralia, cœur de jade,
+lianes et mousse (thème `swamp`). Pièces : corps, Head, Tail, Legs.
+
+![crocodile profil](previews/jungle_crocodile_head.png) ![crocodile face](previews/jungle_crocodile_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |

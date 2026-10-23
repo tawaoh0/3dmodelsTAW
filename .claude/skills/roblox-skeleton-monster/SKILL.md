@@ -70,7 +70,8 @@ dôme alvéolé, défenses de glace et trompe en anneaux, `ice_sabertooth.py` f�
 mâchoire pivotée, `ice_wendigo.py` humanoïde décharné à crâne de cerf et bois, `ice_bear.py` ours plantigrade à
 armure de glacier, `ice_dragon.py` wyverne à ailes de cristal, `jungle_gorilla.py` primate à glyphes mayas
 (fonction `glyph`), `jungle_serpent.py` serpent enroulé à collerette de plumes, `jungle_jaguar.py`
-félin en traque à rosettes-runes).
+félin en traque à rosettes-runes, `jungle_mantis.py` insecte à pattes ravisseuses et élytres-pétales,
+`jungle_crocodile.py` rampant à ostéodermes, crâne plat ajouré et mandibule courbe à fenêtre).
 S'en inspirer pour la structure (rig → crâne → détails de tête → colonne → cage → membres),
 mais **concevoir un crâne neuf** : c'est la partie que l'utilisateur regarde en premier.
 Le crâne doit être **ajouré et fait d'os séparés** (boîte crânienne courte + barres de museau,
@@ -93,7 +94,7 @@ Le module définit :
   (utilisées par le script d'effets) ;
 - `TEST_POSE` : rotations (degrés) d'os qui montrent que le rig marche (gueule ouverte,
   cou levé, une patte avancée, queue fléchie, aile repliée) ;
-- `EFFECT_THEME` : `fire`, `acid`, `souls`, `frost`, `abyss`, `blood`, `gold`, `vent` (fumée noire + braises) `lure` (points lumineux flottants) `moon` (éclats d'argent qui tombent + brume), `phoenix` (flammes dorées + étincelles) `magma` (fumée lourde + gouttes de lave), `sulfur` (fumée de soufre + flammèches) `hellfire` (flammes cramoisies + cendres) `aurora` (voiles d'aurore + neige), `blizzard` (neige soufflée), `wraith` (brume spectrale), `polar` (souffle glacé + flocons), `crystal` (éclats de cristal) `jungle` (spores + poison turquoise), `quetzal` (plumes au vent + venin) ou `ruins` (poussière d'or + feuilles) (particules du script Roblox) ;
+- `EFFECT_THEME` : `fire`, `acid`, `souls`, `frost`, `abyss`, `blood`, `gold`, `vent` (fumée noire + braises) `lure` (points lumineux flottants) `moon` (éclats d'argent qui tombent + brume), `phoenix` (flammes dorées + étincelles) `magma` (fumée lourde + gouttes de lave), `sulfur` (fumée de soufre + flammèches) `hellfire` (flammes cramoisies + cendres) `aurora` (voiles d'aurore + neige), `blizzard` (neige soufflée), `wraith` (brume spectrale), `polar` (souffle glacé + flocons), `crystal` (éclats de cristal) `jungle` (spores + poison turquoise), `quetzal` (plumes au vent + venin) `ruins` (poussière d'or + feuilles), `orchid` (pétales + pollen) ou `swamp` (bulles de marais + brume) (particules du script Roblox) ;
 - `VIEW` : direction de caméra des aperçus, choisie pour qu'aucune grande pièce n'en cache
   une autre (ailes vues de face, collerette pas masquée par les cornes) ;
 - `build(pal)` qui renvoie le `Rig`.
