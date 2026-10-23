@@ -221,9 +221,9 @@ trompe en anneaux d'os autour d'un cœur lumineux, bosse de garrot givrée, cœu
 |---|---|
 | ![tigre](previews/ice_sabertooth.png) | ![tigre pose](previews/ice_sabertooth_pose.png) |
 
-Crâne de Smilodon (crête sagittale, arcades larges), sabres démesurés aplatis et dentelés,
-gueule ouverte à ~60° avec bride mentonnière, os gris argent rayés de glace bleu nuit,
-posture de bond, cœur de glace (thème `blizzard`). Pièces : corps, Head, Legs.
+Vrai tigre à quatre pattes : grand crâne au long museau, sabres démesurés aplatis et
+dentelés, grande gueule ouverte avec bride mentonnière, os gris argent rayés de glace bleu
+nuit, longue queue, cœur de glace (thème `blizzard`). Pièces : corps, Head, Legs.
 
 ![tigre profil](previews/ice_sabertooth_head.png) ![tigre face](previews/ice_sabertooth_head_front.png)
 
