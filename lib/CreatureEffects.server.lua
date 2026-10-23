@@ -88,6 +88,11 @@ local THEMES = {
 		extra = { name = "Ash", texture = SMOKE, accel = Vector3.new(0, -1, 0),
 			speed = NumberRange.new(0.3, 1), lifetime = NumberRange.new(1.5, 2.5), size = 0.2 },
 	},
+	aurora = { -- voiles d'aurore boréale qui ondulent vers le haut + neige fine
+		main = { texture = SPARKLES, accel = Vector3.new(0, 1.2, 0), speed = 0.4, rot = 60, light = 1 },
+		extra = { name = "Snow", texture = SPARKLES, accel = Vector3.new(0, -2, 0),
+			speed = NumberRange.new(0.3, 1), lifetime = NumberRange.new(2, 3), size = 0.12 },
+	},
 	gold = { -- poussière d'or scintillante
 		main = { texture = SPARKLES, accel = Vector3.new(0, 1, 0), speed = 0.8, rot = 120, light = 1 },
 		extra = { name = "GoldDust", texture = SPARKLES, accel = Vector3.new(0, -1, 0),

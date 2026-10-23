@@ -204,6 +204,19 @@ fendus, queue à touffe de feu (thème `hellfire`). Pièces : corps, Head, Arms,
 
 ![taureau profil](previews/hell_bull_head.png) ![taureau face](previews/hell_bull_head_front.png)
 
+## Pack 4 — Royaume de glace éternelle
+
+| Mammouth squelette | Pose de test (rig) |
+|---|---|
+| ![mammouth](previews/ice_mammoth.png) | ![mammouth pose](previews/ice_mammoth_pose.png) |
+
+Crâne en dôme alvéolé (sinus traversants), grande ouverture nasale, fourreaux de défenses,
+molaires en lamelles, défenses spirales en glace couvertes de givre et de stalactites,
+trompe en anneaux d'os autour d'un cœur lumineux, bosse de garrot givrée, cœur-aurore
+(thème `aurora`). Pièces : corps, Head, Tusks, Legs.
+
+![mammouth profil](previews/ice_mammoth_head.png) ![mammouth face](previews/ice_mammoth_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |
