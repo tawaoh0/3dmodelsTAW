@@ -52,6 +52,17 @@ Méthode qui marche :
   avec `Chain(cou).at(0.7)` pour qu'il ne soit pas caché dans la mâchoire.
 - `VIEW` de face plongeant, ex. `(0.35, -1, 0.75)`, pour montrer l'éventail.
 
+## Céphalopode (kraken, calmar, pieuvre) — exemple : `abyss_kraken.py`
+
+Tête (capsule `loft_profile` le long de Y) avec deux yeux géants sur les flancs, bec de
+perroquet dessous, siphon devant. Au-dessus, le **manteau** dressé : plume dorsale (gladius)
++ **côtes qui partent du dos et s'ouvrent devant** (une cage fermée régulière fait « cage à
+oiseaux »), nageoires en membrane à rayons. 8 bras étalés au sol (`smooth_path` sur 6 points de
+contrôle, 13 segments, 4 os chacun) reliés à la base par une **membrane** (calmar-vampire),
+2 longs tentacules dressés **sur les côtés** (pas devant le visage) avec massue à crochets.
+Os : `Head`, `Mantle`, `Jaw`, `Arm{0-7}_1-4`, `Tentacle_{L,R}_1-5`. Pièces : corps / `Arms` /
+`Tentacles`.
+
 ## Arthropode (araignée, scorpion, mante)
 
 Céphalothorax + abdomen en `blade`/`loft_profile`, pattes à 4 segments (`long_bone` sans

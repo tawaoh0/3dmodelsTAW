@@ -111,6 +111,14 @@ Le build produit dans `exports/<creature>/` :
    braises apparaissent sur chaque os `FX_*` (yeux, cœur, bout de queue…).
 3. Animer avec l'**Animation Editor** (marche, morsure, rugissement…).
 
+## Pack 2 — Abysses
+
+| Kraken squelette | Pose de test (rig) |
+|---|---|
+| ![kraken](previews/abyss_kraken.png) | ![kraken pose](previews/abyss_kraken_pose.png) |
+
+![kraken profil](previews/abyss_kraken_head.png) ![kraken face](previews/abyss_kraken_head_front.png)
+
 ## Skill Claude : un monstre à partir d'une description
 
 La skill `roblox-skeleton-monster` permet à Claude de générer un squelette démoniaque

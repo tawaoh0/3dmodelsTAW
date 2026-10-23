@@ -310,6 +310,40 @@ def crystal(name, center, radius, height, sides=6):
                          [tuple(c + Vector((0, 0, height * 0.55)))]])
 
 
+def smooth_path(points, samples):
+    """Courbe lisse (Catmull-Rom) passant par `points` : liste de `samples` Vector régulièrement
+    répartis. Pour tentacules, queues souples, cous de serpent."""
+    pts = [Vector(p) for p in points]
+    ext = [pts[0] * 2 - pts[1]] + pts + [pts[-1] * 2 - pts[-2]]
+    dense = []
+    for i in range(1, len(ext) - 2):
+        p0, p1, p2, p3 = ext[i - 1], ext[i], ext[i + 1], ext[i + 2]
+        for k in range(20):
+            t = k / 20
+            dense.append(0.5 * (2 * p1 + (p2 - p0) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t
+                                + (3 * p1 - p0 - 3 * p2 + p3) * t * t * t))
+    dense.append(pts[-1])
+    lengths = [0.0]
+    for a_, b_ in zip(dense, dense[1:]):
+        lengths.append(lengths[-1] + (b_ - a_).length)
+    out, j = [], 0
+    for k in range(samples):
+        target = lengths[-1] * k / (samples - 1)
+        while j < len(lengths) - 2 and lengths[j + 1] < target:
+            j += 1
+        seg = lengths[j + 1] - lengths[j] or 1e-9
+        out.append(dense[j].lerp(dense[j + 1], (target - lengths[j]) / seg))
+    return out
+
+
+def oriented(obj, location, normal):
+    """Oriente un objet modélisé selon +Z vers `normal`, puis le place à `location`
+    (balanes, ventouses, pièces…)."""
+    rot = Vector((0, 0, 1)).rotation_difference(Vector(normal).normalized()).to_matrix().to_4x4()
+    obj.data.transform(Matrix.Translation(Vector(location)) @ rot)
+    return obj
+
+
 def rotate_obj(obj, axis, angle, pivot):
     """Fait tourner les sommets de `obj` autour de `pivot`."""
     pivot = Vector(pivot)

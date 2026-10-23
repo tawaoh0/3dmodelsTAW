@@ -23,7 +23,9 @@ c.Chain(points).at(t) -> (point, tangente)              # t de 0 à 1 le long d'
 - Os `FX_*` : le script d'effets y accroche flammes et braises. En mettre aux yeux, à la
   gueule, au cœur, au bout de queue.
 - `EFFECT_THEME` (module) : thème des particules du script Roblox — `fire`, `acid` (bulles
-  + gouttes qui tombent), `souls` (volutes), `frost` (brume qui retombe + flocons), `gold`.
+  + gouttes qui tombent), `souls` (volutes), `frost` (brume qui retombe + flocons), `abyss`
+  (lueurs qui dérivent + bulles), `gold`. Un nouveau thème = une entrée dans `THEMES` de
+  `lib/CreatureEffects.server.lua`.
 - `TEST_POSE` : `{"Jaw": (30, 0, 0), ...}` rotations XYZ en degrés dans l'espace de l'os.
   X ouvre une mâchoire / plie une patte, Z balance une queue ou une aile.
 
@@ -44,6 +46,8 @@ c.Chain(points).at(t) -> (point, tangente)              # t de 0 à 1 le long d'
 | `blade(name, a, b, largeur, épaisseur, width_end, normal, bevel, mid)` | Os plat : omoplate, ilium, arcade, crête, collerette, chevrons. `normal` = direction de l'épaisseur. |
 | `claw(name, base, direction, longueur, rayon, curl=0.35, segments=6)` | Griffe, croc, petite corne, épine. `curl` > 0 recourbe vers le bas, < 0 vers le haut. |
 | `claw_point(base, direction, longueur, curl, t)` | Point + tangente à la fraction `t` d'une `claw` courbée : pour poser une pointe lumineuse, une goutte ou un anneau **sur** la courbe. |
+| `smooth_path(points, n)` | Courbe lisse passant par des points de contrôle → `n` points réguliers : tentacules, queues souples, cous de serpent. |
+| `oriented(obj, position, normale)` | Oriente un objet modélisé selon +Z vers `normale` et le pose : balanes, ventouses, pièces, gemmes posées sur une surface. |
 | `ridged_horn(name, points, rayon, ridges=6)` | Grande corne annelée qui suit un chemin. |
 | `spiral_points(base, side, back, up, coil, turns, spread)` | Chemin d'une corne de bélier (liste de points) : pour y poser bagues et gemmes. Rayon de la corne à la fraction t ≈ `rayon × (1 − t)^0.9`. |
 | `ring_around(name, centre, axe, rayon, épaisseur)` | Anneau autour d'un axe : bague de corne, collier de cou, sertissage de gemme, boucle d'oreille. |
@@ -83,6 +87,10 @@ Chacune a coûté au moins une itération. `check_model.py` détecte celles marq
   avant d'un plan engendré par `X` (largeur) et `U` (hauteur) vaut `X.cross(U)`, pas
   `U.cross(X)`. Vérifier sur le gros plan de face : si on voit les détails à travers les
   trous, ils sont derrière.
+- **Longs membres qui passent devant le visage** (tentacules, cous, bras levés) : les faire
+  partir des côtés et s'écarter avant de monter ; vérifier sur le gros plan de face.
+- **Structure trop régulière** (cage de cerceaux et barreaux identiques) : préférer une
+  forme anatomique (côtes qui partent d'une colonne et s'ouvrent), avec variations.
 - **Anneau d'orbite ou bosse qui dépasse dans le vide** : posé à la largeur max des joues
   alors que le crâne est plus étroit à cette hauteur. Utiliser `side_width(sections, y, z)`.
 - **Pièce volontairement suspendue** (pièces d'or en orbite, runes flottantes non
