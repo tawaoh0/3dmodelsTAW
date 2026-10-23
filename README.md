@@ -93,6 +93,20 @@ Le build produit dans `exports/<creature>/` :
    braises apparaissent sur chaque os `FX_*` (yeux, cœur, bout de queue…).
 3. Animer avec l'**Animation Editor** (marche, morsure, rugissement…).
 
+## Skill Claude : un monstre à partir d'une description
+
+La skill `roblox-skeleton-monster` permet à Claude de générer un squelette démoniaque
+animable à partir d'une simple phrase (« un raptor squelette vert toxique », « une hydre à
+3 têtes dorée »…), avec le même style et les mêmes contrôles que le T-Rex et le dragon.
+
+- Dans ce repo, elle est déjà active (`.claude/skills/roblox-skeleton-monster/`).
+- Pour la partager : envoyer `dist/roblox-skeleton-monster.skill` (bouton « Save skill »
+  dans Claude), ou copier le dossier dans `~/.claude/skills/` d'un autre ordinateur.
+  Elle embarque sa boîte à outils et l'installe toute seule dans un projet vide
+  (`scripts/setup_project.sh`, Python 3.13 requis pour `pip install bpy`).
+- Après une modification de `lib/` ou `build.py` : `bash tools/sync_skill_toolkit.sh`, puis
+  ré-empaqueter.
+
 ## Structure
 
 ```
