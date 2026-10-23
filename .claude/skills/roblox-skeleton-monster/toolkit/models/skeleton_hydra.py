@@ -5,8 +5,9 @@ Identité propre (différente du T-Rex, du dragon, du raptor et du tricératops)
 - cornes de bélier enroulées (bronze sombre, pointes dorées), une variante par tête ;
 - corps bas qui rampe, pattes écartées en crocodile, queue enroulée au sol,
   trois longs cous en éventail à des hauteurs différentes ;
-- trois crânes différents : tête royale (centre, couronne de piques), tête serpent
-  (gauche, crâne en losange, capuchon de cobra), tête brute (droite, défenses, corne de nez) ;
+- trois têtes identiques, très détaillées : cornes de bélier baguées d'or à gemme,
+  couronne de piques à gemmes, diadème d'or, sourcils hérissés, pommettes à piques et
+  boucles d'oreille, barbe d'épines, collier d'or hérissé en haut du cou ;
 - thème or : idole de cristal entourée de pièces en orbite, gemmes, effets Roblox « gold ».
 
 4 pièces Roblox : corps, HeadA, HeadB, HeadC (chaque tête avec son cou), plus le mesh lumineux.
@@ -152,223 +153,157 @@ def build_rig(rig):
 # ---------------------------------------------------------------- têtes (repère local)
 # Articulation de la tête à l'origine, museau vers -Y, Z vers le haut.
 
-SKULL_A = [(0.1, 0.5, 0.72, 0.6, 0.55, -0.35), (-0.25, 0.56, 0.8, 0.62, 0.72, -0.4),
-           (-0.6, 0.52, 0.74, 0.58, 0.75, -0.4), (-0.95, 0.38, 0.56, 0.48, 0.5, -0.38),
-           (-1.35, 0.34, 0.48, 0.42, 0.55, -0.36), (-1.75, 0.28, 0.4, 0.34, 0.42, -0.33),
-           (-2.05, 0.18, 0.26, 0.22, 0.25, -0.3)]
-JAW_A = [(0.0, 0.45, 0.66, 0.55, -0.38, -0.8), (-0.8, 0.4, 0.56, 0.46, -0.4, -0.82),
-         (-1.6, 0.28, 0.4, 0.32, -0.38, -0.7), (-2.0, 0.16, 0.24, 0.2, -0.36, -0.6)]
+# Une seule tête, répétée sur les 3 cous (repère local : articulation à l'origine, museau -Y)
+SKULL = [(0.1, 0.5, 0.72, 0.6, 0.55, -0.35), (-0.25, 0.56, 0.8, 0.62, 0.72, -0.4),
+         (-0.6, 0.52, 0.74, 0.58, 0.75, -0.4), (-0.95, 0.38, 0.56, 0.48, 0.5, -0.38),
+         (-1.35, 0.34, 0.48, 0.42, 0.55, -0.36), (-1.75, 0.28, 0.4, 0.34, 0.42, -0.33),
+         (-2.05, 0.18, 0.26, 0.22, 0.25, -0.3)]
+JAW = [(0.0, 0.45, 0.66, 0.55, -0.38, -0.8), (-0.8, 0.4, 0.56, 0.46, -0.4, -0.82),
+       (-1.6, 0.28, 0.4, 0.32, -0.38, -0.7), (-2.0, 0.16, 0.24, 0.2, -0.36, -0.6)]
+EYE_Y, EYE_Z = -0.6, 0.35
 
 
-def head_details(rig, k, skull, jaw, H, J, eye_y, eye_z, gem_y, kw):
-    """Couche de détails commune (densité) : bourrelets, nodules, veines d'or, gemmes."""
-    for s in (-1, 1):
-        # Rangée de nodules osseux le long du bord dentaire
-        y = skull[0][0] - 0.25
-        while y > skull[-1][0] + 0.2:
-            rig.add(r.ico(f"Rim{k}{s}{y:.2f}", 0.055, subdivisions=1,
-                          location=(s * width_at(skull, y, 3) * 1.0, y,
-                                    width_at(skull, y, 5) + 0.12), scale=(0.6, 1, 0.8)),
-                    H, "bone_shade", **kw)
-            y -= 0.28
-        # Crête osseuse le long de la mâchoire
-        rig.add(r.tube(f"JawRidge{k}{s}", [(s * width_at(jaw, yy, 2) * 0.98, yy,
-                                             (width_at(jaw, yy, 4) + width_at(jaw, yy, 5)) / 2)
-                                            for yy in (jaw[0][0] - 0.2, (jaw[0][0] + jaw[-1][0]) / 2,
-                                                       jaw[-1][0] + 0.25)],
-                       [0.05, 0.06, 0.04], segments=4), J, "bone_shade", **kw)
-        # Veine d'or lumineuse de l'œil vers l'arrière du crâne
-        x = width_at(skull, eye_y, 2) * 0.96
-        vein = [(s * x, eye_y + 0.2, eye_z + 0.05), (s * x * 0.98, eye_y + 0.38, eye_z + 0.15),
-                (s * x * 0.95, eye_y + 0.55, eye_z + 0.05)]
-        rig.add(r.tube(f"GoldVein{k}{s}", vein, 0.025, segments=4), H, "glow", glow=True)
-        # Petites pointes à l'arrière du crâne
-        rig.add(a.claw(f"NapeSpike{k}{s}", (s * width_at(skull, skull[0][0], 2) * 0.8,
-                                            skull[0][0] - 0.05, width_at(skull, skull[0][0], 4) - 0.1),
-                       (s * 0.6, 1, 0.4), 0.32, 0.06, curl=-0.1, segments=4), H, "horn", **kw)
-    # Gemme frontale lumineuse sertie d'un anneau d'or
-    z = width_at(skull, gem_y, 4) + 0.02
-    rig.add(a.crystal(f"BrowGem{k}", (0, gem_y, z + 0.05), 0.07, 0.16, sides=4), H, "glow",
-            glow=True)
-    ring = [(math.cos(t) * 0.11, gem_y + math.sin(t) * 0.11, z) for t in
-            (2 * math.pi * i / 8 for i in range(8))]
-    rig.add(r.tube(f"GemSetting{k}", ring, 0.03, segments=4, closed=True), H, "coin", **kw)
-
-
-def head_king(rig):
-    """Tête A, la reine : grandes cornes de bélier, couronne de piques, pièce frontale."""
-    k, H, J, kw = "A", "HeadA", "JawA", dict(part="HeadA")
-    skull = a.loft_profile(f"Skull{k}", SKULL_A)
-    a.cut(skull, [a.hole_x((0, -0.6, 0.35), 0.2, 0.2), a.hole_x((0, -1.15, 0.05), 0.3, 0.12),
+def build_head(rig, k):
+    """Tête d'hydre : cornes de bélier baguées d'or, couronne, diadème, collier."""
+    H, J, kw = f"Head{k}", f"Jaw{k}", dict(part=f"Head{k}")
+    skull = a.loft_profile(f"Skull{k}", SKULL)
+    a.cut(skull, [a.hole_x((0, EYE_Y, EYE_Z), 0.2, 0.2), a.hole_x((0, -1.15, 0.05), 0.3, 0.12),
                   a.hole_x((0, -1.9, 0.15), 0.1, 0.08), a.hole_x((0, -0.02, 0.2), 0.1, 0.24)])
     rig.add(skull, H, "bone", **kw)
-    jaw = a.loft_profile(f"Jaw{k}", JAW_A)
+    jaw = a.loft_profile(f"Jaw{k}", JAW)
     a.cut(jaw, [a.hole_x((0, -0.6, -0.6), 0.28, 0.08)])
     rig.add(jaw, J, "bone", **kw)
+
     for s in (-1, 1):
-        rig.add(a.spiral_horn(f"Ram{k}{s}", (s * 0.42, -0.25, 0.62), (s, 0, 0), (0, 1, 0),
-                              (0, 0, 1), 0.24, coil=0.55, turns=1.15, spread=0.55), H, "horn", **kw)
-        rig.add(a.blade(f"Brow{k}{s}", (s * 0.15, -0.9, 0.62), (s * 0.55, -0.45, 0.78), 0.26,
-                        0.13, width_end=0.2, mid=0.32, normal=(0, 0.25, 1)), H, "bone_shade", **kw)
-        eye_and_rim(rig, k, s, -0.6, 0.35, side_width(SKULL_A, -0.6, 0.35), 0.13, H, **kw)
-        rig.add(r.ico(f"CheekBoss{k}{s}", 0.17, subdivisions=1,
-                      location=(s * 0.72, -0.95, -0.12), scale=(0.7, 1.2, 0.8)), H, "bone_shade",
+        # --- Cornes de bélier, baguées d'or, gemme en pointe
+        spiral = dict(side=(s, 0, 0), back=(0, 1, 0), up=(0, 0, 1), coil=0.55, turns=1.15,
+                      spread=0.55)
+        base = (s * 0.42, -0.25, 0.62)
+        rig.add(a.spiral_horn(f"Ram{k}{s}", base, radius=0.24, **spiral), H, "horn", **kw)
+        path = a.spiral_points(base, **spiral)
+        for i in (2, 5, 8, 11):
+            t = i / (len(path) - 1)
+            tan = path[i + 1] - path[i - 1]
+            rig.add(a.ring_around(f"RamBand{k}{s}{i}", path[i], tan, 0.24 * (1 - t) ** 0.9 + 0.035,
+                                  0.035), H, "coin", **kw)
+        tip, tan = path[-2], path[-1] - path[-2]
+        rig.add(a.claw(f"RamGem{k}{s}", tip, tan, 0.22, 0.06, curl=0, segments=4), H, "glow",
+                glow=True)
+        # --- Œil, bourrelet d'orbite, sourcil hérissé
+        x = side_width(SKULL, EYE_Y, EYE_Z)
+        rig.add(r.ico(f"Eye{k}{s}", 0.13, subdivisions=2, location=(s * x * 0.65, EYE_Y, EYE_Z)),
+                H, "glow", glow=True)
+        ring = [(s * x, EYE_Y + math.cos(t) * 0.24, EYE_Z + math.sin(t) * 0.24)
+                for t in (2 * math.pi * i / 12 for i in range(12))]
+        rig.add(r.tube(f"OrbitRim{k}{s}", ring, 0.045, segments=4, closed=True), H, "bone_shade",
                 **kw)
-        rig.add(a.claw(f"CheekSpike{k}{s}", (s * 0.7, -0.4, -0.2), (s * 0.8, 0.6, -0.3), 0.4,
-                       0.08, curl=-0.1), H, "horn", **kw)
+        rig.add(a.blade(f"Brow{k}{s}", (s * 0.15, -0.9, 0.62), (s * 0.55, -0.45, 0.78), 0.26, 0.13,
+                        width_end=0.2, mid=0.32, normal=(0, 0.25, 1)), H, "bone_shade", **kw)
+        for i, (yy, ln) in enumerate(((-0.85, 0.18), (-0.65, 0.24), (-0.45, 0.3))):
+            rig.add(a.claw(f"BrowSpike{k}{s}{i}", (s * (0.25 + 0.15 * i), yy, 0.72),
+                           (s * 0.4, 0.6, 0.8), ln, 0.045, curl=-0.15, segments=4), H, "horn",
+                    **kw)
+        rig.fx(f"Eye{k}{s}", head_matrix(k) @ Vector((s * x * 0.65, EYE_Y, EYE_Z)), H)
+        # --- Pommette en arche avec piques + bosse
+        cheek = [(s * 0.5, -1.15, -0.22), (s * 0.78, -0.75, -0.2), (s * 0.82, -0.3, -0.1),
+                 (s * 0.65, 0.05, 0.12)]
+        arch = r.tube(f"Zygomatic{k}{s}", cheek, [0.06, 0.09, 0.09, 0.06], segments=6)
+        r.smooth(arch, 40)
+        rig.add(arch, H, "bone_shade", **kw)
+        for i, (p, ln) in enumerate(((cheek[1], 0.28), (cheek[2], 0.42))):
+            rig.add(a.claw(f"CheekSpike{k}{s}{i}", p, (s * 0.8, 0.6, -0.25), ln, 0.06, curl=-0.1,
+                           segments=4), H, "horn", **kw)
+        # Boucle d'oreille : anneau d'or suspendu à l'arche
+        rig.add(a.ring_around(f"Earring{k}{s}", Vector(cheek[2]) + Vector((s * 0.06, 0.05, -0.17)),
+                              (0, 1, 0), 0.12, 0.03), H, "coin", **kw)
+        # --- Museau : bosses de narines, bosses alignées, nodules du bord dentaire
+        rig.add(r.ico(f"NostrilBoss{k}{s}", 0.09, subdivisions=1, location=(s * 0.14, -1.85, 0.32),
+                      scale=(0.9, 1.4, 0.8)), H, "bone_shade", **kw)
+        for i, yy in enumerate((-1.2, -1.45, -1.7)):
+            rig.add(r.ico(f"SnoutKnob{k}{s}{i}", 0.065, subdivisions=1,
+                          location=(s * side_width(SKULL, yy, 0.12), yy, 0.12), scale=(0.6, 1, 1)),
+                    H, "bone_shade", **kw)
+        yy = SKULL[0][0] - 0.25
+        while yy > SKULL[-1][0] + 0.2:
+            rig.add(r.ico(f"Rim{k}{s}{yy:.2f}", 0.05, subdivisions=1,
+                          location=(s * width_at(SKULL, yy, 3), yy, width_at(SKULL, yy, 5) + 0.12),
+                          scale=(0.6, 1, 0.8)), H, "bone_shade", **kw)
+            yy -= 0.26
+        # Veine d'or lumineuse de l'œil vers la nuque
+        vein = [(s * x * 0.98, EYE_Y + 0.22, EYE_Z + 0.04), (s * x * 0.97, EYE_Y + 0.4, EYE_Z + 0.14),
+                (s * x * 0.95, EYE_Y + 0.58, EYE_Z + 0.02)]
+        rig.add(r.tube(f"GoldVein{k}{s}", vein, 0.025, segments=4), H, "glow", glow=True)
+        # Collerette de nuque : 3 piques en éventail
+        for i in range(3):
+            rig.add(a.claw(f"NapeSpike{k}{s}{i}", (s * 0.4, 0.08, 0.35 - i * 0.2),
+                           (s * 0.6, 1, 0.5 - i * 0.45), 0.38 - i * 0.06, 0.06, curl=-0.1,
+                           segments=4), H, "horn", **kw)
+        # --- Mâchoire : apophyse, crête, épines d'angle, bosses
         rig.add(a.blade(f"Coronoid{k}{s}", (s * 0.5, -0.25, -0.62), (s * 0.52, -0.05, -0.3), 0.26,
                         0.08, width_end=0.14, normal=(1, 0, 0), bevel=0), J, "bone_shade", **kw)
-        for i, y in enumerate((-1.25, -1.55)):
-            rig.add(r.ico(f"SnoutKnob{k}{s}{i}", 0.07, subdivisions=1,
-                          location=(s * width_at(SKULL_A, y, 2) * 0.97, y, 0.1), scale=(0.6, 1, 1)),
-                    H, "bone_shade", **kw)
-        rig.fx(f"Eye{k}{s}", head_matrix(k) @ Vector((s * 0.4, -0.6, 0.35)), H)
-    # Couronne de piques sur le dôme, pointes dorées lumineuses
+        rig.add(r.tube(f"JawRidge{k}{s}", [(s * width_at(JAW, yy, 2) * 0.98, yy, -0.6)
+                                           for yy in (-0.2, -0.9, -1.6)], [0.05, 0.06, 0.04],
+                       segments=4), J, "bone_shade", **kw)
+        rig.add(a.claw(f"JawSpike{k}{s}", (s * 0.55, 0.0, -0.75), (s * 0.6, 0.7, -0.5), 0.4, 0.08,
+                       curl=-0.1, segments=5), J, "horn", **kw)
+        for i, yy in enumerate((-0.5, -1.1)):
+            rig.add(r.ico(f"JawKnob{k}{s}{i}", 0.08, subdivisions=1,
+                          location=(s * width_at(JAW, yy, 2) * 0.98, yy, -0.68), scale=(0.6, 1, 0.9)),
+                    J, "bone_shade", **kw)
+
+    # --- Couronne de 5 piques à gemmes dorées
     for i, x in enumerate((-0.32, -0.16, 0.0, 0.16, 0.32)):
         h = 0.5 - abs(x) * 0.6
-        base = Vector((x, -0.35, width_at(SKULL_A, -0.35, 4) - 0.04))
-        rig.add(a.claw(f"Crown{i}", base, (x * 0.8, 0.15, 1), h, 0.07, curl=0, segments=5), H,
-                "horn", **kw)
-        tip, tan = a.claw_point(base, Vector((x * 0.8, 0.15, 1)), h, 0, 0.75)
-        rig.add(a.claw(f"CrownGem{i}", tip, tan, h * 0.28, 0.035, curl=0, segments=4), H,
-                "glow", glow=True)
-    coin(rig, "BrowCoin", (0, -0.85, width_at(SKULL_A, -0.85, 4) + 0.01), (0, -0.3, 1), H, **kw)
-    rig.add(r.tube("NasalRidgeA", [(0, y, width_at(SKULL_A, y, 4) + 0.02) for y in (-1.1, -1.45,
-                                                                                    -1.8)],
-                   [0.07, 0.08, 0.05], segments=5), H, "bone_shade", **kw)
-    teeth(rig, k, SKULL_A, JAW_A, -1.95, -0.4, 0.22, (1, 2), H, J, -0.32, -0.4, **kw)
-    head_details(rig, k, SKULL_A, JAW_A, H, J, -0.6, 0.35, -1.3, kw)
-
-
-SKULL_B = [(0.1, 0.4, 0.6, 0.5, 0.35, -0.25), (-0.4, 0.55, 0.78, 0.64, 0.42, -0.28),
-           (-0.9, 0.4, 0.55, 0.45, 0.38, -0.27), (-1.4, 0.28, 0.38, 0.32, 0.3, -0.25),
-           (-1.85, 0.18, 0.24, 0.2, 0.22, -0.22), (-2.1, 0.1, 0.14, 0.12, 0.15, -0.18)]
-JAW_B = [(0.0, 0.38, 0.55, 0.46, -0.26, -0.5), (-0.9, 0.32, 0.45, 0.38, -0.27, -0.5),
-         (-1.7, 0.18, 0.24, 0.2, -0.24, -0.4), (-2.05, 0.1, 0.13, 0.11, -0.2, -0.32)]
-
-
-def head_serpent(rig):
-    """Tête B : crâne plat en losange, longs crochets, capuchon de cobra palmé, petites spirales."""
-    k, H, J, kw = "B", "HeadB", "JawB", dict(part="HeadB")
-    skull = a.loft_profile(f"Skull{k}", SKULL_B)
-    cut_o = a.hole_x((0, -0.75, 0.2), 0.2, 0.12)
-    a.rotate_obj(cut_o, "X", -0.3, (0, -0.75, 0.2))
-    a.cut(skull, [cut_o, a.hole_x((0, -1.95, 0.08), 0.08, 0.06)])
-    rig.add(skull, H, "bone", **kw)
-    jaw = a.loft_profile(f"Jaw{k}", JAW_B)
-    rig.add(jaw, J, "bone", **kw)
-    for s in (-1, 1):
-        rig.add(a.spiral_horn(f"Ram{k}{s}", (s * 0.35, -0.1, 0.38), (s, 0, 0), (0, 1, 0),
-                              (0, 0, 1), 0.14, coil=0.3, turns=1.0, spread=0.35, ridges=5), H,
-                "horn", **kw)
-        eye = r.ico(f"Eye{k}{s}", 0.1, subdivisions=2, location=(s * 0.38, -0.75, 0.2),
-                    scale=(0.7, 1.8, 0.8))
-        a.rotate_obj(eye, "X", -0.3, (0, 0, 0))
-        rig.add(eye, H, "glow", glow=True)
-        rig.add(a.blade(f"Brow{k}{s}", (s * 0.15, -1.05, 0.38), (s * 0.55, -0.5, 0.44), 0.18, 0.08,
-                        width_end=0.12, normal=(0, 0.2, 1), bevel=0.01), H, "bone_shade", **kw)
-        # Crochets à venin repliables + écailles osseuses le long de la joue
-        rig.add(a.claw(f"Fang{k}{s}", (s * 0.12, -1.8, -0.2), (0, 0.35, -1), 0.55, 0.06,
-                       curl=-0.2, segments=4), H, "tooth", **kw)
-        for i, y in enumerate((-0.3, -0.6, -0.9, -1.2)):
-            rig.add(r.ico(f"Scale{k}{s}{i}", 0.08, subdivisions=1,
-                          location=(s * width_at(SKULL_B, y, 2) * 0.98, y, 0.02), scale=(0.5, 1.2, 0.8)),
-                    H, "bone_shade", **kw)
-        # Capuchon de cobra : 4 baleines d'os qui s'écartent derrière la tête + membrane
-        ribs = []
-        for i in range(4):
-            ang = 0.25 + i * 0.32
-            tip = Vector((s * (0.45 + 0.9 * math.cos(ang)), 0.5 + 0.25 * i, 0.15 + 0.9 * math.sin(ang)
-                          - 0.25 * i))
-            base = Vector((s * 0.3, 0.45 + 0.1 * i, 0.05))
-            ribs.append((base, tip))
-            rig.add(r.tube(f"Hood{k}{s}{i}", [tuple(base), tuple(base.lerp(tip, 0.5)
-                                                                + Vector((0, -0.05, 0.08))),
-                                              tuple(tip)], [0.05, 0.04, 0.02], segments=4), H,
-                    "bone_shade", **kw)
-        outline = [(tuple(ribs[0][0]), {H: 1})] + [(tuple(t), {H: 1}) for _, t in ribs] \
-            + [(tuple(ribs[-1][0]), {H: 1})]
-        hood = a.membrane(f"HoodMembrane{k}{s}", outline, thickness=0.04)
-        rig.pal.paint(hood, "membrane")
-        hood["part"] = "HeadB"
-        coin(rig, f"HoodCoin{k}{s}", ribs[1][0].lerp(ribs[2][1], 0.5) + Vector((0, -0.04, 0)),
-             (s * 0.3, -1, 0.3), H, radius=0.1, **kw)
-        rig.fx(f"Eye{k}{s}", head_matrix(k) @ Vector((s * 0.38, -0.75, 0.2)), H)
-    rig.add(r.tube("DorsalB", [(0, y, width_at(SKULL_B, y, 4) + 0.02) for y in (-0.2, -0.8, -1.4)],
-                   [0.06, 0.05, 0.03], segments=4), H, "bone_shade", **kw)
-    teeth(rig, k, SKULL_B, JAW_B, -1.8, -0.4, 0.2, (), H, J, -0.22, -0.28, **kw)
-    head_details(rig, k, SKULL_B, JAW_B, H, J, -0.75, 0.2, -1.2, kw)
-    for s in (-1, 1):   # bosses des narines et bourrelet d'orbite
-        rig.add(r.ico(f"NostrilBoss{k}{s}", 0.07, subdivisions=1, location=(s * 0.1, -1.9, 0.2),
-                      scale=(0.9, 1.4, 0.8)), H, "bone_shade", **kw)
-        rig.add(a.blade(f"Coronoid{k}{s}", (s * 0.38, -0.25, -0.45), (s * 0.4, -0.05, -0.2), 0.2,
-                        0.06, width_end=0.1, normal=(1, 0, 0), bevel=0), J, "bone_shade", **kw)
-
-
-SKULL_C = [(0.1, 0.55, 0.75, 0.65, 0.6, -0.4), (-0.4, 0.6, 0.82, 0.68, 0.72, -0.45),
-           (-0.9, 0.55, 0.75, 0.62, 0.62, -0.45), (-1.3, 0.45, 0.6, 0.52, 0.64, -0.42),
-           (-1.6, 0.38, 0.5, 0.44, 0.45, -0.4)]
-JAW_C = [(0.0, 0.5, 0.72, 0.6, -0.44, -0.95), (-0.8, 0.46, 0.64, 0.54, -0.45, -0.98),
-         (-1.55, 0.36, 0.5, 0.42, -0.42, -0.85)]
-
-
-def head_brute(rig):
-    """Tête C : crâne court et carré, défenses relevées, grosse corne de nez, spirales vers l'avant."""
-    k, H, J, kw = "C", "HeadC", "JawC", dict(part="HeadC")
-    skull = a.loft_profile(f"Skull{k}", SKULL_C)
-    a.cut(skull, [a.hole_x((0, -0.55, 0.38), 0.17, 0.17), a.hole_x((0, -1.05, 0.05), 0.22, 0.12),
-                  a.hole_x((0, -1.5, 0.2), 0.09, 0.08)])
-    rig.add(skull, H, "bone", **kw)
-    jaw = a.loft_profile(f"Jaw{k}", JAW_C)
-    rig.add(jaw, J, "bone", **kw)
-    for s in (-1, 1):
-        # Spirales qui s'enroulent vers l'avant, devant les joues
-        rig.add(a.spiral_horn(f"Ram{k}{s}", (s * 0.5, -0.15, 0.62), (s, 0, 0), (0, -1, 0),
-                              (0, 0, 1), 0.2, coil=0.42, turns=0.95, spread=0.45, ridges=6), H,
-                "horn", **kw)
-        eye_and_rim(rig, k, s, -0.55, 0.38, side_width(SKULL_C, -0.55, 0.38), 0.11, H, **kw)
-        # Lourde arcade en plaque
-        rig.add(a.blade(f"Brow{k}{s}", (s * 0.15, -0.8, 0.72), (s * 0.62, -0.35, 0.78), 0.3, 0.16,
-                        width_end=0.24, mid=0.36, normal=(0, 0.2, 1)), H, "bone_shade", **kw)
-        # Défenses relevées sorties de la mâchoire
-        base = Vector((s * 0.42, -1.3, -0.5))
-        rig.add(a.claw(f"Tusk{k}{s}", base, (s * 0.45, -0.3, 1), 0.85, 0.11, curl=-0.35,
-                       segments=6), J, "tooth", **kw)
-        rig.add(r.tube(f"TuskRing{k}{s}", [tuple(base + Vector((math.cos(t) * 0.13, math.sin(t) * 0.13, 0.05)))
-                                           for t in (2 * math.pi * i / 8 for i in range(8))], 0.035,
-                       segments=4, closed=True), J, "horn_tip", **kw)
-        # Bosses et pointes de mâchoire
-        for i, y in enumerate((-0.4, -0.9)):
-            rig.add(r.ico(f"JawKnob{k}{s}{i}", 0.12, subdivisions=1,
-                          location=(s * width_at(JAW_C, y, 2) * 0.98, y, -0.75), scale=(0.6, 1, 0.9)),
-                    J, "bone_shade", **kw)
-        rig.add(a.claw(f"JawSpike{k}{s}", (s * 0.6, 0.0, -0.85), (s * 0.6, 0.7, -0.5), 0.4, 0.09,
-                       curl=-0.1), J, "horn", **kw)
-        rig.fx(f"Eye{k}{s}", head_matrix(k) @ Vector((s * 0.45, -0.55, 0.38)), H)
-    rig.add(a.claw(f"NoseHorn{k}", (0, -1.35, 0.6), (0, -0.35, 1), 0.7, 0.18, curl=-0.25,
-                   segments=6), H, "horn", **kw)
-    rig.add(a.claw(f"NoseHornGem{k}", *a.claw_point((0, -1.35, 0.6), (0, -0.35, 1), 0.7, -0.25, 0.7),
-                   0.18, 0.05, curl=0, segments=4), H, "glow", glow=True)
-    teeth(rig, k, SKULL_C, JAW_C, -1.5, -0.3, 0.24, (0,), H, J, -0.38, -0.46, **kw)
-    head_details(rig, k, SKULL_C, JAW_C, H, J, -0.55, 0.38, -0.95, kw)
-    rig.add(r.tube("NasalRidgeC", [(0, y, width_at(SKULL_C, y, 4) + 0.02) for y in (-0.8, -1.1)],
-                   [0.08, 0.07], segments=5), H, "bone_shade", **kw)
-    for s in (-1, 1):   # pointes d'arcade et bosses de joue
-        rig.add(a.claw(f"BrowSpike{k}{s}", (s * 0.62, -0.35, 0.78), (s * 0.7, 0.5, 0.6), 0.35,
-                       0.07, curl=-0.1, segments=4), H, "horn", **kw)
-        rig.add(r.ico(f"CheekBoss{k}{s}", 0.16, subdivisions=1, location=(s * 0.8, -0.95, -0.1),
-                      scale=(0.7, 1.2, 0.9)), H, "bone_shade", **kw)
+        base = Vector((x, -0.35, width_at(SKULL, -0.35, 4) - 0.04))
+        d = Vector((x * 0.8, 0.15, 1))
+        rig.add(a.claw(f"Crown{k}{i}", base, d, h, 0.07, curl=0, segments=5), H, "horn", **kw)
+        tip, tan = a.claw_point(base, d, h, 0, 0.75)
+        rig.add(a.claw(f"CrownGem{k}{i}", tip, tan, h * 0.28, 0.035, curl=0, segments=4), H, "glow",
+                glow=True)
+    # Diadème : bandeau d'or qui court sur le front d'une corne à l'autre, gemme au centre
+    band = [(x, -0.62 - 0.12 * (1 - abs(x) / 0.5), side_top + 0.03)
+            for x in (-0.5, -0.25, 0.0, 0.25, 0.5)
+            for side_top in [width_at(SKULL, -0.62 - 0.12 * (1 - abs(x) / 0.5), 4)
+                             - 0.06 * (abs(x) / 0.5) ** 2]]
+    rig.add(r.tube(f"Diadem{k}", band, 0.04, segments=4), H, "coin", **kw)
+    gem_c = Vector(band[2]) + Vector((0, -0.02, 0.05))
+    rig.add(a.crystal(f"DiademGem{k}", gem_c, 0.08, 0.2, sides=4), H, "glow", glow=True)
+    rig.add(a.ring_around(f"GemSetting{k}", gem_c - Vector((0, 0, 0.04)), (0, 0, 1), 0.11, 0.03),
+            H, "coin", **kw)
+    # Arête nasale, petite corne de nez, barbe d'épines sous le menton
+    rig.add(r.tube(f"NasalRidge{k}", [(0, yy, width_at(SKULL, yy, 4) + 0.02)
+                                      for yy in (-1.05, -1.4, -1.75)], [0.07, 0.08, 0.05],
+                   segments=5), H, "bone_shade", **kw)
+    rig.add(a.claw(f"NoseHorn{k}", (0, -1.55, width_at(SKULL, -1.55, 4)), (0, -0.4, 1), 0.3, 0.08,
+                   curl=-0.2, segments=5), H, "horn", **kw)
+    for i, xx in enumerate((-0.12, 0.0, 0.12)):
+        rig.add(a.claw(f"Beard{k}{i}", (xx, -1.55 + abs(xx), -0.78), (xx * 2, 0.5, -1),
+                       0.32 - abs(xx), 0.05, curl=0.15, segments=4), J, "horn", **kw)
+    # Gorge de feu doré (visible gueule ouverte)
+    rig.add(r.ico(f"Throat{k}", 0.2, subdivisions=2, location=(0, -0.45, -0.42),
+                  scale=(1.3, 1.2, 0.5)), H, "glow", glow=True)
+    teeth(rig, k, SKULL, JAW, -1.95, -0.4, 0.22, (1, 2), H, J, -0.32, -0.4, **kw)
 
 
 def build_heads(rig):
-    for key, builder in (("A", head_king), ("B", head_serpent), ("C", head_brute)):
+    for key in NECKS:
         before = {o.name for o in bpy.context.scene.objects}
-        builder(rig)
+        build_head(rig, key)
         place(new_objects(before), head_matrix(key))
 
 
 def build_necks(rig):
     for key, (pts, _, _) in NECKS.items():
+        # Collier d'or hérissé sur le cou, juste sous la mâchoire (pas caché dedans)
+        collar_c, tan = c.Chain(pts).at(0.72)
+        rig.add(a.ring_around(f"Collar{key}", collar_c, tan, 0.33, 0.06, segments=14),
+                f"Neck{key}2", "coin", part=f"Head{key}")
+        side, up = a._basis(tan)
+        for i in range(6):
+            ang = 2 * math.pi * i / 6
+            out = side * math.cos(ang) + up * math.sin(ang)
+            rig.add(a.claw(f"CollarSpike{key}{i}", collar_c + out * 0.33, out + tan * 0.3, 0.22,
+                           0.05, curl=0, segments=4), f"Neck{key}2", "horn", part=f"Head{key}")
         neck = c.Chain(pts)
         n = 9
         for i in range(n):

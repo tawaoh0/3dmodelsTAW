@@ -240,20 +240,36 @@ def ridged_horn(name, points, radius, ridges=6, depth=0.12, segments=8):
     return obj
 
 
-def spiral_horn(name, base, side, back, up, radius, coil=0.55, turns=1.1, spread=0.5,
-                ridges=7):
-    """Corne de bélier enroulée : monte, part vers `back`, redescend et revient vers l'avant
-    en s'écartant vers `side` pour ne pas se recouper. `coil` = rayon de l'enroulement."""
+def spiral_points(base, side, back, up, coil=0.55, turns=1.1, spread=0.5, n=14):
+    """Chemin d'une corne de bélier (voir `spiral_horn`) : liste de Vector, de la base à la
+    pointe. Sert aussi à poser des bagues ou des gemmes exactement sur la corne."""
     base, side, back, up = (Vector(v) for v in (base, side, back, up))
     side, back, up = side.normalized(), back.normalized(), up.normalized()
     pts = []
-    n = 14
     for k in range(n + 1):
         th = 2 * math.pi * turns * k / n
         rad = coil * (1 - 0.3 * k / n)
-        pts.append(tuple(base + (up * math.sin(th) + back * (1 - math.cos(th))) * rad
-                         + side * spread * k / n))
-    return ridged_horn(name, pts, radius, ridges=ridges)
+        pts.append(base + (up * math.sin(th) + back * (1 - math.cos(th))) * rad
+                   + side * spread * k / n)
+    return pts
+
+
+def spiral_horn(name, base, side, back, up, radius, coil=0.55, turns=1.1, spread=0.5,
+                ridges=7):
+    """Corne de bélier enroulée : monte, part vers `back`, redescend et revient vers l'avant
+    en s'écartant vers `side` pour ne pas se recouper. `coil` = rayon de l'enroulement.
+    Rayon de la corne à la fraction t du chemin ≈ radius × (1 − t)^0.9."""
+    pts = spiral_points(base, side, back, up, coil, turns, spread)
+    return ridged_horn(name, [tuple(p) for p in pts], radius, ridges=ridges)
+
+
+def ring_around(name, center, tangent, radius, thickness, segments=10):
+    """Anneau (bague, collier, sertissage) autour d'un axe `tangent` passant par `center`."""
+    center, t = Vector(center), Vector(tangent).normalized()
+    side, up = _basis(t)
+    pts = [tuple(center + (side * math.cos(a) + up * math.sin(a)) * radius)
+           for a in (2 * math.pi * i / segments for i in range(segments))]
+    return r.tube(name, pts, thickness, segments=4, closed=True)
 
 
 def crystal(name, center, radius, height, sides=6):

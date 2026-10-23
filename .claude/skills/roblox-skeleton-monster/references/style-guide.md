@@ -28,6 +28,7 @@ corrige un rendu qui a été refusé.
 | Crâne du dragon = crâne du T-Rex | « la tête est trop la même » | Un crâne conçu pour chaque créature |
 | Crâne en coin droit et pointu | « manque de grand relief / de parties, toute droite et pointue » | Profil ondulé + grosses pièces en relief (voir ci-dessous) |
 | T-Rex, dragon, raptor tous ivoire + cornes noires annelées balayées + cœur cristal | « ils se ressemblent trop tous entre eux » | Une identité complète par créature (section suivante) |
+| Hydre avec 3 crânes différents (royal, serpent, brute) | « je veux que les 3 têtes soient les mêmes, travaille-les plus » | Différencier les **créatures** entre elles, pas les têtes d'une même créature ; une seule tête très détaillée, répétée |
 
 ## Identité : chaque créature doit se distinguer sur 4 axes
 
@@ -37,7 +38,7 @@ pour la nouvelle, en choisissant pour **chaque ligne** une valeur qu'aucune autr
 | Axe | T-Rex | Dragon | Raptor | Tricératops | Hydre | Idées libres |
 |---|---|---|---|---|---|---|
 | Matière / couleur des os | ivoire `#ddd0b8` | ivoire froid `#dcd3c8` | vert-gris rongé `#c4c9a0` + cratères lumineux | givré blanc-bleuté `#d6e4ec` + grappes de cristaux | dorés `#e3c068` + pièces d'or incrustées | os calcinés noirs fissurés de lave, obsidienne, os dorés, os rouges sanglants, os translucides |
-| Cornes / pointes | 2 grandes cornes annelées noires recourbées | couronne : 2 cornes plaquées + collerette palmée | **aucune corne** : éventails de piquants-plumes + crêtes jumelles dentelées | 3 cornes de **glace facettée** + collerette percée bordée d'éclats | **cornes de bélier en spirale** (bronze sombre), variante par tête |  ramures, lames, couronne de piques, épines dorsales en voile |
+| Cornes / pointes | 2 grandes cornes annelées noires recourbées | couronne : 2 cornes plaquées + collerette palmée | **aucune corne** : éventails de piquants-plumes + crêtes jumelles dentelées | 3 cornes de **glace facettée** + collerette percée bordée d'éclats | **cornes de bélier en spirale** (bronze sombre) baguées d'or, 3 têtes identiques |  ramures, lames, couronne de piques, épines dorsales en voile |
 | Silhouette / posture | massif bipède, tête énorme | quadrupède ailé, cou en S dressé | petit bipède ramassé prêt à bondir | quadrupède trapu et bas, tête baissée pour charger, sabots | corps rampant, pattes de crocodile, 3 cous en éventail | dressé sur 2 pattes, rampant au sol, enroulé, voûté, multi-têtes |
 | Thème d'effets (`EFFECT_THEME`) | `fire` + cœur cristal | `fire` violet + cœur cristal | `acid` + poche d'acide, gouttes | `frost` + cœur en grappe de glace, stalactites | `gold` + idole de cristal, pièces en orbite, gemmes | `souls`, lave, sang, ombre |
 
@@ -86,6 +87,11 @@ d'environ 1 stud² sans détail. Pour chaque grande surface, combiner au moins 3
 | Lignes lumineuses | veines de givre, fissures de lave, runes | `r.tube` fin (rayon ≈ 0.03) en zigzag, couleur `glow` |
 | Anneaux sur les cornes | fourreau d'os, bagues | anneaux placés avec `claw_point` |
 | Bosses et rugosités | bosses sus-orbitaires, bosses de pommettes, nodules sur le museau | `r.ico(subdivisions=1)` aplatis |
+| Ornements « éléments supplémentaires » | bagues d'or sur les cornes, diadème avec gemme sertie, boucles d'oreille, couronne de piques à gemmes, collier hérissé, barbe d'épines | `ring_around`, `spiral_points` / `claw_point` pour poser sur une corne, `crystal` + anneau de sertissage |
+
+Quand l'utilisateur demande « plus de détails / d'éléments supplémentaires », ajouter une
+couche d'**ornements** en plus des détails osseux : c'est ce qui a fait la différence sur
+l'hydre (125 pièces par tête).
 
 Repère : une tête réussie compte **plus de 100 pièces** (crâne + mâchoire + détails), le
 tricératops final en a 131 pour 6 000 triangles. `check_model.py` prévient sous 45.

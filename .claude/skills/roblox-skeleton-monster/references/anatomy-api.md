@@ -44,6 +44,8 @@ c.Chain(points).at(t) -> (point, tangente)              # t de 0 à 1 le long d'
 | `claw(name, base, direction, longueur, rayon, curl=0.35, segments=6)` | Griffe, croc, petite corne, épine. `curl` > 0 recourbe vers le bas, < 0 vers le haut. |
 | `claw_point(base, direction, longueur, curl, t)` | Point + tangente à la fraction `t` d'une `claw` courbée : pour poser une pointe lumineuse, une goutte ou un anneau **sur** la courbe. |
 | `ridged_horn(name, points, rayon, ridges=6)` | Grande corne annelée qui suit un chemin. |
+| `spiral_points(base, side, back, up, coil, turns, spread)` | Chemin d'une corne de bélier (liste de points) : pour y poser bagues et gemmes. Rayon de la corne à la fraction t ≈ `rayon × (1 − t)^0.9`. |
+| `ring_around(name, centre, axe, rayon, épaisseur)` | Anneau autour d'un axe : bague de corne, collier de cou, sertissage de gemme, boucle d'oreille. |
 | `spiral_horn(name, base, side, back, up, rayon, coil, turns, spread)` | Corne de bélier enroulée (monte, part vers `back`, redescend, revient) ; `back=(0,-1,0)` l'enroule vers l'avant. |
 | `crystal(name, centre, rayon, hauteur, sides=6)` | Cristal facetté (cœur, éclats). |
 | `membrane(name, [(pos, {os: poids})], thickness)` | Membrane 2 faces (aile, collerette) ; triangulée en éventail depuis le 1er point. Peindre avec `rig.pal.paint(m, "membrane")` puis `m["part"] = "Wings"`. |

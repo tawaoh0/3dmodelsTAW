@@ -44,8 +44,12 @@ Méthode qui marche :
   os / os FX avec la même matrice.
 - Têtes à ≈ 80 % de la taille d'une tête unique, cous longs et bien écartés (lacet ±0.5),
   à des hauteurs différentes, pour qu'aucune tête n'en masque une autre.
-- **Un crâne différent par tête** (même famille, signature propre : couronne, capuchon,
-  défenses…), une pièce Roblox par tête (`part="HeadA"`…) avec son cou.
+- **Les têtes sont identiques** (préférence explicite de l'utilisateur : une version avec
+  3 crânes différents a été refusée). Une seule fonction `build_head(rig, key)` appelée pour
+  chaque cou ; y mettre tout l'effort de détail. Une pièce Roblox par tête
+  (`part="HeadA"`…) avec son cou : chaque tête dispose ainsi de 20 000 triangles.
+- Un ornement en haut de chaque cou (collier) relie visuellement tête et corps ; le placer
+  avec `Chain(cou).at(0.7)` pour qu'il ne soit pas caché dans la mâchoire.
 - `VIEW` de face plongeant, ex. `(0.35, -1, 0.75)`, pour montrer l'éventail.
 
 ## Arthropode (araignée, scorpion, mante)
