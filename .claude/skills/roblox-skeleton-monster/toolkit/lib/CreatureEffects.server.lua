@@ -63,6 +63,11 @@ local THEMES = {
 		extra = { name = "Plankton", texture = SPARKLES, accel = Vector3.new(0, -0.3, 0),
 			speed = NumberRange.new(0.1, 0.5), lifetime = NumberRange.new(2, 4), size = 0.08 },
 	},
+	moon = { -- éclats d'argent lunaires qui tombent lentement + brume froide qui rampe
+		main = { texture = SPARKLES, accel = Vector3.new(0, -0.6, 0), speed = 0.3, rot = 30, light = 0.9 },
+		extra = { name = "Mist", texture = SMOKE, accel = Vector3.new(0, -0.4, 0),
+			speed = NumberRange.new(0.2, 0.6), lifetime = NumberRange.new(2, 3.5), size = 0.5 },
+	},
 	gold = { -- poussière d'or scintillante
 		main = { texture = SPARKLES, accel = Vector3.new(0, 1, 0), speed = 0.8, rot = 120, light = 1 },
 		extra = { name = "GoldDust", texture = SPARKLES, accel = Vector3.new(0, -1, 0),

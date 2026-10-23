@@ -61,7 +61,8 @@ acide, `skeleton_dragon.py` quadrupède ailé multi-pièces, `skeleton_tricerato
 trapu à collerette percée et très détaillée, `skeleton_hydra.py` rampant à 3 têtes dans des
 repères locaux, multi-pièces, `abyss_kraken.py` céphalopode à tentacules et membranes, `abyss_megalodon.py` requin au
 chondrocrâne ajouré et rostre en barres, `abyss_leviathan.py` serpent au crâne de murène ajouré, `abyss_crab.py` arthropode à
-carapace ajourée + pattes + pinces, `abyss_angler.py` poisson tout en gueule à canne-appât).
+carapace ajourée + pattes + pinces, `abyss_angler.py` poisson tout en gueule à canne-appât, `forest_werewolf.py` bipède voûté
+à crâne de loup, mousse et racines).
 S'en inspirer pour la structure (rig → crâne → détails de tête → colonne → cage → membres),
 mais **concevoir un crâne neuf** : c'est la partie que l'utilisateur regarde en premier.
 Le crâne doit être **ajouré et fait d'os séparés** (boîte crânienne courte + barres de museau,
@@ -84,7 +85,7 @@ Le module définit :
   (utilisées par le script d'effets) ;
 - `TEST_POSE` : rotations (degrés) d'os qui montrent que le rig marche (gueule ouverte,
   cou levé, une patte avancée, queue fléchie, aile repliée) ;
-- `EFFECT_THEME` : `fire`, `acid`, `souls`, `frost`, `abyss`, `blood`, `gold`, `vent` (fumée noire + braises) ou `lure` (points lumineux flottants) (particules du script Roblox) ;
+- `EFFECT_THEME` : `fire`, `acid`, `souls`, `frost`, `abyss`, `blood`, `gold`, `vent` (fumée noire + braises) `lure` (points lumineux flottants) ou `moon` (éclats d'argent qui tombent + brume) (particules du script Roblox) ;
 - `VIEW` : direction de caméra des aperçus, choisie pour qu'aucune grande pièce n'en cache
   une autre (ailes vues de face, collerette pas masquée par les cornes) ;
 - `build(pal)` qui renvoie le `Rig`.

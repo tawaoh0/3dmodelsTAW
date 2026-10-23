@@ -150,6 +150,19 @@ proie squelettique qui brille dans le ventre (thème `lure`). Pièces : corps, H
 
 ![baudroie profil](previews/abyss_angler_head.png) ![baudroie face](previews/abyss_angler_head_front.png)
 
+## Pack 3 — Forêt maudite
+
+| Loup-garou squelette | Pose de test (rig) |
+|---|---|
+| ![loup-garou](previews/forest_werewolf.png) | ![loup-garou pose](previews/forest_werewolf_pose.png) |
+
+Crâne de loup (stop marqué, crête sagittale, arcades très larges, canines et carnassières),
+os cendre envahis de mousse et de racines, crinière de piquants, fers brisés aux poignets,
+flèches d'argent dans le dos, cœur en croissant de lune (thème `moon`). Pièces : corps, Head,
+Arms, Legs.
+
+![loup-garou profil](previews/forest_werewolf_head.png) ![loup-garou face](previews/forest_werewolf_head_front.png)
+
 ## Skill Claude : un monstre à partir d'une description
 
 La skill `roblox-skeleton-monster` permet à Claude de générer un squelette démoniaque

@@ -94,6 +94,15 @@ grande ouverte) avec 2 rangées de longs crocs `mr.tooth` recourbés vers l'int�
 `Teeth`), canne-appât en chaîne d'os `Lure1-3` terminée par une esca lumineuse en cage,
 corps en boule de côtes, ventre lumineux qui éclaire la cage par l'intérieur.
 
+## Bipède bestial voûté (loup-garou, `forest_werewolf.py`)
+
+Colonne très inclinée vers l'avant (`Spine1-3`, `Neck`), cage thoracique qui pend sous le
+dos, bras démesurés (`UpperArm/ForeArm/Hand`) dont les griffes descendent vers le sol,
+jambes **digitigrades** (`Thigh/Shin/Foot` : fémur vers l'avant, jarret haut vers l'arrière,
+métatarses longs, orteils griffus), queue. Crâne d'animal en `loft_profile` + mâchoire en
+plaques `band` à bord courbe, gueule entrouverte. Détails « forêt » : racines en spirale
+autour des os longs (`vine`), mousse en icos aplaties, fers et chaînes, flèches plantées.
+
 ## Humanoïde (liche, démon, chevalier squelette)
 
 Os type R15 pour réutiliser des animations : `Root, LowerTorso, UpperTorso, Head, Jaw,
