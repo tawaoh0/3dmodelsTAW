@@ -72,6 +72,24 @@ Un bon crâne combine :
    - loup / chien des enfers : museau court et haut, crocs énormes, crête dorsale de flammes.
 5. **Deux paires de crocs plus longs** à l'avant et une rangée plus courte derrière.
 
+## Densité de détails (demandé deux fois par l'utilisateur)
+
+Une grande surface lisse et vide fait « pas fini ». Règle : aucune zone plate de plus
+d'environ 1 stud² sans détail. Pour chaque grande surface, combiner au moins 3 de ces couches :
+
+| Couche | Exemples | Outils |
+|---|---|---|
+| Bourrelets autour des ouvertures | anneau d'os autour des orbites et des fenêtres de collerette | `r.tube(..., closed=True)` sur un anneau de points |
+| Nervures / arêtes | baleines d'éventail sur une collerette, arête nasale, crête de mâchoire | `r.tube` sur 2-3 points posés sur la surface |
+| Bord découpé | nodules osseux alternés avec des éclats, festons, dents | `r.ico` aplatis + `claw` le long du bord |
+| Excroissances du thème | cristaux de glace, piquants-plumes, cratères d'acide, flammèches | grappes de `claw`, `ico` lumineux |
+| Lignes lumineuses | veines de givre, fissures de lave, runes | `r.tube` fin (rayon ≈ 0.03) en zigzag, couleur `glow` |
+| Anneaux sur les cornes | fourreau d'os, bagues | anneaux placés avec `claw_point` |
+| Bosses et rugosités | bosses sus-orbitaires, bosses de pommettes, nodules sur le museau | `r.ico(subdivisions=1)` aplatis |
+
+Repère : une tête réussie compte **plus de 100 pièces** (crâne + mâchoire + détails), le
+tricératops final en a 131 pour 6 000 triangles. `check_model.py` prévient sous 45.
+
 ## Silhouette générale
 
 - Proportions « jeu » : tête un peu grosse (≈ 20 % de la longueur hors queue), pattes et
@@ -83,9 +101,9 @@ Un bon crâne combine :
 
 ## Contrôle qualité (à vérifier sur les images à chaque itération)
 
-- [ ] Rien ne flotte : yeux dans les orbites, cornes ancrées au crâne, griffes au bout des
-      doigts (un objet `ico` créé avec `location` se tourne autour de `(0, 0, 0)`, pas de sa
-      position monde).
+- [ ] `check_model.py` affiche « Contrôle OK » (rien ne flotte, budget respecté).
+- [ ] Sur les 3 gros plans : les détails sont sur la face visible des plaques, rien n'est
+      masqué par l'angle de vue, aucune grande surface n'est vide.
 - [ ] Pas de face noire ni de trou non voulu.
 - [ ] Le crâne a un profil ondulé et ≥ 4 pièces en relief ; il ne ressemble à aucune
       créature déjà faite dans le projet.

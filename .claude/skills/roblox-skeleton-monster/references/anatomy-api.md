@@ -68,7 +68,20 @@ lames (chevrons, apophyses), dents en `segments=4`, moins de vertèbres de queue
 répartir : `part="Head"` (tête + cou), `part="Wings"`, `part="Tail"`… Chaque pièce devient un
 MeshPart distinct qui partage le même squelette.
 
-## Pièges connus
+## Pièges connus (toutes les erreurs déjà commises)
+
+Chacune a coûté au moins une itération. `check_model.py` détecte celles marquées (auto).
+
+- **Pièce qui flotte loin du modèle** (auto) : rotation d'un `ico` créé avec `location=`
+  autour de sa position monde. Ses sommets sont locaux : pivot `(0, 0, 0)`.
+- **Détails posés derrière une plaque** au lieu de devant (collerette, crête) : la normale
+  avant d'un plan engendré par `X` (largeur) et `U` (hauteur) vaut `X.cross(U)`, pas
+  `U.cross(X)`. Vérifier sur le gros plan de face : si on voit les détails à travers les
+  trous, ils sont derrière.
+- **Écarts entre vertèbres en bout de queue** (auto) : la queue s'affine mais l'espacement
+  reste constant. Prendre `n ≥ longueur / (0.8 × taille moyenne)` vertèbres.
+- **Ergot, sternum ou petite pièce décollés** (auto) : les décaler d'une distance inférieure
+  à leur propre rayon par rapport à l'os porteur.
 
 - **Pièce qui flotte loin du modèle** : rotation d'un `ico` créé avec `location=` autour de sa
   position monde. Pivot `(0, 0, 0)`.
@@ -76,9 +89,13 @@ MeshPart distinct qui partage le même squelette.
   `base + d·L·t` ; utiliser `claw_point` (la courbe s'écarte de la droite de `curl·L·t²`).
 - **Membrane percée par booléen qui perd des faces** : le contour doit être convexe et ne pas
   se recouper (ex. centre + demi-ovale), sinon `cut` interprète mal l'intérieur.
-- **Élément qui semble flotter sur l'aperçu** : vérifier d'abord avec un gros plan sous un
-  autre angle ; souvent sa base est simplement cachée par une autre pièce. Corriger alors
-  `VIEW` ou supprimer l'élément mal placé (ex. pointes horizontales au bas d'une collerette).
+- **Élément qui semble flotter sur l'aperçu** alors que `check_model.py` est OK : sa base est
+  cachée par une autre pièce sous cet angle. Corriger `VIEW` ou supprimer l'élément mal placé
+  (ex. pointes horizontales au bas d'une collerette).
+- **Partie d'une surface qui « disparaît » sur l'aperçu** : vérifier avec `scene.ray_cast`
+  avant de chercher un bug de géométrie ; souvent c'est une autre pièce devant (cornes devant
+  la collerette). L'éclairage des aperçus inclut une lumière depuis la caméra, donc une zone
+  à l'ombre ne se confond plus avec le fond.
 - **Pièce invisible** : un os plat dont `normal` est parallèle à `b - a` (largeur nulle).
 - **Aile vue par la tranche** dans l'aperçu : changer `VIEW` (ex. `(0.4, -1, 0.8)`).
 - **Mâchoire qui ne s'ouvre pas bien** : la tête de l'os `Jaw` doit être à l'articulation

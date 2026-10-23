@@ -116,6 +116,8 @@ animable à partir d'une simple phrase (« un raptor squelette vert toxique », 
   dans Claude), ou copier le dossier dans `~/.claude/skills/` d'un autre ordinateur.
   Elle embarque sa boîte à outils et l'installe toute seule dans un projet vide
   (`scripts/setup_project.sh`, Python 3.13 requis pour `pip install bpy`).
+- Elle contrôle elle-même son travail : `scripts/check_model.py` (pièces flottantes, budget de
+  triangles, densité de détails de la tête) et `scripts/closeup.py … trio` (3 gros plans).
 - Après une modification de `lib/` ou `build.py` : `bash tools/sync_skill_toolkit.sh`, puis
   ré-empaqueter.
 

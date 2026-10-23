@@ -51,45 +51,61 @@ cornes, thème d'effets, pièces Roblox.
 
 Lire `references/body-plans.md` : plans types (bipède théropode, quadrupède, ailé, serpent,
 multi-têtes, arthropode, humanoïde) avec la liste d'os du rig et les ordres de grandeur.
-Lire `references/anatomy-api.md` pour les fonctions disponibles et leurs pièges.
+Lire `references/anatomy-api.md` pour les fonctions disponibles et **sa section « Pièges »**,
+qui liste toutes les erreurs déjà commises : les éviter dès le premier jet fait gagner
+plusieurs itérations.
 
 Créer `models/skeleton_<nom>.py` en partant de l'exemple le plus proche dans
 `toolkit/models/` (`skeleton_trex.py` bipède massif, `skeleton_raptor.py` bipède agile thème
 acide, `skeleton_dragon.py` quadrupède ailé multi-pièces, `skeleton_triceratops.py` quadrupède
-trapu à collerette percée).
-S'en inspirer pour la structure (rig → crâne → colonne → cage → membres), mais **concevoir
-un crâne neuf** : c'est la partie que l'utilisateur regarde en premier, et deux créatures au
-crâne semblable ont été rejetées.
+trapu à collerette percée et très détaillée).
+S'en inspirer pour la structure (rig → crâne → détails de tête → colonne → cage → membres),
+mais **concevoir un crâne neuf** : c'est la partie que l'utilisateur regarde en premier.
+
+Viser dès le premier jet la **densité de détails** décrite dans le style guide : l'utilisateur
+a demandé à deux reprises « plus de détails » sur la tête et la collerette. Une fonction
+`build_<zone>_details(rig)` séparée par grande surface (crâne, collerette, crête, ailes) aide
+à ne rien oublier.
 
 Le module définit :
 - `COLORS` : `bone`, `bone_shade`, `tooth`, `horn`, `horn_tip`, `disc`, éventuellement
-  `membrane`, et obligatoirement `glow` + `glow_hot` (utilisées par le script d'effets) ;
+  `membrane` ou une couleur de thème (`ice`, `quill`…), et obligatoirement `glow` + `glow_hot`
+  (utilisées par le script d'effets) ;
 - `TEST_POSE` : rotations (degrés) d'os qui montrent que le rig marche (gueule ouverte,
   cou levé, une patte avancée, queue fléchie, aile repliée) ;
 - `EFFECT_THEME` : `fire`, `acid`, `souls`, `frost` ou `gold` (particules du script Roblox) ;
-- `VIEW` (optionnel) : direction de caméra des aperçus, ex. `(0.4, -1, 0.8)` pour voir des ailes ;
+- `VIEW` : direction de caméra des aperçus, choisie pour qu'aucune grande pièce n'en cache
+  une autre (ailes vues de face, collerette pas masquée par les cornes) ;
 - `build(pal)` qui renvoie le `Rig`.
 
-## 4. Générer et contrôler (boucle obligatoire)
+## 4. Contrôler (boucle obligatoire)
+
+**a. Contrôle automatique d'abord** (rapide, sans rendu) :
+
+```bash
+<python> <chemin-de-cette-skill>/scripts/check_model.py skeleton_<nom>
+```
+
+Il signale les pièces qui flottent (avec leur position), les os ou couleurs inconnus, le
+budget de triangles par pièce Roblox et une tête trop peu détaillée. Corriger jusqu'à
+« Contrôle OK ». Les « info » sur des lueurs suspendues (œil au centre d'une orbite, éclats
+autour du cœur) sont acceptables si c'est voulu.
+
+**b. Rendus**, puis **regarder chaque image** avec l'outil de lecture d'image :
 
 ```bash
 <python> build.py skeleton_<nom>
+<python> <chemin-de-cette-skill>/scripts/closeup.py skeleton_<nom> Head <prefixe> trio
 ```
 
-La sortie console donne, pour chaque mesh, le nombre de triangles (`OK` / `TROP DE TRIANGLES`)
-et le nombre d'os. Puis **regarder les images** avec l'outil de lecture d'image :
-`previews/skeleton_<nom>.png`, `previews/skeleton_<nom>_pose.png`, et un gros plan de la tête :
+`build.py` produit `previews/skeleton_<nom>.png` et `_pose.png`. `closeup.py … trio` produit
+3 gros plans de la tête (`<prefixe>_profil.png`, `_face.png`, `_dessus.png`) en un seul
+passage. Le contrôle automatique ne voit pas tout : un détail posé sur la **mauvaise face**
+d'une plaque (derrière la collerette au lieu de devant), une pièce masquée par l'angle de vue,
+un crâne trop simple. Les 3 angles servent à ça.
 
-```bash
-<python> <chemin-de-cette-skill>/scripts/closeup.py skeleton_<nom> Head <sortie.png> 1 -0.6 0.35
-```
-
-(`Head` = nom de la pièce ; `Body` pour le corps principal ; les 3 nombres = direction caméra.)
-
-Passer la checklist de `references/style-guide.md` (section « Contrôle qualité »). Les défauts
-typiques : pièce flottante hors du crâne (rotation autour du mauvais pivot), faces noires,
-os qui ne suivent pas leur articulation dans la pose, aile vue par la tranche, tête trop
-simple. Corriger et regénérer jusqu'à ce que tout passe. Compter 3 à 6 itérations, c'est normal.
+**c. Checklist** de `references/style-guide.md` (« Contrôle qualité »), puis corriger et
+recommencer. Avec les pièges évités dès le départ, 2 à 3 itérations suffisent en général.
 
 Chaque mesh doit rester ≤ 20 000 triangles (limite Roblox par MeshPart). Sinon : alléger
 (voir anatomy-api.md, « Budget ») ou répartir sur plusieurs pièces avec `part="Head"`,
@@ -100,7 +116,8 @@ Chaque mesh doit rester ≤ 20 000 triangles (limite Roblox par MeshPart). Sinon
 1. Ajouter la créature au `README.md` (aperçu repos + pose) si le projet en a un.
 2. Committer code + exports + aperçus si le projet est un dépôt git (et pousser si c'est
    la pratique du projet).
-3. Montrer les aperçus à l'utilisateur (outil d'envoi de fichiers s'il existe), puis résumer
+3. Montrer les aperçus à l'utilisateur (outil d'envoi de fichiers s'il existe) : repos, pose,
+   et 2 gros plans de la tête (profil et face) copiés dans `previews/`. Puis résumer
    en quelques puces : ce qu'il y a sur la créature (surtout le crâne), triangles par pièce,
    nombre d'os, comment l'importer (Import 3D, *File Dimensions : Studs*, glisser le script
    d'effets dans le Model). Dire clairement que l'import Roblox Studio n'a pas été testé.

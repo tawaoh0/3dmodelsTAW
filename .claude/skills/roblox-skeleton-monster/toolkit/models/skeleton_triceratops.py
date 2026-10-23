@@ -231,6 +231,119 @@ def build_head(rig):
     rig.add(jaw, "Jaw", "bone", **head)
 
 
+
+# Repère de la collerette : X (largeur), FRILL_U (hauteur inclinée), FRILL_F (face avant)
+FRILL_X = Vector((1, 0, 0))
+FRILL_F = FRILL_X.cross(FRILL_U).normalized()   # vers l'avant et le haut
+HOLES = [(s * 0.95, 1.35) for s in (-1, 1)]      # (x, u) des fenêtres, rayons 0.42 × 0.6
+
+
+def on_frill(x, u, off=0.11):
+    """Point posé sur la face avant de la collerette (épaisseur 0.2)."""
+    return FRILL_C + FRILL_X * x + FRILL_U * u + FRILL_F * off
+
+
+def frill_polar(theta, k):
+    """Point à la fraction k (0 = centre, 1 = bord) le long du rayon d'angle theta."""
+    return math.cos(theta) * FRILL_RX * k, math.sin(theta) * FRILL_RU * k
+
+
+def build_frill_details(rig):
+    head = dict(part="Head")
+    # Bourrelets osseux autour des deux fenêtres
+    for k, (hx, hu) in enumerate(HOLES):
+        ring = [tuple(on_frill(hx + math.cos(t) * 0.47, hu + math.sin(t) * 0.66, 0.1))
+                for t in (2 * math.pi * i / 14 for i in range(14))]
+        rig.add(r.tube(f"HoleRim{k}", ring, 0.07, segments=5, closed=True), "Head", "bone_shade",
+                **head)
+    # Nervures rayonnantes (comme les baleines d'un éventail), entre les fenêtres
+    for k, theta in enumerate((0.13, 0.4, 0.6, 0.87)):
+        theta *= math.pi
+        pts = [tuple(on_frill(*frill_polar(theta, f), 0.1)) for f in (0.22, 0.55, 0.9)]
+        rig.add(r.tube(f"FrillRib{k}", pts, [0.09, 0.07, 0.05], segments=5), "Head",
+                "bone_shade", **head)
+    # Nodules osseux (époccipitaux) entre les éclats de glace du bord
+    for k in range(2, 10):
+        theta = math.pi * (k + 0.5) / 12
+        p = frill_point(theta, 0.97) + FRILL_F * 0.04
+        rig.add(r.ico(f"Epoccipital{k}", 0.16, subdivisions=1, location=p, scale=(1, 0.7, 1)),
+                "Head", "bone", **head)
+    # Veines de givre lumineuses qui partent du centre vers le bord, en zigzag
+    for k, theta in enumerate((0.27, 0.5, 0.73)):
+        theta *= math.pi
+        pts = []
+        for i, f in enumerate((0.15, 0.35, 0.55, 0.75, 0.92)):
+            x, u = frill_polar(theta + (0.07 if i % 2 else -0.07), f)
+            pts.append(tuple(on_frill(x, u, 0.115)))
+        rig.add(r.tube(f"FrostVein{k}", pts, 0.028, segments=4), "Head", "glow", glow=True)
+    # Croûtes de cristaux de glace sur la collerette
+    for k, (x, u) in enumerate(((1.6, 0.55), (-1.6, 0.55), (0.45, 2.05), (-0.45, 2.05))):
+        ice_cluster(rig, f"FrillIce{k}", on_frill(x, u, 0.08), FRILL_F + FRILL_U * 0.3, 0.32,
+                    "Head", seed=40 + k, **head)
+    # Stalactites supplémentaires sous le bord bas
+    for s in (-1, 1):
+        p = frill_point(math.pi * (0.17 if s > 0 else 0.83), 0.96)
+        icicle(rig, f"FrillIcicleB{s}", p, 0.38, "Head", radius=0.055)
+
+
+def build_skull_details(rig):
+    head = dict(part="Head")
+    for s in (-1, 1):
+        # Cercle osseux autour de l'orbite
+        x = s * (width_at(SKULL, -3.25, 2) - 0.02)
+        ring = [(x, -3.25 + math.cos(t) * 0.28, 3.42 + math.sin(t) * 0.28)
+                for t in (2 * math.pi * i / 12 for i in range(12))]
+        rig.add(r.tube(f"OrbitRim{s}", ring, 0.055, segments=5, closed=True), "Head",
+                "bone_shade", **head)
+        # Bosse sus-orbitaire hérissée de cristaux, au pied de la grande corne
+        rig.add(r.ico(f"BrowBoss{s}", 0.26, subdivisions=1, location=(s * 0.62, -3.1, 3.9),
+                      scale=(1, 1.3, 0.7)), "Head", "bone_shade", **head)
+        ice_cluster(rig, f"BrowIce{s}", (s * 0.8, -3.0, 4.0), (s * 1, 0.4, 0.8), 0.3, "Head",
+                    seed=60 + s, **head)
+        # Anneaux d'os autour des grandes cornes (fourreau)
+        base = Vector((s * 0.5, -2.95, 3.95))
+        d = Vector((s * 0.22, -0.75, 0.75)).normalized()
+        for k, t in enumerate((0.18, 0.36)):
+            p, tan = a.claw_point(base, d, 2.3, -0.25, t)
+            rad = 0.3 * (1 - t) ** 0.8 + 0.035
+            side = tan.cross(Vector((0, 0, 1))).normalized()
+            other = tan.cross(side).normalized()
+            ring = [tuple(p + side * math.cos(a_) * rad + other * math.sin(a_) * rad)
+                    for a_ in (2 * math.pi * i / 10 for i in range(10))]
+            rig.add(r.tube(f"HornBand{s}{k}", ring, 0.045, segments=4, closed=True), "Head",
+                    "bone_shade", **head)
+        # Bosses rugueuses alignées sur les flancs du museau
+        for k, y in enumerate((-3.9, -4.3, -4.7)):
+            z = (width_at(SKULL, y, 4) + width_at(SKULL, y, 5)) / 2 + 0.15
+            rig.add(r.ico(f"SnoutKnob{s}{k}", 0.1 - k * 0.015, subdivisions=1,
+                          location=(s * width_at(SKULL, y, 2) * 0.97, y, z), scale=(0.6, 1, 1)),
+                    "Head", "bone_shade", **head)
+        # Bosse de la pommette sous la pointe de glace
+        rig.add(r.ico(f"JugalBoss{s}", 0.2, subdivisions=1, location=(s * 0.88, -3.0, 2.62),
+                      scale=(0.8, 1.1, 0.9)), "Head", "bone_shade", **head)
+        # Mâchoire : crête le long du bord et apophyse coronoïde
+        rig.add(r.tube(f"JawRidge{s}", [(s * width_at(JAW, y, 2) * 0.98, y, 2.12)
+                                        for y in (-2.8, -3.6, -4.4)], [0.06, 0.07, 0.05],
+                       segments=5), "Jaw", "bone_shade", **head)
+        rig.add(a.blade(f"Coronoid{s}", (s * 0.6, -2.95, 2.3), (s * 0.62, -2.7, 2.75), 0.35, 0.1,
+                        width_end=0.2, normal=(1, 0, 0), bevel=0), "Jaw", "bone_shade", **head)
+    # Arête nasale de la corne du nez jusqu'au bec
+    ridge = [(0, y, width_at(SKULL, y, 4) + 0.02) for y in (-4.6, -4.85, -5.1)]
+    rig.add(r.tube("NasalRidge", ridge, [0.11, 0.09, 0.07], segments=5), "Head", "bone_shade",
+            **head)
+    # Bague d'os à la base de la corne du nez
+    ring = [(math.cos(t) * 0.24, -4.55 + math.sin(t) * 0.24, 3.3)
+            for t in (2 * math.pi * i / 10 for i in range(10))]
+    rig.add(r.tube("NoseHornRing", ring, 0.05, segments=4, closed=True), "Head", "bone_shade",
+            **head)
+    # Cristaux entre les cornes, sur le haut du crâne
+    ice_cluster(rig, "CrownIce", (0, -2.85, 4.05), (0, 0.3, 1), 0.4, "Head", seed=77, **head)
+    # Veine de givre lumineuse du front jusqu'au museau
+    vein = [(0.08 * (1 if i % 2 else -1), y, width_at(SKULL, y, 4) + 0.025)
+            for i, y in enumerate((-3.1, -3.45, -3.8, -4.15))]
+    rig.add(r.tube("SkullVein", vein, 0.03, segments=4), "Head", "glow", glow=True)
+
+
 # ---------------------------------------------------------------- corps
 
 def build_spine(rig):
@@ -254,7 +367,7 @@ def build_spine(rig):
             rig.add(a.disc(f"NeckDisc{i}", q, tq, 0.4), "Neck", "disc")
 
     tail = c.Chain(TAIL)
-    n = 10
+    n = 13   # assez de vertèbres pour qu'elles se touchent jusqu'au bout de la queue
     for i in range(n):
         t = i / (n - 1)
         p, tan = tail.at(t)
@@ -265,7 +378,7 @@ def build_spine(rig):
         if i < n - 1:
             q, tq = tail.at((i + 0.5) / (n - 1))
             rig.add(a.disc(f"TailDisc{i}", q, tq, size), bone, "disc")
-        if i < 7:
+        if i < 9:
             down = p - Vector((0, -0.05, size * 0.4))
             rig.add(a.blade(f"Chevron{i}", down, down + Vector((0, 0.25, -size * 1.6)),
                             size * 0.45, size * 0.16, width_end=size * 0.2, normal=(1, 0, 0),
@@ -352,6 +465,8 @@ def build(pal):
     rig = c.Rig(pal)
     build_rig(rig)
     build_head(rig)
+    build_frill_details(rig)
+    build_skull_details(rig)
     build_spine(rig)
     build_ribcage(rig)
     for s, side in ((1, "L"), (-1, "R")):
