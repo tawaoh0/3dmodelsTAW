@@ -272,6 +272,27 @@ jade comme cœur (thème `jungle`). Pièces : corps, Head, Arms, Legs.
 
 ![gorille profil](previews/jungle_gorilla_head.png) ![gorille face](previews/jungle_gorilla_head_front.png)
 
+| Serpent à plumes (Quetzalcoatl) squelette | Pose de test (rig) |
+|---|---|
+| ![serpent à plumes](previews/jungle_serpent.png) | ![serpent pose](previews/jungle_serpent_pose.png) |
+
+Crâne de vipère (crochets dressés pour la frappe, gouttes de venin, fossettes thermiques,
+écailles sus-oculaires à cornes), collerette de plumes d'os en éventail, touffes de plumes
+espacées, bagues d'or et glyphes mayas, enroulé au sol, crécelle de pierre (thème `quetzal`).
+Pièces : corps, Tail, Head.
+
+![serpent profil](previews/jungle_serpent_head.png) ![serpent face](previews/jungle_serpent_head_front.png)
+
+| Jaguar squelette | Pose de test (rig) |
+|---|---|
+| ![jaguar](previews/jungle_jaguar.png) | ![jaguar pose](previews/jungle_jaguar_pose.png) |
+
+Jaguar noir : crâne rond et court aux arcades énormes, canines épaisses, os noirs tachetés de
+rosettes-runes dorées, lames d'obsidienne sur la colonne, collier rituel de jade et d'or,
+plumes de jade, cœur-soleil d'or, posture de traque (thème `ruins`). Pièces : corps, Head, Legs.
+
+![jaguar profil](previews/jungle_jaguar_head.png) ![jaguar face](previews/jungle_jaguar_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |

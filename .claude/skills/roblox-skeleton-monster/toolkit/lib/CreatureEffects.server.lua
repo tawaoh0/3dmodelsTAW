@@ -118,6 +118,16 @@ local THEMES = {
 		extra = { name = "Poison", texture = SMOKE, accel = Vector3.new(0, -8, 0),
 			speed = NumberRange.new(0, 0.4), lifetime = NumberRange.new(0.5, 1), size = 0.18 },
 	},
+	quetzal = { -- plumes lumineuses portées par le vent + venin émeraude qui goutte
+		main = { texture = SPARKLES, accel = Vector3.new(1.5, 1, 0), speed = 0.6, rot = 120, light = 1 },
+		extra = { name = "Venom", texture = SMOKE, accel = Vector3.new(0, -10, 0),
+			speed = NumberRange.new(0, 0.3), lifetime = NumberRange.new(0.4, 0.8), size = 0.15 },
+	},
+	ruins = { -- poussière d'or des ruines + feuilles qui tombent en tournoyant
+		main = { texture = SPARKLES, accel = Vector3.new(0, 0.8, 0), speed = 0.5, rot = 90, light = 0.9 },
+		extra = { name = "Leaves", texture = SMOKE, accel = Vector3.new(0.5, -1.2, 0),
+			speed = NumberRange.new(0.3, 0.8), lifetime = NumberRange.new(2, 3), size = 0.25 },
+	},
 	gold = { -- poussière d'or scintillante
 		main = { texture = SPARKLES, accel = Vector3.new(0, 1, 0), speed = 0.8, rot = 120, light = 1 },
 		extra = { name = "GoldDust", texture = SPARKLES, accel = Vector3.new(0, -1, 0),
