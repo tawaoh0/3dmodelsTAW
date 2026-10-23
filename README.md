@@ -314,6 +314,19 @@ lianes et mousse (thème `swamp`). Pièces : corps, Head, Tail, Legs.
 
 ![crocodile profil](previews/jungle_crocodile_head.png) ![crocodile face](previews/jungle_crocodile_head_front.png)
 
+## Pack 6 — Cimetière gothique / nécromancie
+
+| Liche dragon squelette | Pose de test (rig) |
+|---|---|
+| ![liche dragon](previews/grave_lich_dragon.png) | ![liche dragon pose](previews/grave_lich_dragon_pose.png) |
+
+Wyverne-liche au crâne de markhor : cornes noires en tire-bouchon, couronne de fer à bougies
+coulantes, orbites lumineuses violettes, ailes en lambeaux tombant en cape, cercueil-phylactère
+à croix lumineuse enchaîné au poitrail, bougies sur le dos, lanterne d'âme pendue au bout de
+la queue (thème `necro`). Pièces : corps, Head, Wings, Tail.
+
+![liche profil](previews/grave_lich_dragon_head.png) ![liche face](previews/grave_lich_dragon_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |

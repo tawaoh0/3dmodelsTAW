@@ -133,6 +133,11 @@ local THEMES = {
 		extra = { name = "Petals", texture = SMOKE, accel = Vector3.new(0.4, -1, 0),
 			speed = NumberRange.new(0.2, 0.6), lifetime = NumberRange.new(2, 3), size = 0.2 },
 	},
+	necro = { -- âmes violettes qui s'élèvent en spirale + étincelles de chandelle
+		main = { texture = SMOKE, accel = Vector3.new(0, 3, 0), speed = 0.8, rot = 240, light = 0.9 },
+		extra = { name = "CandleSparks", texture = SPARKLES, accel = Vector3.new(0, 1.5, 0),
+			speed = NumberRange.new(0.2, 0.6), lifetime = NumberRange.new(0.8, 1.6), size = 0.1 },
+	},
 	swamp = { -- brume verte du marécage qui rampe + bulles de poison
 		main = { texture = SMOKE, accel = Vector3.new(0, 0.3, 0), speed = 0.3, rot = 20, light = 0.7 },
 		extra = { name = "Bubbles", texture = SPARKLES, accel = Vector3.new(0, 2, 0),
