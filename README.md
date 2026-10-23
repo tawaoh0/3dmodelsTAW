@@ -150,7 +150,7 @@ proie squelettique qui brille dans le ventre (thème `lure`). Pièces : corps, H
 
 ![baudroie profil](previews/abyss_angler_head.png) ![baudroie face](previews/abyss_angler_head_front.png)
 
-## Pack 2 bis — Enfers volcaniques
+## Pack 3 — Enfers volcaniques
 
 | Cerbère squelette | Pose de test (rig) |
 |---|---|
