@@ -125,7 +125,7 @@ def build_head(rig):
     head = dict(part="Head")
 
     # Crâne au profil ondulé : dôme crânien, arcades, creux nasal, bosse des narines
-    skull = a.loft_profile("Skull", SKULL)
+    skull = a.loft_profile("Skull", SKULL, tip=None)
     tilt = -0.3   # fentes inclinées (avant plus bas) → regard mauvais
     cutters = []
     for center, ry, rz in (((0, -5.5, 7.62), 0.38, 0.19),      # orbites en fente
@@ -242,7 +242,7 @@ def build_head(rig):
             y += 0.32
             k += 1
 
-    jaw = a.loft_profile("Jaw", JAW)
+    jaw = a.loft_profile("Jaw", JAW, tip=None)
     a.cut(jaw, [a.hole_x((0, -5.6, 6.65), 0.38, 0.12)])
     rig.add(jaw, "Jaw", "bone", **head)
 

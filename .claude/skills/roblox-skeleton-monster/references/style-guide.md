@@ -28,6 +28,7 @@ corrige un rendu qui a été refusé.
 | Crâne du dragon = crâne du T-Rex | « la tête est trop la même » | Un crâne conçu pour chaque créature |
 | Crâne en coin droit et pointu | « manque de grand relief / de parties, toute droite et pointue » | Profil ondulé + grosses pièces en relief (voir ci-dessous) |
 | T-Rex, dragon, raptor tous ivoire + cornes noires annelées balayées + cœur cristal | « ils se ressemblent trop tous entre eux » | Une identité complète par créature (section suivante) |
+| Museaux qui finissent sur une face plate ; crânes « reptile standard » | « les visages sont encore trop génériques, le nez se coupe net » | Bout de museau arrondi (`loft_profile` le fait par défaut) + crâne inspiré d'un **vrai animal** lié au thème |
 | Hydre avec 3 crânes différents (royal, serpent, brute) | « je veux que les 3 têtes soient les mêmes, travaille-les plus » | Différencier les **créatures** entre elles, pas les têtes d'une même créature ; une seule tête très détaillée, répétée |
 
 ## Identité : chaque créature doit se distinguer sur 4 axes
@@ -51,10 +52,24 @@ créature se reconnaît **en silhouette** (sans les couleurs) et **en couleur** 
 
 Un bon crâne combine :
 
+0. **Un vrai animal comme modèle**, choisi pour aller avec le thème de la créature, puis
+   exagéré. Ne pas partir d'un « crâne de reptile » générique. Exemples :
+   - cornes de bélier → crâne de **bélier** : nez busqué (le dessus du profil s'arrondit
+     vers le bas jusqu'au museau), front large et plat, orbites saillantes en manchon,
+     tubercules sous les yeux, naseaux creusés dans le bout du museau ;
+   - loup / chien des enfers → crâne de **loup** : stop marqué entre front et museau,
+     crête sagittale haute, arcades zygomatiques très larges, canines énormes ;
+   - serpent → crâne de **vipère** : tête en triangle plat, crochets repliés, écailles
+     sus-orbitaires ;
+   - oiseau / griffon → crâne de **rapace** : bec crochu, grandes orbites cerclées d'os.
+   Écrire en commentaire au-dessus de `SKULL` l'animal choisi et ses 3-4 traits clés.
+
 1. **Un profil qui ondule** (ligne du dessus vue de côté) : dôme crânien → arcade au-dessus
    des yeux → creux nasal → bosse des narines → bout de museau arrondi ou carré. Jamais une
    ligne droite qui finit en pointe. Concrètement : 7 à 9 sections `SKULL` dont le `z dessus`
    monte et descend.
+   Le bout du museau ne doit **jamais** être une face plate : `loft_profile` ajoute un
+   dôme arrondi par défaut (`tip="round"`, `droop` pour faire plonger le nez).
 2. **De vraies ouvertures** découpées (`hole_x` + `cut`) : orbites, fenêtres temporales et
    antorbitales, narines. Inclinées (`rotate_obj` sur le cutter) pour un regard mauvais.
    L'œil lumineux est placé au fond de l'orbite.
@@ -111,6 +126,8 @@ tricératops final en a 131 pour 6 000 triangles. `check_model.py` prévient sou
 - [ ] Sur les 3 gros plans : les détails sont sur la face visible des plaques, rien n'est
       masqué par l'angle de vue, aucune grande surface n'est vide.
 - [ ] Pas de face noire ni de trou non voulu.
+- [ ] Le museau se termine en bout arrondi (pas de face plate) et le crâne évoque l'animal
+      choisi comme modèle.
 - [ ] Le crâne a un profil ondulé et ≥ 4 pièces en relief ; il ne ressemble à aucune
       créature déjà faite dans le projet.
 - [ ] Le tableau « Identité » est rempli : couleur des os, cornes, posture et thème

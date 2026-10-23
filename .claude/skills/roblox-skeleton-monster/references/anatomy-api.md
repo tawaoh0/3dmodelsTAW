@@ -31,7 +31,8 @@ c.Chain(points).at(t) -> (point, tangente)              # t de 0 à 1 le long d'
 
 | Fonction | Usage |
 |---|---|
-| `loft_profile(name, sections)` | Crâne / mâchoire. Sections `(y, demi-larg. dessus, joues, bord dentaire, z dessus, z bas)` de l'arrière vers l'avant (y décroissant). |
+| `loft_profile(name, sections, tip="round", droop=0.15)` | Crâne / mâchoire. Sections `(y, demi-larg. dessus, joues, bord dentaire, z dessus, z bas)` de l'arrière vers l'avant (y décroissant). Termine par un bout de museau arrondi ; `droop` > 0 le fait plonger (nez busqué), < 0 le relève (menton). `tip=None` = face plate (à éviter). |
+| `hole_along(centre, axe, side, ra, rb, depth)` | Cutter selon un axe quelconque : naseaux creusés dans le bout du museau, fenêtres d'une plaque inclinée. |
 | `width_at(sections, y, idx)` / `side_width(sections, y, z)` | Largeur / hauteur d'un crâne à la profondeur y ; `side_width` donne la demi-largeur **réelle à la hauteur z** pour poser anneaux, bosses et veines sur la paroi. |
 | `hole_x(center, ry, rz)` | Cutter tunnel elliptique selon X (traverse les 2 côtés). |
 | `cut(obj, [cutters])` | Booléen : perce l'objet, supprime les cutters. |

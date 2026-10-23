@@ -85,7 +85,7 @@ def build_rig(rig):
 
 
 def build_skull(rig):
-    skull = a.loft_profile("Skull", SKULL)
+    skull = a.loft_profile("Skull", SKULL, tip=None)
     a.cut(skull, [
         a.hole_x((0, -3.8, 6.6), 0.3, 0.4),          # orbites
         a.hole_x((0, -4.9, 6.1), 0.58, 0.3),          # fenêtres antorbitales
@@ -142,7 +142,7 @@ def build_skull(rig):
 
 
 def build_jaw(rig):
-    jaw = a.loft_profile("Jaw", JAW)
+    jaw = a.loft_profile("Jaw", JAW, tip=None)
     a.cut(jaw, [a.hole_x((0, -3.75, 5.2), 0.38, 0.14)])
     rig.add(jaw, "Jaw", "bone")
     y = -6.5

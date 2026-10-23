@@ -130,7 +130,7 @@ def build_rig(rig):
 
 def build_head(rig):
     head = dict(part="Head")
-    skull = a.loft_profile("Skull", SKULL)
+    skull = a.loft_profile("Skull", SKULL, tip=None)
     cutters = []
     for center, ry, rz in (((0, -3.2, 4.15), 0.22, 0.22),     # grandes orbites rondes
                            ((0, -3.9, 3.88), 0.34, 0.13),     # fenêtres antorbitales
@@ -212,7 +212,7 @@ def build_head(rig):
             y += 0.2
             k += 1
 
-    jaw = a.loft_profile("Jaw", JAW)
+    jaw = a.loft_profile("Jaw", JAW, tip=None)
     a.cut(jaw, [a.hole_x((0, -3.3, 3.38), 0.24, 0.07)])
     rig.add(jaw, "Jaw", "bone", **head)
     drip(rig, "ChinDrip", (0, -4.6, 3.32), "Jaw", size=0.045)

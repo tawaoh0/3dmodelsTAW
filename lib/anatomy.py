@@ -83,11 +83,40 @@ def side_width(sections, y, z):
     return wm + (wb - wm) * min(1.0, (zm - z) / max(zm - zb, 1e-6))
 
 
-def loft_profile(name, sections):
-    """Crâne / mâchoire : loft de sections `profile_ring(*s)`."""
-    obj = r.loft(name, [profile_ring(*s) for s in sections])
+def loft_profile(name, sections, tip="round", tip_length=None, droop=0.15):
+    """Crâne / mâchoire : loft de sections `profile_ring(*s)`.
+
+    `tip="round"` (défaut) prolonge la dernière section par un bout de museau arrondi en
+    dôme (sinon le museau « se coupe net » sur une face plate). `tip_length` : longueur du
+    dôme (défaut : la moitié de la hauteur de la dernière section). `droop` : le bout
+    s'abaisse légèrement (nez qui plonge, comme un vrai museau). `tip=None` : face plate.
+    """
+    rings = [profile_ring(*s) for s in sections]
+    if tip == "round":
+        y, wt, wm, wb, zt, zb = sections[-1]
+        length = tip_length or (zt - zb) * 0.5
+        direction = 1 if sections[-1][0] > sections[0][0] else -1
+        zc = (zt + zb) / 2
+        for u in (0.35, 0.6, 0.8, 0.93):
+            sc = math.sqrt(1 - u * u)
+            dz = -droop * (zt - zb) * u * u
+            rings.append(profile_ring(y + direction * length * u, wt * sc, wm * sc, wb * sc,
+                                      zc + (zt - zc) * sc + dz, zc + (zb - zc) * sc + dz))
+        rings.append([(0, y + direction * length, zc - droop * (zt - zb))])
+    obj = r.loft(name, rings)
     r.smooth(obj, 32)
     return obj
+
+
+def hole_along(center, axis, side, ra, rb, depth=1.0, segments=12):
+    """Cutter : tunnel elliptique selon un axe quelconque (narines creusées vers l'avant,
+    fenêtres d'une collerette inclinée…). `ra` selon `side`, `rb` selon la 3e direction."""
+    center, axis, side = Vector(center), Vector(axis).normalized(), Vector(side).normalized()
+    other = axis.cross(side).normalized()
+    rings = [[tuple(center + axis * d + side * math.cos(t) * ra + other * math.sin(t) * rb)
+              for t in (2 * math.pi * k / segments for k in range(segments))]
+             for d in (-depth, depth)]
+    return r.loft("Cutter", rings)
 
 
 # ---------------------------------------------------------------- os

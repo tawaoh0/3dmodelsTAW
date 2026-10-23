@@ -153,24 +153,29 @@ def build_rig(rig):
 # ---------------------------------------------------------------- têtes (repère local)
 # Articulation de la tête à l'origine, museau vers -Y, Z vers le haut.
 
-# Une seule tête, répétée sur les 3 cous (repère local : articulation à l'origine, museau -Y)
-SKULL = [(0.1, 0.5, 0.72, 0.6, 0.55, -0.35), (-0.25, 0.56, 0.8, 0.62, 0.72, -0.4),
-         (-0.6, 0.52, 0.74, 0.58, 0.75, -0.4), (-0.95, 0.38, 0.56, 0.48, 0.5, -0.38),
-         (-1.35, 0.34, 0.48, 0.42, 0.55, -0.36), (-1.75, 0.28, 0.4, 0.34, 0.42, -0.33),
-         (-2.05, 0.18, 0.26, 0.22, 0.25, -0.3)]
-JAW = [(0.0, 0.45, 0.66, 0.55, -0.38, -0.8), (-0.8, 0.4, 0.56, 0.46, -0.4, -0.82),
-       (-1.6, 0.28, 0.4, 0.32, -0.38, -0.7), (-2.0, 0.16, 0.24, 0.2, -0.36, -0.6)]
+# Une seule tête, répétée sur les 3 cous (repère local : articulation à l'origine, museau -Y).
+# Crâne de bélier démoniaque : front large et plat entre les cornes, orbites qui ressortent,
+# nez busqué qui plonge vers un museau étroit et arrondi (pas une face plate).
+SKULL = [(0.1, 0.5, 0.7, 0.6, 0.55, -0.35), (-0.25, 0.6, 0.8, 0.62, 0.72, -0.4),
+         (-0.6, 0.62, 0.84, 0.6, 0.75, -0.4), (-0.95, 0.42, 0.6, 0.5, 0.68, -0.38),
+         (-1.3, 0.3, 0.44, 0.4, 0.58, -0.36), (-1.6, 0.26, 0.38, 0.36, 0.45, -0.34),
+         (-1.85, 0.22, 0.32, 0.3, 0.27, -0.32), (-2.0, 0.17, 0.25, 0.23, 0.1, -0.3)]
+JAW = [(0.0, 0.45, 0.66, 0.55, -0.38, -0.8), (-0.8, 0.4, 0.56, 0.46, -0.4, -0.8),
+       (-1.5, 0.27, 0.38, 0.32, -0.38, -0.66), (-1.95, 0.17, 0.24, 0.2, -0.36, -0.56)]
 EYE_Y, EYE_Z = -0.6, 0.35
 
 
 def build_head(rig, k):
     """Tête d'hydre : cornes de bélier baguées d'or, couronne, diadème, collier."""
     H, J, kw = f"Head{k}", f"Jaw{k}", dict(part=f"Head{k}")
-    skull = a.loft_profile(f"Skull{k}", SKULL)
-    a.cut(skull, [a.hole_x((0, EYE_Y, EYE_Z), 0.2, 0.2), a.hole_x((0, -1.15, 0.05), 0.3, 0.12),
-                  a.hole_x((0, -1.9, 0.15), 0.1, 0.08), a.hole_x((0, -0.02, 0.2), 0.1, 0.24)])
+    skull = a.loft_profile(f"Skull{k}", SKULL, droop=0.25)
+    # Ouvertures : orbites, fenêtres, tempes, et naseaux creusés dans le bout du museau
+    a.cut(skull, [a.hole_x((0, EYE_Y, EYE_Z), 0.2, 0.2), a.hole_x((0, -1.15, 0.05), 0.28, 0.11),
+                  a.hole_x((0, -0.02, 0.2), 0.1, 0.24)]
+          + [a.hole_along((sx * 0.08, -2.15, -0.06), (0, 1, 0.35), (1, 0, 0), 0.055, 0.08,
+                          depth=0.25) for sx in (-1, 1)])
     rig.add(skull, H, "bone", **kw)
-    jaw = a.loft_profile(f"Jaw{k}", JAW)
+    jaw = a.loft_profile(f"Jaw{k}", JAW, droop=-0.1)
     a.cut(jaw, [a.hole_x((0, -0.6, -0.6), 0.28, 0.08)])
     rig.add(jaw, J, "bone", **kw)
 
@@ -191,19 +196,27 @@ def build_head(rig, k):
                 glow=True)
         # --- Œil, bourrelet d'orbite, sourcil hérissé
         x = side_width(SKULL, EYE_Y, EYE_Z)
-        rig.add(r.ico(f"Eye{k}{s}", 0.13, subdivisions=2, location=(s * x * 0.65, EYE_Y, EYE_Z)),
+        rig.add(r.ico(f"Eye{k}{s}", 0.14, subdivisions=2, location=(s * (x - 0.02), EYE_Y, EYE_Z)),
                 H, "glow", glow=True)
         ring = [(s * x, EYE_Y + math.cos(t) * 0.24, EYE_Z + math.sin(t) * 0.24)
                 for t in (2 * math.pi * i / 12 for i in range(12))]
         rig.add(r.tube(f"OrbitRim{k}{s}", ring, 0.045, segments=4, closed=True), H, "bone_shade",
                 **kw)
+        # Orbite saillante (comme chez le bélier) : un manchon d'os qui ressort de la tempe
+        socket = [[(s * (x + dx), EYE_Y + math.cos(t) * rad, EYE_Z + math.sin(t) * rad)
+                   for t in (2 * math.pi * i / 12 for i in range(12))]
+                  for dx, rad in ((-0.06, 0.25), (0.04, 0.27), (0.08, 0.25))]
+        rig.add(r.loft(f"OrbitSocket{k}{s}", socket, cap=False), H, "bone_shade", **kw)
+        ring = [(s * (x + 0.08), EYE_Y + math.cos(t) * 0.25, EYE_Z + math.sin(t) * 0.25)
+                for t in (2 * math.pi * i / 12 for i in range(12))]
+        rig.add(r.tube(f"OrbitLip{k}{s}", ring, 0.04, segments=4, closed=True), H, "bone", **kw)
         rig.add(a.blade(f"Brow{k}{s}", (s * 0.15, -0.9, 0.62), (s * 0.55, -0.45, 0.78), 0.26, 0.13,
                         width_end=0.2, mid=0.32, normal=(0, 0.25, 1)), H, "bone_shade", **kw)
         for i, (yy, ln) in enumerate(((-0.85, 0.18), (-0.65, 0.24), (-0.45, 0.3))):
             rig.add(a.claw(f"BrowSpike{k}{s}{i}", (s * (0.25 + 0.15 * i), yy, 0.72),
                            (s * 0.4, 0.6, 0.8), ln, 0.045, curl=-0.15, segments=4), H, "horn",
                     **kw)
-        rig.fx(f"Eye{k}{s}", head_matrix(k) @ Vector((s * x * 0.65, EYE_Y, EYE_Z)), H)
+        rig.fx(f"Eye{k}{s}", head_matrix(k) @ Vector((s * (x + 0.05), EYE_Y, EYE_Z)), H)
         # --- Pommette en arche avec piques + bosse
         cheek = [(s * 0.5, -1.15, -0.22), (s * 0.78, -0.75, -0.2), (s * 0.82, -0.3, -0.1),
                  (s * 0.65, 0.05, 0.12)]
@@ -217,8 +230,12 @@ def build_head(rig, k):
         rig.add(a.ring_around(f"Earring{k}{s}", Vector(cheek[2]) + Vector((s * 0.06, 0.05, -0.17)),
                               (0, 1, 0), 0.12, 0.03), H, "coin", **kw)
         # --- Museau : bosses de narines, bosses alignées, nodules du bord dentaire
-        rig.add(r.ico(f"NostrilBoss{k}{s}", 0.09, subdivisions=1, location=(s * 0.14, -1.85, 0.32),
-                      scale=(0.9, 1.4, 0.8)), H, "bone_shade", **kw)
+        rig.add(r.ico(f"NostrilBoss{k}{s}", 0.08, subdivisions=1, location=(s * 0.15, -2.05, 0.06),
+                      scale=(0.8, 1.2, 1.1)), H, "bone_shade", **kw)
+        # Tubercule facial (bosse sous l'œil, typique du bélier)
+        rig.add(r.ico(f"FacialTuber{k}{s}", 0.1, subdivisions=1,
+                      location=(s * side_width(SKULL, -1.05, 0.15), -1.05, 0.15), scale=(0.6, 1.4, 0.8)),
+                H, "bone_shade", **kw)
         for i, yy in enumerate((-1.2, -1.45, -1.7)):
             rig.add(r.ico(f"SnoutKnob{k}{s}{i}", 0.065, subdivisions=1,
                           location=(s * side_width(SKULL, yy, 0.12), yy, 0.12), scale=(0.6, 1, 1)),

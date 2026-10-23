@@ -140,7 +140,7 @@ def build_rig(rig):
 
 def build_head(rig):
     head = dict(part="Head")
-    skull = a.loft_profile("Skull", SKULL)
+    skull = a.loft_profile("Skull", SKULL, tip=None)
     a.cut(skull, [a.hole_x((0, -3.25, 3.42), 0.22, 0.22),        # orbites
                   a.hole_x((0, -4.2, 2.85), 0.24, 0.12),         # fenêtres antorbitales
                   a.hole_x((0, -4.95, 2.72), 0.18, 0.14)])       # grandes narines
@@ -226,7 +226,7 @@ def build_head(rig):
             y += 0.24
             k += 1
 
-    jaw = a.loft_profile("Jaw", JAW)
+    jaw = a.loft_profile("Jaw", JAW, tip=None)
     a.cut(jaw, [a.hole_x((0, -3.3, 2.2), 0.3, 0.1)])
     rig.add(jaw, "Jaw", "bone", **head)
 
