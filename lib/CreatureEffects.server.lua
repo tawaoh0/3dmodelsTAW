@@ -68,6 +68,16 @@ local THEMES = {
 		extra = { name = "Mist", texture = SMOKE, accel = Vector3.new(0, -0.4, 0),
 			speed = NumberRange.new(0.2, 0.6), lifetime = NumberRange.new(2, 3.5), size = 0.5 },
 	},
+	phoenix = { -- grandes flammes dorées qui montent + étincelles qui tourbillonnent
+		main = { texture = FIRE, accel = Vector3.new(0, 6, 0), speed = 1.4, rot = 180, light = 1.2 },
+		extra = { name = "Sparks", texture = SPARKLES, accel = Vector3.new(0, 5, 0),
+			speed = NumberRange.new(2, 4), lifetime = NumberRange.new(0.6, 1.2), size = 0.15 },
+	},
+	magma = { -- fumée lourde qui monte lentement + gouttes de lave qui tombent
+		main = { texture = SMOKE, accel = Vector3.new(0, 1.5, 0), speed = 0.5, rot = 15, light = 0.8 },
+		extra = { name = "LavaDrips", texture = FIRE, accel = Vector3.new(0, -25, 0),
+			speed = NumberRange.new(0, 0.5), lifetime = NumberRange.new(0.4, 0.8), size = 0.3 },
+	},
 	gold = { -- poussière d'or scintillante
 		main = { texture = SPARKLES, accel = Vector3.new(0, 1, 0), speed = 0.8, rot = 120, light = 1 },
 		extra = { name = "GoldDust", texture = SPARKLES, accel = Vector3.new(0, -1, 0),

@@ -163,6 +163,26 @@ HeadA/HeadB/HeadC, Legs.
 
 ![cerbere profil](previews/hell_cerberus_head.png) ![cerbere face](previews/hell_cerberus_head_front.png)
 
+| Phénix squelette | Pose de test (rig) |
+|---|---|
+| ![phenix](previews/hell_phoenix.png) | ![phenix pose](previews/hell_phoenix_pose.png) |
+
+Crâne d'aigle à anneaux sclérotiques, bec crochu à dents tomiales, crête de plumes d'os,
+ailes déployées en plumes d'os aux pointes de feu, éventail de queue et traînes, cœur-œuf de
+feu (thème `phoenix`). Pièces : corps, Head, Wings.
+
+![phenix profil](previews/hell_phoenix_head.png) ![phenix face](previews/hell_phoenix_head_front.png)
+
+| Golem de magma squelette | Pose de test (rig) |
+|---|---|
+| ![golem](previews/hell_golem.png) | ![golem pose](previews/hell_golem_pose.png) |
+
+Crâne de géant au bourrelet massif, couronne d'orgues basaltiques, larmes et bave de lave,
+os d'obsidienne fendus de veines de lave, cœur de magma, poings hérissés de basalte (thème
+`magma`). Pièces : corps, Head, Arms, Legs.
+
+![golem profil](previews/hell_golem_head.png) ![golem face](previews/hell_golem_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |

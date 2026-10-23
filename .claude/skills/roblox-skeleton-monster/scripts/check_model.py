@@ -8,6 +8,7 @@ Vérifie :
   suspendues — œil au centre d'une orbite, éclats autour du cœur — et les pièces marquées
   `obj["float_ok"] = True`, ex. pièces d'or en orbite, sont seulement signalées) ;
 - couleurs : toutes les couleurs utilisées existent dans COLORS, `glow` et `glow_hot` présents ;
+- groupes détachés : tout le squelette (hors lueurs) doit former un seul bloc connecté ;
 - os : chaque pièce est rattachée à un os qui existe ;
 - budget : triangles par pièce Roblox (≤ 20 000) ;
 - détail de la tête : nombre de pièces rattachées aux os Head*/Jaw*, par tête (HeadA, HeadB…).
@@ -102,17 +103,16 @@ def main():
             all_polys.append(tuple(base + k for k in p))
             owner.append(i)
     bvh = BVHTree.FromPolygons(all_verts, all_polys)
+    neighbours = defaultdict(set)
     for i, o in enumerate(objs):
         verts, _ = world_mesh(o)
         step = max(1, len(verts) // 60)
-        touching = False
         for v in verts[::step]:
             for _, _, idx, _ in bvh.find_nearest_range(v, TOL):
                 if idx is not None and owner[idx] != i:
-                    touching = True
-                    break
-            if touching:
-                break
+                    neighbours[i].add(owner[idx])
+                    neighbours[owner[idx]].add(i)
+        touching = bool(neighbours[i])
         if not touching:
             c = sum(verts, Vector()) / len(verts)
             msg = (f"{o.name} flotte (aucune pièce à moins de {TOL} stud) — centre "
@@ -120,6 +120,33 @@ def main():
             # Une lueur suspendue (œil au centre de l'orbite, éclats autour du cœur) peut être
             # voulue ; un os ou une corne qui flotte est toujours une erreur.
             (infos if o.get("glow") or o.get("float_ok") else problems).append(msg)
+
+    # Groupes détachés : des pièces qui se touchent entre elles mais pas le reste du squelette
+    # (ex. un poing entier séparé de l'avant-bras). Les lueurs ne servent pas de pont.
+    solid = [i for i, o in enumerate(objs) if not (o.get("glow") or o.get("float_ok"))]
+    solid_set, seen, groups = set(solid), set(), []
+    for i in solid:
+        if i in seen:
+            continue
+        stack, comp = [i], []
+        seen.add(i)
+        while stack:
+            k = stack.pop()
+            comp.append(k)
+            for nb in neighbours[k]:
+                if nb in solid_set and nb not in seen:
+                    seen.add(nb)
+                    stack.append(nb)
+        groups.append(comp)
+    groups.sort(key=len, reverse=True)
+    for comp in groups[1:]:
+        if len(comp) < 2:
+            continue   # pièce isolée : déjà signalée plus haut
+        c = sum((sum(world_mesh(objs[k])[0], Vector()) / len(world_mesh(objs[k])[0])
+                 for k in comp), Vector()) / len(comp)
+        names = ", ".join(objs[k].name for k in comp[:4])
+        problems.append(f"groupe détaché du squelette ({len(comp)} pièces : {names}…) — centre "
+                        f"({c.x:.2f}, {c.y:.2f}, {c.z:.2f})")
 
     for i in infos:
         print(f"  info (lueur suspendue, vérifier que c'est voulu) : {i}")
