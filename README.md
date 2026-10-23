@@ -259,6 +259,19 @@ Pièces : corps, Head, Wings, Tail.
 
 ![dragon de givre profil](previews/ice_dragon_head.png) ![dragon de givre face](previews/ice_dragon_head_front.png)
 
+## Pack 5 — Ruines de la jungle maudite
+
+| Gorille titan squelette | Pose de test (rig) |
+|---|---|
+| ![gorille](previews/jungle_gorilla.png) | ![gorille pose](previews/jungle_gorilla_pose.png) |
+
+Crâne de gorille (énorme crête sagittale, bourrelet sus-orbitaire massif, face courte,
+canines géantes), glyphes mayas lumineux incrustés, ornements d'oreille en jade, lianes et
+mousse, marche sur les phalanges avec des poings énormes cerclés de pierre gravée, idole de
+jade comme cœur (thème `jungle`). Pièces : corps, Head, Arms, Legs.
+
+![gorille profil](previews/jungle_gorilla_head.png) ![gorille face](previews/jungle_gorilla_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |

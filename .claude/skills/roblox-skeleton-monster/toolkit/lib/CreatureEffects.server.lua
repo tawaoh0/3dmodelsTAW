@@ -113,6 +113,11 @@ local THEMES = {
 		extra = { name = "IceShards", texture = SPARKLES, accel = Vector3.new(0, -6, 0),
 			speed = NumberRange.new(0.5, 1.5), lifetime = NumberRange.new(0.6, 1.2), size = 0.15 },
 	},
+	jungle = { -- spores lumineuses qui flottent + gouttes de poison turquoise
+		main = { texture = SPARKLES, accel = Vector3.new(0, 0.4, 0), speed = 0.3, rot = 50, light = 0.9 },
+		extra = { name = "Poison", texture = SMOKE, accel = Vector3.new(0, -8, 0),
+			speed = NumberRange.new(0, 0.4), lifetime = NumberRange.new(0.5, 1), size = 0.18 },
+	},
 	gold = { -- poussière d'or scintillante
 		main = { texture = SPARKLES, accel = Vector3.new(0, 1, 0), speed = 0.8, rot = 120, light = 1 },
 		extra = { name = "GoldDust", texture = SPARKLES, accel = Vector3.new(0, -1, 0),
