@@ -89,6 +89,13 @@ Le module définit :
   une autre (ailes vues de face, collerette pas masquée par les cornes) ;
 - `build(pal)` qui renvoie le `Rig`.
 
+**Effets / particules : obligatoires sur CHAQUE monstre**, jamais optionnels. Toujours :
+`EFFECT_THEME` adapté (ou un nouveau thème ajouté à `lib/CreatureEffects.server.lua`),
+des os `FX_*` aux yeux (`FX_EyeL/R`), au cœur ou à l'organe lumineux (`FX_Heart`…), à la
+gueule (`FX_Mouth`) **et** aux points propres à la créature (cheminées, appât, pointe de
+queue, cornes, cristaux), plus des pièces `glow` (yeux, cœur, fissures, articulations) qui
+deviennent du Neon pulsant. Le script `<nom>_Effects.server.lua` est livré avec le FBX.
+
 ## 4. Contrôler (boucle obligatoire)
 
 **a. Contrôle automatique d'abord** (rapide, sans rendu) :
