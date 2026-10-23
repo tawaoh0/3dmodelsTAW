@@ -150,7 +150,20 @@ proie squelettique qui brille dans le ventre (thème `lure`). Pièces : corps, H
 
 ![baudroie profil](previews/abyss_angler_head.png) ![baudroie face](previews/abyss_angler_head_front.png)
 
-## Pack 3 — Forêt maudite
+## Pack 2 bis — Enfers volcaniques
+
+| Cerbère squelette | Pose de test (rig) |
+|---|---|
+| ![cerbere](previews/hell_cerberus.png) | ![cerbere pose](previews/hell_cerberus_pose.png) |
+
+3 crânes de loup identiques à cornes annelées, colliers de fer à pointes reliés par des
+chaînes brisées à l'anneau du poitrail, crinières de flammes, os calcinés fendus de lave,
+cœur de braise, queue de serpent à tête de vipère (thème `fire`). Pièces : corps,
+HeadA/HeadB/HeadC, Legs.
+
+![cerbere profil](previews/hell_cerberus_head.png) ![cerbere face](previews/hell_cerberus_head_front.png)
+
+## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |
 |---|---|

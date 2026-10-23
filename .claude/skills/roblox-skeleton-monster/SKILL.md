@@ -62,7 +62,8 @@ trapu à collerette percée et très détaillée, `skeleton_hydra.py` rampant à
 repères locaux, multi-pièces, `abyss_kraken.py` céphalopode à tentacules et membranes, `abyss_megalodon.py` requin au
 chondrocrâne ajouré et rostre en barres, `abyss_leviathan.py` serpent au crâne de murène ajouré, `abyss_crab.py` arthropode à
 carapace ajourée + pattes + pinces, `abyss_angler.py` poisson tout en gueule à canne-appât, `forest_werewolf.py` bipède voûté
-à crâne de loup, mousse et racines).
+à crâne de loup, mousse et racines, `hell_cerberus.py` quadrupède à 3 têtes de loup identiques
+posées par matrice + colliers et chaînes).
 S'en inspirer pour la structure (rig → crâne → détails de tête → colonne → cage → membres),
 mais **concevoir un crâne neuf** : c'est la partie que l'utilisateur regarde en premier.
 Le crâne doit être **ajouré et fait d'os séparés** (boîte crânienne courte + barres de museau,
