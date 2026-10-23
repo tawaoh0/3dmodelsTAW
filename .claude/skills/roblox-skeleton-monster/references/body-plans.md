@@ -32,11 +32,21 @@ Pas de pattes. Colonne longue en S posée au sol (z ≈ 0.5-1.5) avec 30-40 vert
 sur 8-10 os `Body1…BodyN` (une `Chain` sinueuse), côtes sur presque toute la longueur, tête
 levée. Naga : torse humanoïde dressé à l'avant. Budget : `part="Tail"` pour l'arrière.
 
-## Multi-têtes (hydre, cerbère)
+## Multi-têtes (hydre, cerbère) — exemple : `skeleton_hydra.py`
 
-Corps quadrupède, puis N cous partant de l'avant du thorax en éventail : `NeckA1-2, HeadA, JawA`,
-`NeckB1-2…` Chaque tête a sa propre variante de crâne (même famille, détails différents :
-cornes, nombre de crocs, taille). Une pièce par tête (`part="HeadA"`…) pour le budget.
+Corps bas (rampant ou quadrupède), puis N cous partant de l'avant du thorax en éventail.
+Os : `Neck{A,B,C}1-2`, `Head{A,B,C}`, `Jaw{A,B,C}` (le contrôle compte les détails par tête).
+
+Méthode qui marche :
+- Modéliser **chaque tête dans son repère local** (articulation à l'origine, museau vers -Y),
+  puis la placer avec une matrice `Translation(bout du cou) @ Rotation(lacet, Z) @
+  Rotation(tangage, X) @ Scale(HEAD_SCALE)` appliquée aux nouveaux objets (`place()`), et aux
+  os / os FX avec la même matrice.
+- Têtes à ≈ 80 % de la taille d'une tête unique, cous longs et bien écartés (lacet ±0.5),
+  à des hauteurs différentes, pour qu'aucune tête n'en masque une autre.
+- **Un crâne différent par tête** (même famille, signature propre : couronne, capuchon,
+  défenses…), une pièce Roblox par tête (`part="HeadA"`…) avec son cou.
+- `VIEW` de face plongeant, ex. `(0.35, -1, 0.75)`, pour montrer l'éventail.
 
 ## Arthropode (araignée, scorpion, mante)
 

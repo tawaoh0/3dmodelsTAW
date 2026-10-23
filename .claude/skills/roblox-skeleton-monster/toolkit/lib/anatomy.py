@@ -62,6 +62,27 @@ def profile_ring(y, wt, wm, wb, zt, zb, pinch=0.1):
     return [(x, y, z) for x, z in ring]
 
 
+def width_at(sections, y, idx=3):
+    """Valeur interpolée d'une colonne de sections de crâne à la profondeur y
+    (idx : 1 demi-larg. dessus, 2 joues, 3 bord dentaire, 4 z dessus, 5 z bas)."""
+    for s0, s1 in zip(sections, sections[1:]):
+        if s1[0] <= y <= s0[0]:
+            t = (s0[0] - y) / (s0[0] - s1[0])
+            return s0[idx] + (s1[idx] - s0[idx]) * t
+    return sections[-1][idx]
+
+
+def side_width(sections, y, z):
+    """Demi-largeur réelle du crâne à la hauteur z (le profil se rétrécit vers le haut et le
+    bas) : pour poser un anneau d'orbite, une bosse ou une veine SUR la paroi."""
+    wt, wm, wb = (width_at(sections, y, i) for i in (1, 2, 3))
+    zt, zb = width_at(sections, y, 4), width_at(sections, y, 5)
+    zm = (zt + zb) / 2
+    if z >= zm:
+        return wm + (wt - wm) * min(1.0, (z - zm) / max(zt - zm, 1e-6))
+    return wm + (wb - wm) * min(1.0, (zm - z) / max(zm - zb, 1e-6))
+
+
 def loft_profile(name, sections):
     """Crâne / mâchoire : loft de sections `profile_ring(*s)`."""
     obj = r.loft(name, [profile_ring(*s) for s in sections])
@@ -217,6 +238,22 @@ def ridged_horn(name, points, radius, ridges=6, depth=0.12, segments=8):
     obj = r.tube(name, [tuple(p) for p in dense], radii, segments=segments)
     r.smooth(obj, 50)
     return obj
+
+
+def spiral_horn(name, base, side, back, up, radius, coil=0.55, turns=1.1, spread=0.5,
+                ridges=7):
+    """Corne de bélier enroulée : monte, part vers `back`, redescend et revient vers l'avant
+    en s'écartant vers `side` pour ne pas se recouper. `coil` = rayon de l'enroulement."""
+    base, side, back, up = (Vector(v) for v in (base, side, back, up))
+    side, back, up = side.normalized(), back.normalized(), up.normalized()
+    pts = []
+    n = 14
+    for k in range(n + 1):
+        th = 2 * math.pi * turns * k / n
+        rad = coil * (1 - 0.3 * k / n)
+        pts.append(tuple(base + (up * math.sin(th) + back * (1 - math.cos(th))) * rad
+                         + side * spread * k / n))
+    return ridged_horn(name, pts, radius, ridges=ridges)
 
 
 def crystal(name, center, radius, height, sides=6):

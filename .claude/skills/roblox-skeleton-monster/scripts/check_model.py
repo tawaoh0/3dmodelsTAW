@@ -5,11 +5,12 @@ Usage (depuis la racine du projet) :
 
 Vérifie :
 - pièces flottantes : chaque pièce doit toucher (à TOL près) une autre pièce (les lueurs
-  suspendues — œil au centre d'une orbite, éclats autour du cœur — sont seulement signalées) ;
+  suspendues — œil au centre d'une orbite, éclats autour du cœur — et les pièces marquées
+  `obj["float_ok"] = True`, ex. pièces d'or en orbite, sont seulement signalées) ;
 - couleurs : toutes les couleurs utilisées existent dans COLORS, `glow` et `glow_hot` présents ;
 - os : chaque pièce est rattachée à un os qui existe ;
 - budget : triangles par pièce Roblox (≤ 20 000) ;
-- détail de la tête : nombre de pièces rattachées aux os de tête/mâchoire.
+- détail de la tête : nombre de pièces rattachées aux os Head*/Jaw*, par tête (HeadA, HeadB…).
 
 Code de sortie 1 s'il y a un problème bloquant. Les pièces signalées sont listées avec leur
 position : corriger leur placement (souvent une rotation autour du mauvais pivot, ou un
@@ -29,7 +30,7 @@ from lib import roblox  # noqa: E402
 
 TOL = 0.12          # studs : distance max entre une pièce et sa voisine la plus proche
 MAX_TRIS = 20000
-HEAD_BONES = ("Head", "Jaw")
+HEAD_PREFIXES = ("Head", "Jaw")   # Head, HeadA, JawB… : une tête par suffixe
 MIN_HEAD_PIECES = 45
 
 
@@ -58,7 +59,7 @@ def main():
 
     # Os et pièces Roblox
     tris_by_part = defaultdict(int)
-    head_pieces = 0
+    head_pieces = defaultdict(int)
     for o in objs:
         bone = o.get("bone")
         groups = [g.name for g in o.vertex_groups]
@@ -69,17 +70,27 @@ def main():
             problems.append(f"{o.name} : aucun os (utiliser rig.add, ou des poids pour une membrane)")
         part = "_Glow" if o.get("glow") else (o.get("part") or "corps")
         tris_by_part[part] += roblox.triangle_count(o)
-        if bone in HEAD_BONES or any(g in HEAD_BONES for g in groups):
-            head_pieces += 1
+        for b in ([bone] if bone else groups):
+            for prefix in HEAD_PREFIXES:
+                if b and b.startswith(prefix):
+                    head_pieces[b[len(prefix):]] += 1
+                    break
+            else:
+                continue
+            break
     for part, tris in sorted(tris_by_part.items()):
         flag = "OK" if tris <= MAX_TRIS else "TROP"
         print(f"  pièce {part:<10} {tris:>6} triangles  {flag}")
         if tris > MAX_TRIS:
             problems.append(f"pièce {part} : {tris} triangles > {MAX_TRIS} (alléger ou répartir avec part=)")
-    print(f"  pièces de tête : {head_pieces}")
-    if head_pieces < MIN_HEAD_PIECES:
-        warnings.append(f"tête peu détaillée ({head_pieces} pièces < {MIN_HEAD_PIECES}) : "
-                        "voir « Densité de détails » dans style-guide.md")
+    if not head_pieces:
+        warnings.append("aucune pièce rattachée à un os Head*/Jaw* : nommer les os de tête ainsi")
+    for key, n in sorted(head_pieces.items()):
+        label = f"tête {key}" if key else "tête"
+        print(f"  pièces de {label} : {n}")
+        if n < MIN_HEAD_PIECES:
+            warnings.append(f"{label} peu détaillée ({n} pièces < {MIN_HEAD_PIECES}) : "
+                            "voir « Densité de détails » dans style-guide.md")
 
     # Pièces flottantes : BVH global, chaque pièce doit avoir une autre pièce à moins de TOL
     all_verts, all_polys, owner = [], [], []
@@ -108,7 +119,7 @@ def main():
                    f"({c.x:.2f}, {c.y:.2f}, {c.z:.2f})")
             # Une lueur suspendue (œil au centre de l'orbite, éclats autour du cœur) peut être
             # voulue ; un os ou une corne qui flotte est toujours une erreur.
-            (infos if o.get("glow") else problems).append(msg)
+            (infos if o.get("glow") or o.get("float_ok") else problems).append(msg)
 
     for i in infos:
         print(f"  info (lueur suspendue, vérifier que c'est voulu) : {i}")

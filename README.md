@@ -78,6 +78,14 @@ Conventions :
 
 ![triceratops tête](previews/skeleton_triceratops_head.png) ![triceratops tête face](previews/skeleton_triceratops_head_front.png)
 
+| Hydre squelette dorée à 3 têtes | Pose de test (rig) |
+|---|---|
+| ![hydre](previews/skeleton_hydra.png) | ![hydre pose](previews/skeleton_hydra_pose.png) |
+
+| Tête royale (centre) | Tête serpent (gauche) | Tête brute (droite) |
+|---|---|---|
+| ![A](previews/skeleton_hydra_headA.png) | ![B](previews/skeleton_hydra_headB.png) | ![C](previews/skeleton_hydra_headC.png) |
+
 Les créatures sont des **squelettes démoniaques** construits os par os avec `lib/anatomy.py` :
 crâne en sections avec de vraies ouvertures (booléens), os longs à condyles, vertèbres à épines
 en lame, côtes, os plats, griffes et cornes annelées, cristaux. Chaque pièce est rigide et

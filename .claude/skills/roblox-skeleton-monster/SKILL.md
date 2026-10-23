@@ -58,7 +58,8 @@ plusieurs itérations.
 Créer `models/skeleton_<nom>.py` en partant de l'exemple le plus proche dans
 `toolkit/models/` (`skeleton_trex.py` bipède massif, `skeleton_raptor.py` bipède agile thème
 acide, `skeleton_dragon.py` quadrupède ailé multi-pièces, `skeleton_triceratops.py` quadrupède
-trapu à collerette percée et très détaillée).
+trapu à collerette percée et très détaillée, `skeleton_hydra.py` rampant à 3 têtes dans des
+repères locaux, multi-pièces).
 S'en inspirer pour la structure (rig → crâne → détails de tête → colonne → cage → membres),
 mais **concevoir un crâne neuf** : c'est la partie que l'utilisateur regarde en premier.
 

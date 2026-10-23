@@ -32,6 +32,7 @@ c.Chain(points).at(t) -> (point, tangente)              # t de 0 à 1 le long d'
 | Fonction | Usage |
 |---|---|
 | `loft_profile(name, sections)` | Crâne / mâchoire. Sections `(y, demi-larg. dessus, joues, bord dentaire, z dessus, z bas)` de l'arrière vers l'avant (y décroissant). |
+| `width_at(sections, y, idx)` / `side_width(sections, y, z)` | Largeur / hauteur d'un crâne à la profondeur y ; `side_width` donne la demi-largeur **réelle à la hauteur z** pour poser anneaux, bosses et veines sur la paroi. |
 | `hole_x(center, ry, rz)` | Cutter tunnel elliptique selon X (traverse les 2 côtés). |
 | `cut(obj, [cutters])` | Booléen : perce l'objet, supprime les cutters. |
 | `rotate_obj(obj, axe, angle, pivot)` | Tourne les **sommets** autour de `pivot`. Pour un objet créé avec `location=`, le pivot est `(0, 0, 0)`. Pour un cutter `hole_x`, son centre monde. |
@@ -43,6 +44,7 @@ c.Chain(points).at(t) -> (point, tangente)              # t de 0 à 1 le long d'
 | `claw(name, base, direction, longueur, rayon, curl=0.35, segments=6)` | Griffe, croc, petite corne, épine. `curl` > 0 recourbe vers le bas, < 0 vers le haut. |
 | `claw_point(base, direction, longueur, curl, t)` | Point + tangente à la fraction `t` d'une `claw` courbée : pour poser une pointe lumineuse, une goutte ou un anneau **sur** la courbe. |
 | `ridged_horn(name, points, rayon, ridges=6)` | Grande corne annelée qui suit un chemin. |
+| `spiral_horn(name, base, side, back, up, rayon, coil, turns, spread)` | Corne de bélier enroulée (monte, part vers `back`, redescend, revient) ; `back=(0,-1,0)` l'enroule vers l'avant. |
 | `crystal(name, centre, rayon, hauteur, sides=6)` | Cristal facetté (cœur, éclats). |
 | `membrane(name, [(pos, {os: poids})], thickness)` | Membrane 2 faces (aile, collerette) ; triangulée en éventail depuis le 1er point. Peindre avec `rig.pal.paint(m, "membrane")` puis `m["part"] = "Wings"`. |
 | `tattered_edge(a, b, poids_a, poids_b, vers, depth, notches, seed)` | Points d'un bord déchiré festonné entre deux pointes, creusé vers `vers`. |
@@ -78,6 +80,10 @@ Chacune a coûté au moins une itération. `check_model.py` détecte celles marq
   avant d'un plan engendré par `X` (largeur) et `U` (hauteur) vaut `X.cross(U)`, pas
   `U.cross(X)`. Vérifier sur le gros plan de face : si on voit les détails à travers les
   trous, ils sont derrière.
+- **Anneau d'orbite ou bosse qui dépasse dans le vide** : posé à la largeur max des joues
+  alors que le crâne est plus étroit à cette hauteur. Utiliser `side_width(sections, y, z)`.
+- **Pièce volontairement suspendue** (pièces d'or en orbite, runes flottantes non
+  lumineuses) : `obj["float_ok"] = True` avant `rig.add`, sinon `check_model.py` la refuse.
 - **Écarts entre vertèbres en bout de queue** (auto) : la queue s'affine mais l'espacement
   reste constant. Prendre `n ≥ longueur / (0.8 × taille moyenne)` vertèbres.
 - **Ergot, sternum ou petite pièce décollés** (auto) : les décaler d'une distance inférieure
