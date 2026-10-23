@@ -217,6 +217,26 @@ trompe en anneaux d'os autour d'un cœur lumineux, bosse de garrot givrée, cœu
 
 ![mammouth profil](previews/ice_mammoth_head.png) ![mammouth face](previews/ice_mammoth_head_front.png)
 
+| Tigre à dents de sabre squelette | Pose de test (rig) |
+|---|---|
+| ![tigre](previews/ice_sabertooth.png) | ![tigre pose](previews/ice_sabertooth_pose.png) |
+
+Crâne de Smilodon (crête sagittale, arcades larges), sabres démesurés aplatis et dentelés,
+gueule ouverte à ~60° avec bride mentonnière, os gris argent rayés de glace bleu nuit,
+posture de bond, cœur de glace (thème `blizzard`). Pièces : corps, Head, Legs.
+
+![tigre profil](previews/ice_sabertooth_head.png) ![tigre face](previews/ice_sabertooth_head_front.png)
+
+| Wendigo squelette | Pose de test (rig) |
+|---|---|
+| ![wendigo](previews/ice_wendigo.png) | ![wendigo pose](previews/ice_wendigo_pose.png) |
+
+Crâne de cerf (fossettes lacrymales, longs os nasaux) aux grands bois givrés, gueule pleine de
+crocs fins, corps immense et décharné, côte brisée, doigts interminables, sabots fendus, cœur
+gelé (thème `wraith`). Pièces : corps, Head, Arms, Legs.
+
+![wendigo profil](previews/ice_wendigo_head.png) ![wendigo face](previews/ice_wendigo_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |

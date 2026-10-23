@@ -93,6 +93,16 @@ local THEMES = {
 		extra = { name = "Snow", texture = SPARKLES, accel = Vector3.new(0, -2, 0),
 			speed = NumberRange.new(0.3, 1), lifetime = NumberRange.new(2, 3), size = 0.12 },
 	},
+	blizzard = { -- neige soufflée à l'horizontale + cristaux de givre
+		main = { texture = SMOKE, accel = Vector3.new(6, -1, 0), speed = 1.5, rot = 40, light = 0.6 },
+		extra = { name = "Snow", texture = SPARKLES, accel = Vector3.new(8, -2, 0),
+			speed = NumberRange.new(2, 4), lifetime = NumberRange.new(0.8, 1.5), size = 0.12 },
+	},
+	wraith = { -- brume spectrale pâle qui monte lentement + éclats froids
+		main = { texture = SMOKE, accel = Vector3.new(0, 0.6, 0), speed = 0.25, rot = 90, light = 0.7 },
+		extra = { name = "Frost", texture = SPARKLES, accel = Vector3.new(0, -0.5, 0),
+			speed = NumberRange.new(0.2, 0.6), lifetime = NumberRange.new(1.5, 3), size = 0.1 },
+	},
 	gold = { -- poussière d'or scintillante
 		main = { texture = SPARKLES, accel = Vector3.new(0, 1, 0), speed = 0.8, rot = 120, light = 1 },
 		extra = { name = "GoldDust", texture = SPARKLES, accel = Vector3.new(0, -1, 0),
