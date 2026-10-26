@@ -389,11 +389,12 @@ méandres et boucle-labyrinthe lumineuse, jupe de ptéryges en deux rangs rivet�
 |---|---|
 | ![fenrir](previews/myth_fenrir.png) | ![fenrir pose](previews/myth_fenrir_pose.png) |
 
-Loup colossal au crâne massif (crête sagittale, arcades très écartées, canines et carnassières
-énormes), gueule bloquée grande ouverte par l'épée des dieux plantée entre les mâchoires,
-os gravés de runes lumineuses, crinière de piques d'os, arc-bouté tête basse, enchaîné par
-Gleipnir (ruban torsadé lumineux) du collier runique au rocher Gjöll percé du pieu Thviti,
-entraves aux pattes avant (thème `ragnarok`). Pièces : corps, Head, Legs, Tail.
+Loup colossal de 14 studs : crâne massif de loup (crête sagittale, arcades très écartées, os
+nasaux, foramens, épines jugales, canines et carnassières énormes), collerette de piques d'os
+derrière le crâne, gueule béante à mandibule courbe et fenêtrée, flammes de givre aux yeux, os
+gravés de runes lumineuses (front, joues, côtes, omoplates, pattes), fraise et crinière de
+piques, piques aux épaules, coudes et poignets, Gleipnir brisé : fragments de ruban lumineux
+déchirés qui pendent du collier runique et des entraves (thème `ragnarok`). Pièces : corps, Head, Legs, Tail.
 
 ![fenrir profil](previews/myth_fenrir_head.png) ![fenrir face](previews/myth_fenrir_head_front.png)
 
@@ -401,7 +402,8 @@ entraves aux pattes avant (thème `ragnarok`). Pièces : corps, Head, Legs, Tail
 |---|---|
 | ![anubis](previews/myth_anubis.png) | ![anubis pose](previews/myth_anubis_pose.png) |
 
-Crâne de chacal fin aux oreilles immenses de lapis-lazuli bordées d'or, os d'obsidienne,
+Dieu guerrier massif (épaules très larges, épaulières à plaques or et lapis, os épais) au
+crâne de chacal fin, aux oreilles immenses de lapis-lazuli bordées d'or, os d'obsidienne,
 diadème à uraeus, trait de khôl d'or, collier ousekh de perles or / lapis / turquoise, pagne
 de lin plissé à tablier d'hiéroglyphes lumineux, bracelets, sceptre ouas tenu à pleine main et
 planté au sol, ankh pendue à l'autre main (thème `duat`). Pièces : corps, Head, Arms, Legs.

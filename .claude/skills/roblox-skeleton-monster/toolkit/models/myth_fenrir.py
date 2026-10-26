@@ -3,13 +3,13 @@ Pack « Mythologie », créature 2 (mythe nordique).
 
 Animal modèle : le **loup gris** — crâne long à forte crête sagittale, arcades zygomatiques
 très écartées, orbites en avant, carnassières et canines énormes ; ici exagéré en colosse.
-Très différent du loup-garou (bipède voûté) et de Cerbère (3 têtes, feu) : **un seul crâne
-énorme, gueule bloquée grande ouverte par l'épée** plantée entre les mâchoires (le mythe).
+Très différent du loup-garou (bipède voûté) et de Cerbère (3 têtes, feu) : **colosse de
+14 studs**, un seul crâne énorme à collerette de piques, gueule béante.
 
 Identité : os gris pierre gravés de **runes** lumineuses ; **aucune corne** : crinière de
 piques d'os hérissées sur la nuque et le dos ; quadrupède arc-bouté, tête basse qui tire sur
-son lien ; **Gleipnir**, ruban magique torsadé lumineux, du collier jusqu'au rocher Gjöll
-planté du pieu Thviti ; entraves aux pattes avant ; thème d'effets « ragnarok ».
+ses liens ; **Gleipnir brisé** : fragments de ruban magique lumineux déchirés qui pendent du
+collier runique et des entraves ; flammes de givre aux yeux ; thème d'effets « ragnarok ».
 
 Pièces Roblox : corps, Head, Legs, Tail, + lumineux.
 Os : Root, Hips, Chest, Neck1-2, Head, Jaw, Tail1-3, {Front,Hind}{Upper,Lower,Foot}_{L,R}.
@@ -53,7 +53,7 @@ TEST_POSE = {
 VIEW = (1.0, -0.8, 0.35)
 
 SPINE = a.smooth_path([(0, 2.7, 4.3), (0, 1.2, 4.55), (0, -0.2, 4.85), (0, -1.2, 5.05)], 18)
-NECK = a.smooth_path([(0, -1.2, 5.05), (0, -1.9, 5.0), (0, -2.5, 4.7), (0, -2.85, 4.45)], 9)
+NECK = a.smooth_path([(0, -1.2, 5.05), (0, -1.95, 5.3), (0, -2.55, 5.25), (0, -2.95, 5.0)], 9)
 TAIL = a.smooth_path([(0, 2.75, 4.25), (0, 3.6, 3.9), (0, 4.4, 3.0), (0, 4.9, 2.2), (0, 5.4, 1.7)], 16)
 # Crâne de loup dans son repère (occiput en 0, museau vers -Y)
 SKULL = [(0.0, 0.35, 0.42, 0.3, 0.42, -0.25), (-0.4, 0.5, 0.6, 0.4, 0.5, -0.35),
@@ -66,8 +66,8 @@ GAPE = math.radians(42)
 _jm = (Matrix.Translation((0, HINGE[1], HINGE[2])) @ Matrix.Rotation(GAPE, 4, "X")
        @ Matrix.Translation((0, -HINGE[1], -HINGE[2])))
 HEAD_M = (Matrix.Translation(NECK[-1] + Vector((0, 0.15, 0.15))) @ Matrix.Rotation(math.radians(5), 4, "X")
-          @ Matrix.Scale(1.35, 4))
-STONE = Vector((1.9, -4.6, 0.45))
+          @ Matrix.Diagonal((1.4, 1.08, 1.55, 1.0)))   # museau de loup : plus court et plus haut
+SCALE = 1.3          # tout le modèle est agrandi à la fin (colosse)
 HEAD = dict(part="Head")
 LEGS = dict(part="Legs")
 TAILP = dict(part="Tail")
@@ -133,7 +133,6 @@ def build_rig(rig):
         rig.fx(f"Eye{side}", HEAD_M @ Vector((s * 0.35, EYE[0], EYE[1])), "Head")
     rig.fx("Maw", HEAD_M @ Vector((0, -1.5, -0.5)), "Head")
     rig.fx("Heart", (0, -0.4, 3.6), "Chest")
-    rig.fx("RuneStone", STONE + Vector((0, 0, 0.6)), "Root")
     rig.fx("Mane", NECK[2] + Vector((0, 0, 0.7)), "Neck1")
 
 
@@ -159,6 +158,22 @@ def build_head(rig):
     rig.add(r.tube("Nasal", [tuple(top(0, y) + Vector((0, 0, 0.01))) for y in (-1.15, -1.7, -2.3, -2.65)],
                    [0.05, 0.05, 0.04, 0.03], segments=4), H, "bone_shade", **HEAD)
     rune(rig, "BrowRune", top(0, -1.0) + Vector((0, 0, 0.03)), (0, -0.3, 1), H, size=0.22)
+    for s in (-1, 1):
+        # Os nasaux, crête maxillaire, foramens, épines jugales, flamme de givre des yeux
+        rig.add(r.tube(f"NasalBone{s}", [tuple(top(s * 0.09, y) + Vector((0, 0, 0.012))) for y in (-1.3, -1.9, -2.5)],
+                       [0.035, 0.03, 0.025], segments=4), H, "bone_shade", **HEAD)
+        rig.add(r.tube(f"MaxillaRidge{s}", [(s * a.side_width(SKULL, y, -0.15) * 1.0, y, -0.15) for y in (-0.9, -1.5, -2.1, -2.5)],
+                       [0.05, 0.055, 0.045, 0.035], segments=4), H, "bone_shade", **HEAD)
+        for k in range(3):
+            y = -1.9 - 0.2 * k
+            rig.add(r.ico(f"Foramen{s}{k}", 0.03, subdivisions=1, location=(s * a.side_width(SKULL, y, 0.0) * 1.01, y, 0.0)),
+                    H, "ink", **HEAD)
+        rig.add(a.claw(f"JugalSpike{s}", (s * 0.7, -0.55, -0.1), (s * 0.5, 1, -0.1), 0.5, 0.06, curl=-0.2, segments=4), H,
+                "horn", **HEAD)
+        rune(rig, f"CheekRune{s}", (s * a.side_width(SKULL, -1.45, 0.05) * 1.02, -1.45, 0.05), (s, 0, 0.2), H, size=0.16)
+        x = a.side_width(SKULL, EYE[0], EYE[1])
+        rig.add(a.claw(f"EyeFlame{s}", (s * x, EYE[0] + 0.05, EYE[1] + 0.05), (s * 0.3, 1, 0.35), 0.7, 0.06, curl=-0.3,
+                       segments=4), H, "glow", glow=True)
     for s in (-1, 1):
         x = a.side_width(SKULL, EYE[0], EYE[1])
         c0 = Vector((s * x, EYE[0], EYE[1]))
@@ -193,10 +208,12 @@ def build_head(rig):
     # Mandibule massive, grande ouverte (bloquée par l'épée)
     jaw_before = {o.name for o in bpy.context.scene.objects}
     for s in (-1, 1):
-        line = [Vector((s * HINGE[0], HINGE[1], HINGE[2])), Vector((s * 0.36, -1.0, -0.48)),
-                Vector((s * 0.26, -1.9, -0.5)), Vector((s * 0.12, -2.6, -0.5))]
-        hs = [0.42, 0.3, 0.26, 0.22]
-        rig.add(a.band(f"Mandible{s}", line, hs, [0.11, 0.1, 0.09, 0.08], offset=1), J, "bone", **HEAD)
+        line = a.smooth_path([(s * HINGE[0], HINGE[1], HINGE[2]), (s * 0.38, -0.9, -0.46), (s * 0.28, -1.8, -0.5),
+                              (s * 0.13, -2.6, -0.5)], 8)
+        hs = [0.48, 0.42, 0.34, 0.27, 0.24, 0.26, 0.25, 0.2]
+        mand = a.band(f"Mandible{s}", line, hs, [0.12 - 0.005 * i for i in range(8)], offset=1)
+        a.cut(mand, [a.hole_along((s * 0.4, -0.75, -0.72), (1, 0, 0), (0, 1, 0), 0.25, 0.08, depth=0.5)])
+        rig.add(mand, J, "bone", **HEAD)
         rig.add(r.tube(f"MandibleBase{s}", [tuple(p - Vector((0, 0, h))) for p, h in zip(line, hs)], 0.04,
                        segments=4), J, "bone_shade", **HEAD)
         rig.add(a.blade(f"Coronoid{s}", line[0] + Vector((0, -0.12, 0)), line[0] + Vector((0, -0.02, 0.4)), 0.24,
@@ -221,18 +238,15 @@ def build_head(rig):
     for o in [o for o in bpy.context.scene.objects if o.type == "MESH" and o.name not in jaw_before]:
         o.data.transform(_jm @ o.matrix_basis)
         o.matrix_basis = Matrix.Identity(4)
-    # L'épée des dieux : garde sur la mâchoire inférieure, pointe plantée dans le palais
-    low = _jm @ Vector((0, -1.75, -0.55))
-    high = Vector((0, -1.75, -0.32))
-    up = (high - low).normalized()
-    rig.add(a.blade("SwordBlade", low + up * 0.05, high + up * 0.12, 0.17, 0.04, width_end=0.03, mid=0.17,
-                    normal=(1, 0, 0)), H, "steel", **HEAD)
-    rig.add(r.tube("SwordFuller", [tuple(low + up * 0.15), tuple(high - up * 0.1)], 0.02, segments=4), H, "glow",
-            glow=True)
-    rig.add(r.box("SwordGuard", (0.55, 0.08, 0.07), location=low), H, "steel", **HEAD)
-    grip_end = low - up * 0.45
-    rig.add(r.tube("SwordGrip", [tuple(low), tuple(grip_end)], 0.05, segments=6), H, "leather", **HEAD)
-    rig.add(r.ico("SwordPommel", 0.08, subdivisions=1, location=grip_end - up * 0.05), H, "steel", **HEAD)
+    # Collerette de piques d'os derrière le crâne (silhouette impressionnante)
+    for k in range(9):
+        ang = math.radians(-80 + 160 * k / 8)
+        d = Vector((math.sin(ang), 0.9, 0.55 + 0.6 * math.cos(ang)))
+        base = Vector((0.33 * math.sin(ang), 0.02, 0.1 + 0.3 * math.cos(ang)))
+        rig.add(a.claw(f"Ruff{k}", base, d, 0.75 + 0.35 * math.cos(ang), 0.07, curl=-0.25, segments=5), H, "horn",
+                **HEAD)
+    rig.add(r.ico("Tongue", 0.12, subdivisions=2, location=_jm @ Vector((0, -1.3, -0.6)), scale=(2.6, 3.5, 0.45)), J,
+            "gum", **HEAD)
     rig.add(r.ico("Throat", 0.14, subdivisions=2, location=(0, -1.0, -0.45), scale=(1.3, 2.4, 0.6)), H, "glow",
             glow=True)
     for o in [o for o in bpy.context.scene.objects if o.type == "MESH" and o.name not in before]:
@@ -249,7 +263,7 @@ def build_body(rig):
         side, up = a._basis(t)
         bone = "Hips" if i < 9 else "Chest"
         withers = max(0.0, (i - 10) / (n - 10))
-        rig.add(a.vertebra(f"Vert{i}", SPINE[i], t, 0.28, spine=1.2 + 1.2 * withers, lean=0.5), bone, "bone")
+        rig.add(a.vertebra(f"Vert{i}", SPINE[i], t, 0.34, spine=1.2 + 1.2 * withers, lean=0.5), bone, "bone")
         if i < n - 1:
             rig.add(a.disc(f"Disc{i}", SPINE[i].lerp(SPINE[i + 1], 0.5), t, 0.28), bone, "disc")
         # Crinière de piques d'os hérissées (plus longues au garrot)
@@ -262,13 +276,13 @@ def build_body(rig):
     sternum = []
     for k, i in enumerate(range(5, n - 1)):
         f = k / (n - 7)
-        hw = 0.65 + 0.2 * math.sin(math.pi * f)
-        depth = 0.9 + 0.75 * f
+        hw = 0.85 + 0.25 * math.sin(math.pi * f)
+        depth = 1.05 + 0.85 * f
         for s in (-1, 1):
-            rig.add(a.rib(f"Rib{k}{s}", SPINE[i], hw, depth, s, sweep=-0.2, radius=0.065), "Hips" if i < 9 else "Chest",
+            rig.add(a.rib(f"Rib{k}{s}", SPINE[i], hw, depth, s, sweep=-0.2, radius=0.08), "Hips" if i < 9 else "Chest",
                     "bone")
         sternum.append(SPINE[i] + Vector((0, -0.2, -depth)))
-    rig.add(r.tube("Sternum", [tuple(p) for p in sternum[::2]], 0.08, segments=6), "Chest", "bone_shade")
+    rig.add(a.band("Sternum", sternum[::2], 0.1, 0.5), "Chest", "bone_shade")
     for k, (dx, h) in enumerate(((0, 0.6), (0.15, 0.4), (-0.15, 0.45))):
         rig.add(a.crystal(f"RuneHeart{k}", (dx, -0.4, 3.6), 0.12 if k == 0 else 0.08, h, sides=4), "Chest", "glow",
                 glow=True)
@@ -283,11 +297,27 @@ def build_body(rig):
         for s in (-1, 1):
             rig.add(a.claw(f"NeckHackle{i}{s}", NECK[i] + up * 0.35 + side * s * 0.15, up + side * s * 0.5 + Vector((0, 0.8, 0)),
                            0.9 - 0.04 * i, 0.06, curl=-0.25, segments=4), bone, "horn")
+    for k, i in enumerate(range(6, n - 2, 3)):
+        for s in (-1, 1):
+            rune(rig, f"RibRune{k}{s}", SPINE[i] + Vector((s * 0.72, -0.25, -0.45)), (s, -0.2, 0), "Chest" if i >= 9 else "Hips",
+                 size=0.14)
+    # Fraise de piques autour du cou
+    cc, t = NECK[2], tangent(NECK, 2)
+    side, up = a._basis(t)
+    for k in range(12):
+        ang = 2 * math.pi * k / 12
+        d = side * math.cos(ang) + up * math.sin(ang)
+        if d.z < -0.6:
+            continue
+        rig.add(a.claw(f"NeckRuff{k}", cc + d * 0.3, d + Vector((0, 0.9, 0)), 0.8 + 0.3 * max(0, d.z), 0.06, curl=-0.2,
+                       segments=4), "Neck1", "horn")
     # Omoplates et bassin runés
     for s in (-1, 1):
         sh = leg("Front", s)[0]
         rig.add(a.blade(f"Scapula{s}", SPINE[-3] + Vector((s * 0.3, 0.3, 0.2)), sh, 0.55, 0.07, width_end=0.28,
                         mid=0.55, normal=(s, 0, 0.3)), "Chest", "bone")
+        rig.add(a.claw(f"ShoulderSpike{s}", SPINE[-3].lerp(sh, 0.4) + Vector((s * 0.3, 0.2, 0.2)), (s * 0.5, 0.6, 1), 0.7, 0.08,
+                       curl=-0.2, segments=5), "Chest", "horn")
         rune(rig, f"ScapulaRune{s}", SPINE[-3].lerp(sh, 0.5) + Vector((s * 0.4, 0.25, 0.05)), (s, 0, 0.3), "Chest")
         hp = leg("Hind", s)[0]
         rig.add(a.blade(f"Ilium{s}", SPINE[2] + Vector((s * 0.2, -0.3, 0.1)), hp + Vector((s * 0.08, 0, 0.15)), 0.5,
@@ -311,36 +341,29 @@ def build_body(rig):
 
 
 def build_chain(rig):
-    """Gleipnir : collier runique + ruban torsadé jusqu'au rocher Gjöll et son pieu, entraves."""
-    cc, t = NECK[3], tangent(NECK, 3)
+    """Gleipnir brisé : collier runique et entraves d'où pendent des fragments de ruban déchirés."""
+    cc, t = NECK[4], tangent(NECK, 4)
     side, up = a._basis(t)
-    rig.add(a.ring_around("Collar", cc, t, 0.42, 0.07, segments=14), "Neck1", "iron")
+    rig.add(a.ring_around("Collar", cc, t, 0.42, 0.08, segments=14), "Neck1", "iron")
     for k in range(6):
         ang = 2 * math.pi * k / 6
         d = side * math.cos(ang) + up * math.sin(ang)
-        rune(rig, f"CollarRune{k}", cc + d * 0.47, d, "Neck1", size=0.1)
-    anchor = cc - up * 0.48
-    path = a.smooth_path([anchor, anchor + Vector((0.4, -0.6, -1.2)), (1.6, -3.4, 1.2), STONE + Vector((-0.1, 0.2, 0.55))],
-                         20)
-    ribbon(rig, "Gleipnir", path, "Neck1")
-    # Rocher Gjöll gravé de runes, percé du pieu Thviti
-    rig.add(r.ico("Gjoll", 0.7, subdivisions=2, location=STONE, scale=(1.25, 1, 0.7)), "Root", "stone")
-    for k, ang in enumerate((0.3, 1.6, 2.9)):
-        d = Vector((math.cos(ang), math.sin(ang), 0.2))
-        rune(rig, f"StoneRune{k}", STONE + Vector((d.x * 0.82, d.y * 0.68, 0.15)), d, "Root", size=0.2)
-    rig.add(a.claw("Thviti", STONE + Vector((0, 0, 1.0)), (0, 0, -1), 1.2, 0.1, curl=0, segments=6), "Root", "iron")
-    rig.add(a.ring_around("ThvitiRing", STONE + Vector((0, 0, 0.62)), (0, 0, 1), 0.16, 0.05, segments=10), "Root",
-            "iron")
-    # Entraves aux pattes avant reliées par un bout de ruban
-    pts = []
+        rune(rig, f"CollarRune{k}", cc + d * 0.48, d, "Neck1", size=0.1)
+        rig.add(a.claw(f"CollarSpike{k}", cc + d * 0.48, d, 0.25, 0.04, curl=0, segments=4), "Neck1", "iron")
+    for k, (sx, ln) in enumerate(((-1, 1.4), (1, 0.9), (0.3, 1.8))):
+        start = cc - up * 0.46 + side * sx * 0.2
+        path = a.smooth_path([start, start + Vector((sx * 0.15, -0.1, -ln * 0.5)), start + Vector((sx * 0.3, 0.1, -ln))], 8)
+        ribbon(rig, f"Gleipnir{k}", path, "Neck1")
+        rig.add(a.claw(f"GleipnirTear{k}", path[-1], (sx * 0.3, 0, -1), 0.15, 0.04, curl=0, segments=4), "Neck1", "glow",
+                glow=True)
     for s, side_n in ((1, "L"), (-1, "R")):
-        p = leg("Front", s)
-        q = p[2].lerp(p[3], 0.3)
-        rig.add(a.ring_around(f"Fetter{s}", q, p[3] - p[2], 0.14, 0.045, segments=10), f"FrontFoot_{side_n}", "iron",
-                **LEGS)
-        pts.append(q + Vector((-s * 0.13, 0, 0)))
-    ribbon(rig, "FetterLink", a.smooth_path([pts[0], pts[0].lerp(pts[1], 0.5) + Vector((0, 0, -0.25)), pts[1]], 9),
-           "FrontFoot_L", radius=0.025, **LEGS)
+        for prefix in ("Front", "Hind"):
+            p = leg(prefix, s)
+            q = p[2].lerp(p[3], 0.3)
+            bone = f"{prefix}Foot_{side_n}"
+            rig.add(a.ring_around(f"Fetter{prefix}{s}", q, p[3] - p[2], 0.17, 0.05, segments=10), bone, "iron", **LEGS)
+            frag = a.smooth_path([q + Vector((s * 0.17, 0, 0)), q + Vector((s * 0.3, 0.1, -0.3)), q + Vector((s * 0.35, 0.25, -0.55))], 6)
+            ribbon(rig, f"Fragment{prefix}{s}", frag, bone, radius=0.025, **LEGS)
 
 
 def build_legs(rig):
@@ -357,7 +380,12 @@ def build_legs(rig):
             rune(rig, f"{prefix}LegRune{s}", p[0].lerp(p[1], 0.5) + Vector((s * 0.17, 0, 0)), (s, 0, 0), bones[0])
             rig.add(a.claw(f"{prefix}Point{s}", p[1], (0, 1, 0.3) if prefix == "Front" else (0, -1, 0.3), 0.3, 0.08,
                            curl=0, segments=4), bones[1], "bone_shade", **LEGS)
-            rig.add(r.ico(f"{prefix}Wrist{s}", 0.13, subdivisions=1, location=p[2]), bones[2], "bone_shade", **LEGS)
+            rig.add(r.ico(f"{prefix}Wrist{s}", 0.15, subdivisions=1, location=p[2]), bones[2], "bone_shade", **LEGS)
+            for k in range(3):
+                rig.add(a.claw(f"{prefix}Tuft{s}{k}", p[2] + Vector((s * 0.05 * (k - 1), 0.1, 0)), (s * 0.3 * (k - 1), 1, 0.2),
+                               0.3, 0.04, curl=-0.3, segments=4), bones[2], "horn", **LEGS)
+            rig.add(a.claw(f"{prefix}ElbowSpike{s}", p[1] + Vector((s * 0.12, 0, 0)), (s * 0.4, 1 if prefix == "Front" else -0.6, 0.5),
+                           0.45, 0.06, curl=-0.2, segments=4), bones[1], "horn", **LEGS)
             rig.add(a.long_bone(f"{prefix}Meta{s}", p[2], p[3] + Vector((0, 0, 0.08)), 0.11, segments=6), bones[2],
                     "bone", **LEGS)
             for k in range(4):
@@ -376,4 +404,11 @@ def build(pal):
     build_body(rig)
     build_chain(rig)
     build_legs(rig)
+    # Colosse : tout est agrandi depuis l'origine (les pattes restent au sol)
+    m = Matrix.Scale(SCALE, 4)
+    for o in bpy.context.scene.objects:
+        if o.type == "MESH":
+            o.data.transform(m @ o.matrix_basis)
+            o.matrix_basis = Matrix.Identity(4)
+    rig.bones = {k: (h * SCALE, tl * SCALE, par) for k, (h, tl, par) in rig.bones.items()}
     return rig

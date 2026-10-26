@@ -3,7 +3,8 @@ Pack « Mythologie », créature 3 (mythe égyptien).
 
 Animal modèle : le **chacal doré** — crâne fin et allongé, museau étroit, grandes orbites,
 canines fines, oreilles immenses dressées ; sur un corps humain élancé aux jambes de chacal.
-Très différent du Minotaure (massif, voûté) : droit, mince, hiératique.
+Très différent du Minotaure (voûté, en jupe de cuir) : droit, hiératique, carrure de dieu
+guerrier (épaules très larges, épaulières or et lapis).
 
 Identité : **os noirs d'obsidienne** cerclés d'or ; **aucune corne** : oreilles géantes de
 lapis-lazuli bordées d'or, diadème à **uraeus** (cobra dressé) ; collier ousekh de perles
@@ -64,8 +65,8 @@ GAPE = math.radians(14)
 _jm = (Matrix.Translation((0, HINGE[1], HINGE[2])) @ Matrix.Rotation(GAPE, 4, "X")
        @ Matrix.Translation((0, -HINGE[1], -HINGE[2])))
 HEAD_M = Matrix.Translation(NECK[-1] + Vector((0, 0.15, 0.15)))
-GRIP = Vector((1.45, -0.55, 4.55))
-STAFF_TOP, STAFF_BOTTOM = GRIP + Vector((0, 0, 3.4)), Vector((1.45, -0.55, 0.0))
+GRIP = Vector((1.75, -0.55, 4.55))
+STAFF_TOP, STAFF_BOTTOM = GRIP + Vector((0, 0, 3.6)), Vector((1.75, -0.55, 0.0))
 HEAD = dict(part="Head")
 ARMS = dict(part="Arms")
 LEGS = dict(part="Legs")
@@ -81,15 +82,15 @@ def spine_bone(i):
 
 def arm_points(s):
     if s > 0:   # bras gauche : main serrée sur le sceptre ouas
-        return (Vector((0.78, -0.05, 6.3)), Vector((1.25, 0.1, 5.15)), Vector((1.45, -0.3, 4.62)),
-                Vector((1.45, -0.45, 4.58)))
-    return (Vector((-0.78, -0.05, 6.3)), Vector((-1.0, 0.12, 5.05)), Vector((-0.98, -0.35, 3.95)),
-            Vector((-0.98, -0.45, 3.6)))
+        return (Vector((1.15, -0.05, 6.35)), Vector((1.55, 0.12, 5.15)), Vector((1.75, -0.3, 4.62)),
+                Vector((1.75, -0.45, 4.58)))
+    return (Vector((-1.15, -0.05, 6.35)), Vector((-1.45, 0.15, 5.05)), Vector((-1.45, -0.35, 3.95)),
+            Vector((-1.45, -0.45, 3.6)))
 
 
 def leg_points(s):
-    return (Vector((s * 0.42, 0.15, 3.95)), Vector((s * 0.5, -0.35, 2.3)), Vector((s * 0.5, 0.4, 0.9)),
-            Vector((s * 0.52, 0.0, 0.15)))
+    return (Vector((s * 0.55, 0.15, 3.95)), Vector((s * 0.68, -0.35, 2.3)), Vector((s * 0.68, 0.4, 0.9)),
+            Vector((s * 0.72, 0.0, 0.15)))
 
 
 def beads(rig, name, center, radius, start, end, n, bone, colors, size=0.06, dz=0.0, **kw):
@@ -233,19 +234,19 @@ def build_body(rig):
     n = len(SPINE)
     for i in range(n):
         t = tangent(SPINE, i)
-        rig.add(a.vertebra(f"Vert{i}", SPINE[i], t, 0.2, spine=1.0, lean=0.4), spine_bone(i), "bone")
+        rig.add(a.vertebra(f"Vert{i}", SPINE[i], t, 0.27, spine=1.1, lean=0.4), spine_bone(i), "bone")
         if i < n - 1:
-            rig.add(a.disc(f"Disc{i}", SPINE[i].lerp(SPINE[i + 1], 0.5), t, 0.2), spine_bone(i), "disc")
+            rig.add(a.disc(f"Disc{i}", SPINE[i].lerp(SPINE[i + 1], 0.5), t, 0.27), spine_bone(i), "disc")
     for i in range(len(NECK)):
-        rig.add(a.vertebra(f"NeckVert{i}", NECK[i], tangent(NECK, i), 0.15, spine=0.8), "Neck", "bone")
+        rig.add(a.vertebra(f"NeckVert{i}", NECK[i], tangent(NECK, i), 0.22, spine=0.9), "Neck", "bone")
         if i < len(NECK) - 1:
-            rig.add(a.disc(f"NeckDisc{i}", NECK[i].lerp(NECK[i + 1], 0.5), tangent(NECK, i), 0.15), "Neck", "disc")
+            rig.add(a.disc(f"NeckDisc{i}", NECK[i].lerp(NECK[i + 1], 0.5), tangent(NECK, i), 0.22), "Neck", "disc")
     sternum = []
     for k, i in enumerate(range(7, 15)):
-        hw = 0.55 + 0.12 * math.sin(math.pi * k / 7)
-        depth = 0.55 + 0.15 * math.sin(math.pi * (k + 1) / 9)
+        hw = 0.72 + 0.2 * math.sin(math.pi * (k + 3) / 10)
+        depth = 0.7 + 0.2 * math.sin(math.pi * (k + 1) / 9)
         for s in (-1, 1):
-            rig.add(a.rib(f"Rib{k}{s}", SPINE[i], hw, depth, s, sweep=-0.3, radius=0.05), spine_bone(i), "bone")
+            rig.add(a.rib(f"Rib{k}{s}", SPINE[i], hw, depth, s, sweep=-0.3, radius=0.07), spine_bone(i), "bone")
         sternum.append(SPINE[i] + Vector((0, -0.3, -depth)))
     rig.add(r.tube("Sternum", [tuple(p) for p in sternum[2::2]], 0.06, segments=6), "Spine3", "gold")
     for k, (dx, h) in enumerate(((0, 0.5), (0.12, 0.35), (-0.12, 0.38))):
@@ -255,8 +256,14 @@ def build_body(rig):
         sh = arm_points(s)[0]
         rig.add(a.blade(f"Scapula{s}", SPINE[13] + Vector((s * 0.25, 0.2, 0)), sh + Vector((0, 0.1, 0)), 0.4, 0.05,
                         width_end=0.2, normal=(0.3 * s, 1, 0.2)), "Spine3", "bone")
-        rig.add(a.long_bone(f"Clavicle{s}", sh, sternum[-1] + Vector((s * 0.12, 0, 0.05)), 0.05, condyles=False), "Spine3",
+        rig.add(a.long_bone(f"Clavicle{s}", sh, sternum[-1] + Vector((s * 0.12, 0, 0.05)), 0.07, condyles=False), "Spine3",
                 "gold")
+        # Épaulière à plaques superposées or / lapis
+        for k in range(3):
+            c0 = sh + Vector((s * (0.1 + 0.1 * k), 0, 0.3 - 0.16 * k))
+            rig.add(a.band(f"Pauldron{s}{k}", [c0 + Vector((0, -0.4, -0.1)), c0 + Vector((s * 0.05, 0, 0.04)),
+                                              c0 + Vector((0, 0.4, -0.1))], [0.3, 0.32, 0.3], 0.05,
+                           up=(s, 0, -0.6), offset=0.5), "Spine3", "gold" if k % 2 == 0 else "lapis")
         hp = leg_points(s)[0]
         rig.add(a.blade(f"Ilium{s}", SPINE[1] + Vector((s * 0.12, 0, 0.05)), hp + Vector((s * 0.15, 0, 0.45)), 0.4, 0.06,
                         width_end=0.32, mid=0.45, normal=(s, -0.2, 0.2)), "Spine1", "bone")
@@ -265,17 +272,17 @@ def build_body(rig):
     # Collier ousekh : rangs de perles or / lapis / turquoise + liseré d'or
     cc = Vector((0, -0.12, 6.5))
     for k in range(4):
-        beads(rig, f"Usekh{k}", cc, 0.36 + 0.12 * k, -105, 105, 9 + 2 * k, "Spine3",
+        beads(rig, f"Usekh{k}", cc, 0.5 + 0.13 * k, -105, 105, 9 + 2 * k, "Spine3",
               (("gold", "lapis", "turquoise", "lapis"))[k:] + ("gold",) * k, size=0.05, dz=-0.04 * k)
     rim = []
     for k in range(13):
         ang = math.radians(-110 + 220 * k / 12)
-        rim.append((0.36 + 0.12 * 4) * Vector((math.sin(ang), -math.cos(ang) * 0.85, 0)) + cc
+        rim.append((0.5 + 0.13 * 4) * Vector((math.sin(ang), -math.cos(ang) * 0.85, 0)) + cc
                    + Vector((0, 0, -0.16 - 0.12 * (1 - math.cos(ang)))))
     rig.add(r.tube("UsekhRim", [tuple(p) for p in rim], 0.03, segments=4), "Spine3", "gold")
     # Pagne (shendyt) : ceinture d'or, plis de lin, tablier triangulaire à hiéroglyphes lumineux
     belt_c = Vector((0, 0.05, 3.95))
-    rx, ry = 0.62, 0.48
+    rx, ry = 0.78, 0.58
     pts = [belt_c + Vector((rx * math.sin(math.radians(d)), -ry * math.cos(math.radians(d)), 0)) for d in range(-170, 171, 20)]
     rig.add(a.band("Belt", pts, 0.2, 0.05, up=(0, 0, 1), offset=0.5), "Spine1", "gold")
     for k, d in enumerate(range(-160, 161, 16)):
@@ -325,12 +332,12 @@ def build_arms(rig):
     for s, side in ((1, "L"), (-1, "R")):
         sh, el, wr, hd = arm_points(s)
         ua, fa, hb = f"UpperArm_{side}", f"ForeArm_{side}", f"Hand_{side}"
-        rig.add(a.long_bone(f"Humerus{s}", sh, el, 0.11, segments=7), ua, "bone", **ARMS)
-        off = (wr - el).cross(Vector((0, 0, 1))).normalized() * 0.06
-        rig.add(a.long_bone(f"Radius{s}", el + off, wr + off, 0.07, condyles=False, segments=6), fa, "bone", **ARMS)
-        rig.add(a.long_bone(f"Ulna{s}", el - off, wr - off, 0.06, condyles=False, segments=6), fa, "bone_shade", **ARMS)
-        for k, (p, q, rad, bn) in enumerate(((sh.lerp(el, 0.3), el - sh, 0.14, ua), (wr.lerp(el, 0.15), el - wr, 0.11, fa),
-                                            (wr.lerp(el, 0.28), el - wr, 0.11, fa))):
+        rig.add(a.long_bone(f"Humerus{s}", sh, el, 0.17, segments=7), ua, "bone", **ARMS)
+        off = (wr - el).cross(Vector((0, 0, 1))).normalized() * 0.08
+        rig.add(a.long_bone(f"Radius{s}", el + off, wr + off, 0.1, condyles=False, segments=6), fa, "bone", **ARMS)
+        rig.add(a.long_bone(f"Ulna{s}", el - off, wr - off, 0.085, condyles=False, segments=6), fa, "bone_shade", **ARMS)
+        for k, (p, q, rad, bn) in enumerate(((sh.lerp(el, 0.45), el - sh, 0.2, ua), (wr.lerp(el, 0.15), el - wr, 0.15, fa),
+                                            (wr.lerp(el, 0.28), el - wr, 0.15, fa))):
             rig.add(a.ring_around(f"Bracelet{s}{k}", p, q, rad, 0.04, segments=10), bn, "gold" if k != 1 else "lapis",
                     **ARMS)
         rig.add(r.ico(f"Wrist{s}", 0.08, subdivisions=1, location=wr), hb, "bone_shade", **ARMS)
@@ -379,10 +386,10 @@ def build_legs(rig):
     for s, side in ((1, "L"), (-1, "R")):
         hp, kn, an, ft = leg_points(s)
         th, sn, fo = f"Thigh_{side}", f"Shin_{side}", f"Foot_{side}"
-        rig.add(a.long_bone(f"Femur{s}", hp, kn, 0.11, segments=7), th, "bone", **LEGS)
+        rig.add(a.long_bone(f"Femur{s}", hp, kn, 0.16, segments=7), th, "bone", **LEGS)
         rig.add(r.ico(f"Patella{s}", 0.07, subdivisions=1, location=kn + Vector((0, -0.1, 0.02))), th, "gold", **LEGS)
-        rig.add(a.long_bone(f"Tibia{s}", kn, an, 0.085, segments=7), sn, "bone", **LEGS)
-        rig.add(a.long_bone(f"Tarsus{s}", an, ft + Vector((0, 0, 0.06)), 0.065, segments=6), fo, "bone", **LEGS)
+        rig.add(a.long_bone(f"Tibia{s}", kn, an, 0.12, segments=7), sn, "bone", **LEGS)
+        rig.add(a.long_bone(f"Tarsus{s}", an, ft + Vector((0, 0, 0.06)), 0.09, segments=6), fo, "bone", **LEGS)
         rig.add(a.claw(f"Heel{s}", an, (0, 1, 0.3), 0.18, 0.05, curl=0, segments=4), fo, "bone_shade", **LEGS)
         rig.add(a.ring_around(f"Anklet{s}", an.lerp(ft, 0.25), ft - an, 0.1, 0.035, segments=10), fo, "gold", **LEGS)
         for k in range(4):

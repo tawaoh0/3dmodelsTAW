@@ -75,8 +75,8 @@ félin en traque à rosettes-runes, `jungle_mantis.py` insecte à pattes ravisse
 de markhor, ailes en cape, fonctions `chain` et `candle`, `grave_horse.py` cheval à tête posée par
 matrice et sabots en feu, `grave_raven.py` oiseau aux ailes repliées perché sur une tombe, `grave_bat.py`
 chauve-souris qui marche sur les poignets, `grave_spider.py` araignée 8 pattes à abdomen-cage et toile, `myth_minotaur.py`
-bipède à crâne de buffle, labrys tenue à pleine main, `myth_fenrir.py` loup colossal à gueule
-bloquée par une épée et ruban Gleipnir, `myth_anubis.py` bipède élancé, fonction `grip_hand` pour tenir un objet).
+bipède à crâne de buffle, labrys tenue à pleine main, `myth_fenrir.py` loup colossal agrandi par
+`Matrix.Scale` global, Gleipnir brisé, `myth_anubis.py` bipède élancé, fonction `grip_hand` pour tenir un objet).
 S'en inspirer pour la structure (rig → crâne → détails de tête → colonne → cage → membres),
 mais **concevoir un crâne neuf** : c'est la partie que l'utilisateur regarde en premier.
 Le crâne doit être **ajouré et fait d'os séparés** (boîte crânienne courte + barres de museau,
