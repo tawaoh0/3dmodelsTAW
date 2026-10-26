@@ -436,6 +436,48 @@ de lueurs (thème `petrify`). Pièces : corps, Head, Tail, Legs.
 
 ![basilic profil](previews/myth_basilisk_head.png) ![basilic face](previews/myth_basilisk_head_front.png)
 
+## Pack 8 — Insectes géants
+
+| Scorpion empereur squelette | Pose de test (rig) |
+|---|---|
+| ![Scorpion empereur](previews/bug_scorpion.png) | ![Scorpion empereur pose](previews/bug_scorpion_pose.png) |
+
+Pinces géantes bombées aux doigts dentés, carapace à tubercule oculaire et emblème d'or, 7 anneaux de plaques ajourées, queue de 5 anneaux cerclés d'or recourbée au-dessus du dos, vésicule à venin lumineuse et aiguillon noir (thème `venom`). Pièces : corps, Head, Tail, Legs, Claws.
+
+![Scorpion empereur profil](previews/bug_scorpion_head.png) ![Scorpion empereur face](previews/bug_scorpion_head_front.png)
+
+| Scarabée rhinocéros squelette | Pose de test (rig) |
+|---|---|
+| ![Scarabée rhinocéros](previews/bug_beetle.png) | ![Scarabée rhinocéros pose](previews/bug_beetle_pose.png) |
+
+Énorme corne céphalique fourchue et corne thoracique annelées, pronotum bombé, dôme d'élytres en plaques séparées par des jours ambrés, stries, gemmes d'ambre serties, antennes lamellées, pattes de fouisseur dentées (thème `amber`). Pièces : corps, Head, Legs.
+
+![Scarabée rhinocéros profil](previews/bug_beetle_head.png) ![Scarabée rhinocéros face](previews/bug_beetle_head_front.png)
+
+| Mille-pattes titan squelette | Pose de test (rig) |
+|---|---|
+| ![Mille-pattes titan](previews/bug_centipede.png) | ![Mille-pattes titan pose](previews/bug_centipede_pose.png) |
+
+Scolopendre de 11 studs : avant dressé en menace, arrière qui serpente au sol, 21 anneaux rouge sang à jours lumineux et épines, une paire de pattes d'or par anneau, forcipules à venin dentées, ocelles, longues antennes, pattes anales (thème `swarm`). Pièces : corps, Head, Legs.
+
+![Mille-pattes titan profil](previews/bug_centipede_head.png) ![Mille-pattes titan face](previews/bug_centipede_head_front.png)
+
+| Frelon reine squelette | Pose de test (rig) |
+|---|---|
+| ![Frelon reine](previews/bug_hornet.png) | ![Frelon reine pose](previews/bug_hornet_pose.png) |
+
+Reine couronnée d'alvéoles de cire pleines de miel lumineux, yeux composés en rein, ocelles, mandibules dentées gouttant de miel, thorax et abdomen rayés jaune / noir en anneaux ajourés, dard, quatre ailes nervurées dressées en V (thème `hive`). Pièces : corps, Head, Wings, Legs.
+
+![Frelon reine profil](previews/bug_hornet_head.png) ![Frelon reine face](previews/bug_hornet_head_front.png)
+
+| Fourmi guerrière squelette | Pose de test (rig) |
+|---|---|
+| ![Fourmi guerrière](previews/bug_ant.png) | ![Fourmi guerrière pose](previews/bug_ant_pose.png) |
+
+Soldat Dorylus : tête énorme en plaques ajourées, mandibules en faucille croisées à dents pleines gouttant d'acide, glandes lumineuses, soies noires, thorax épineux, double pétiole en nœuds, gastre ajouré autour d'une poche d'acide vert (thème `acid`). Pièces : corps, Head, Legs.
+
+![Fourmi guerrière profil](previews/bug_ant_head.png) ![Fourmi guerrière face](previews/bug_ant_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |

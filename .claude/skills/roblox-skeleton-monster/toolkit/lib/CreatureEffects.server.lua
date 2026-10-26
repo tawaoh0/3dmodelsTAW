@@ -178,6 +178,26 @@ local THEMES = {
 		extra = { name = "GazeGlints", texture = SPARKLES, accel = Vector3.new(0, 1, 0),
 			speed = NumberRange.new(0.5, 1.5), lifetime = NumberRange.new(0.6, 1.2), size = 0.15 },
 	},
+	venom = { -- gouttes de venin magenta qui suintent + vapeur toxique
+		main = { texture = SMOKE, accel = Vector3.new(0, 0.8, 0), speed = 0.3, rot = 60, light = 0.7 },
+		extra = { name = "VenomDrops", texture = SPARKLES, accel = Vector3.new(0, -5, 0),
+			speed = NumberRange.new(0, 0.4), lifetime = NumberRange.new(0.5, 1), size = 0.1 },
+	},
+	amber = { -- poussière d'ambre dorée + éclats qui tournoient
+		main = { texture = SMOKE, accel = Vector3.new(0, 0.6, 0), speed = 0.3, rot = 40, light = 0.8 },
+		extra = { name = "AmberShards", texture = SPARKLES, accel = Vector3.new(0, 1, 0),
+			speed = NumberRange.new(0.3, 1), lifetime = NumberRange.new(1, 2), size = 0.14 },
+	},
+	swarm = { -- nuée de petites étincelles qui grouillent + poussière
+		main = { texture = SPARKLES, accel = Vector3.new(0, 0.5, 0), speed = 2, rot = 360, light = 1 },
+		extra = { name = "Dust", texture = SMOKE, accel = Vector3.new(0, 0.2, 0),
+			speed = NumberRange.new(0.1, 0.4), lifetime = NumberRange.new(1, 2), size = 0.4 },
+	},
+	hive = { -- gouttes de miel qui tombent + bourdonnement d'étincelles dorées
+		main = { texture = SPARKLES, accel = Vector3.new(0, 1, 0), speed = 1.5, rot = 200, light = 1 },
+		extra = { name = "Honey", texture = SPARKLES, accel = Vector3.new(0, -4, 0),
+			speed = NumberRange.new(0, 0.3), lifetime = NumberRange.new(0.6, 1.2), size = 0.12 },
+	},
 	necro = { -- âmes violettes qui s'élèvent en spirale + étincelles de chandelle
 		main = { texture = SMOKE, accel = Vector3.new(0, 3, 0), speed = 0.8, rot = 240, light = 0.9 },
 		extra = { name = "CandleSparks", texture = SPARKLES, accel = Vector3.new(0, 1.5, 0),
