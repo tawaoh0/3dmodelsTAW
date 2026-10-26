@@ -158,6 +158,16 @@ local THEMES = {
 		extra = { name = "StoneChips", texture = SPARKLES, accel = Vector3.new(0, -4, 0),
 			speed = NumberRange.new(0.5, 1.5), lifetime = NumberRange.new(0.6, 1.2), size = 0.12 },
 	},
+	ragnarok = { -- runes lumineuses qui s'envolent + souffle glacé du Fimbulvetr
+		main = { texture = SMOKE, accel = Vector3.new(0, 1, 0), speed = 0.5, rot = 60, light = 0.7 },
+		extra = { name = "RuneSparks", texture = SPARKLES, accel = Vector3.new(0, 2.5, 0),
+			speed = NumberRange.new(0.5, 1.2), lifetime = NumberRange.new(1, 2), size = 0.18 },
+	},
+	duat = { -- sable doré qui s'écoule + esprits bleus du monde des morts
+		main = { texture = SMOKE, accel = Vector3.new(0, -1, 0), speed = 0.4, rot = 45, light = 0.5 },
+		extra = { name = "Spirits", texture = SPARKLES, accel = Vector3.new(0, 2, 0),
+			speed = NumberRange.new(0.3, 0.9), lifetime = NumberRange.new(1.2, 2.2), size = 0.2 },
+	},
 	necro = { -- âmes violettes qui s'élèvent en spirale + étincelles de chandelle
 		main = { texture = SMOKE, accel = Vector3.new(0, 3, 0), speed = 0.8, rot = 240, light = 0.9 },
 		extra = { name = "CandleSparks", texture = SPARKLES, accel = Vector3.new(0, 1.5, 0),

@@ -381,10 +381,32 @@ Crâne de buffle du Cap (bouclier frontal de corne, cornes tombantes en crochet 
 bronze), os de marbre, debout poitrail bombé et jambes écartées, labrys minoenne (lames en
 croissant à tranchant lumineux, douille, manche gainé) posée sur l'épaule et tenue à pleine
 main (doigts enroulés autour du manche), épaulière à plaques, large ceinture de bronze à
-méandres et boucle-labyrinthe lumineuse, jupe de ptéryges en deux rangs rivetés, fil d'Ariane
-rouge lumineux enroulé au bras droit jusqu'à sa pelote au sol (thème `labyrinth`). Pièces : corps, Head, Arms, Legs.
+méandres et boucle-labyrinthe lumineuse, jupe de ptéryges en deux rangs rivetés (thème `labyrinth`). Pièces : corps, Head, Arms, Legs.
 
 ![minotaure profil](previews/myth_minotaur_head.png) ![minotaure face](previews/myth_minotaur_head_front.png)
+
+| Fenrir squelette | Pose de test (rig) |
+|---|---|
+| ![fenrir](previews/myth_fenrir.png) | ![fenrir pose](previews/myth_fenrir_pose.png) |
+
+Loup colossal au crâne massif (crête sagittale, arcades très écartées, canines et carnassières
+énormes), gueule bloquée grande ouverte par l'épée des dieux plantée entre les mâchoires,
+os gravés de runes lumineuses, crinière de piques d'os, arc-bouté tête basse, enchaîné par
+Gleipnir (ruban torsadé lumineux) du collier runique au rocher Gjöll percé du pieu Thviti,
+entraves aux pattes avant (thème `ragnarok`). Pièces : corps, Head, Legs, Tail.
+
+![fenrir profil](previews/myth_fenrir_head.png) ![fenrir face](previews/myth_fenrir_head_front.png)
+
+| Anubis squelette | Pose de test (rig) |
+|---|---|
+| ![anubis](previews/myth_anubis.png) | ![anubis pose](previews/myth_anubis_pose.png) |
+
+Crâne de chacal fin aux oreilles immenses de lapis-lazuli bordées d'or, os d'obsidienne,
+diadème à uraeus, trait de khôl d'or, collier ousekh de perles or / lapis / turquoise, pagne
+de lin plissé à tablier d'hiéroglyphes lumineux, bracelets, sceptre ouas tenu à pleine main et
+planté au sol, ankh pendue à l'autre main (thème `duat`). Pièces : corps, Head, Arms, Legs.
+
+![anubis profil](previews/myth_anubis_head.png) ![anubis face](previews/myth_anubis_head_front.png)
 
 ## Bonus — Forêt maudite
 

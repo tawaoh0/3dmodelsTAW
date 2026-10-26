@@ -8,8 +8,7 @@ taureau (aurochs, cornes cerclées d'or, anneau au nez, feu).
 
 Identité : os de marbre veiné ; **casque de cornes** de buffle à pointes de bronze ; voûté et
 massif, épaules énormes ; **armure grecque en bronze** (épaulière, brassards à méandres,
-ceinture et jupe de lanières de cuir) ; **labrys** (double hache) en main droite ; **fil
-d'Ariane** rouge lumineux enroulé au bras gauche et traînant au sol ; médaillon-labyrinthe
+ceinture et jupe de lanières de cuir) ; **labrys** (double hache) posée sur l'épaule ; médaillon-labyrinthe
 lumineux sur le cœur ; thème d'effets « labyrinth » (poussière d'or + éclats de pierre).
 
 4 pièces Roblox : corps, Head, Arms, Legs, + lumineux.
@@ -40,7 +39,6 @@ COLORS = {
     "ink": "#0c0a08",
     "glow": "#ffc54a",
     "glow_hot": "#fff2c4",
-    "glow_thread": "#ff2a45",
 }
 
 EFFECT_THEME = "labyrinth"
@@ -143,7 +141,6 @@ def build_rig(rig):
         rig.fx(f"HornTip{side}", m @ Vector((s * 1.35, -0.95, 0.7)), "Head")
     rig.fx("Heart", (0, -0.4, 4.6), "Spine2")
     rig.fx("Labrys", AXE_C, "Hand_L")
-    rig.fx("Thread", (-1.25, -2.3, 0.14), "Hand_R")
 
 
 # ---------------------------------------------------------------- tête (repère canonique)
@@ -406,7 +403,7 @@ def build_arms(rig):
 
 
 def build_gear(rig):
-    """Labrys posée sur l'épaule gauche tenue à pleine main, épaulière, fil d'Ariane."""
+    """Labrys posée sur l'épaule gauche tenue à pleine main, épaulière."""
     hb = "Hand_L"
     side, up = a._basis(HAFT)
     blade_dir = HAFT.cross(Vector((1, 0, 0))).normalized()
@@ -475,20 +472,6 @@ def build_gear(rig):
         rig.add(a.band(f"Pauldron{k}", [c0 + Vector((0, -0.38, -0.08)), c0 + Vector((0.05, 0, 0.05)),
                                         c0 + Vector((0, 0.38, -0.08))], [0.3, 0.32, 0.3], 0.05,
                        up=(1, 0, -0.6), offset=0.5), "UpperArm_L", "gold", **ARMS)
-    # Fil d'Ariane : spirale autour de l'avant-bras droit puis traîne jusqu'à la pelote au sol
-    sh, el, wr, hd = arm_points(-1)
-    axis = (wr - el).normalized()
-    s2 = axis.cross(Vector((0, 1, 0))).normalized()
-    u2 = axis.cross(s2)
-    coil = [tuple(el.lerp(wr, 0.1 + 0.8 * k / 23) + (s2 * math.cos(k * 0.9) + u2 * math.sin(k * 0.9)) * 0.16)
-            for k in range(24)]
-    rig.add(r.tube("ThreadCoil", coil, 0.022, segments=4), "ForeArm_R", "glow_thread", glow=True)
-    trail = a.smooth_path([coil[-1], tuple(hd + Vector((0.1, -0.2, -0.6))), (-1.9, -1.6, 0.6), (-1.6, -2.1, 0.1),
-                           (-1.25, -2.3, 0.08)], 12)
-    rig.add(r.tube("ThreadTrail", [tuple(p) for p in trail], 0.02, segments=4), "Hand_R", "glow_thread",
-            glow=True)
-    rig.add(r.ico("ThreadBall", 0.14, subdivisions=2, location=(-1.25, -2.3, 0.14)), "Root", "glow_thread",
-            glow=True)
 
 
 def build_legs(rig):
