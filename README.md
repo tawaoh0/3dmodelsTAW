@@ -412,6 +412,30 @@ planté au sol, ankh pendue à l'autre main (thème `duat`). Pièces : corps, He
 
 ![anubis profil](previews/myth_anubis_head.png) ![anubis face](previews/myth_anubis_head_front.png)
 
+| Kitsune à neuf queues squelette | Pose de test (rig) |
+|---|---|
+| ![kitsune](previews/myth_kitsune.png) | ![kitsune pose](previews/myth_kitsune_pose.png) |
+
+Renard de porcelaine blanche au crâne peint de marques vermillon comme un masque de kitsune,
+oreilles triangulaires laquées, neuf queues d'os à « fourrure » de lames déployées en éventail,
+chacune terminée par un kitsunebi (feu de renard), perle hoshi no tama au bout de la queue
+centrale, shimenawa tressée au cou avec papiers shide et clochette (thème `foxfire`).
+Pièces : corps, Head, Legs, Tails.
+
+![kitsune profil](previews/myth_kitsune_head.png) ![kitsune face](previews/myth_kitsune_head_front.png)
+
+| Basilic squelette | Pose de test (rig) |
+|---|---|
+| ![basilic](previews/myth_basilisk.png) | ![basilic pose](previews/myth_basilisk_pose.png) |
+
+Roi des serpents médiéval : tête de coq couronnée (couronne d'or à pointes d'os, crête rouge,
+barbillons), bec crochu à crochets venimeux et dents en scie, regard pétrifiant vert-jaune
+cerclé de plaquettes, camail et ailes vestigiales de plumes d'os, corps de vipère dressé en S
+sur deux pattes de coq à ergots, côtes et écailles ventrales, bout de queue pétrifié fissuré
+de lueurs (thème `petrify`). Pièces : corps, Head, Tail, Legs.
+
+![basilic profil](previews/myth_basilisk_head.png) ![basilic face](previews/myth_basilisk_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |

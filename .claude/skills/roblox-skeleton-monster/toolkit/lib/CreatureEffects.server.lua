@@ -168,6 +168,16 @@ local THEMES = {
 		extra = { name = "Spirits", texture = SPARKLES, accel = Vector3.new(0, 2, 0),
 			speed = NumberRange.new(0.3, 0.9), lifetime = NumberRange.new(1.2, 2.2), size = 0.2 },
 	},
+	foxfire = { -- feux de renard qui flottent + pétales de cerisier
+		main = { texture = FIRE, accel = Vector3.new(0, 1.5, 0), speed = 0.4, rot = 120, light = 1 },
+		extra = { name = "Sakura", texture = SPARKLES, accel = Vector3.new(0.5, -1, 0),
+			speed = NumberRange.new(0.3, 1), lifetime = NumberRange.new(1.5, 3), size = 0.15 },
+	},
+	petrify = { -- poussière de pierre + éclats verts du regard pétrifiant
+		main = { texture = SMOKE, accel = Vector3.new(0, -0.5, 0), speed = 0.3, rot = 30, light = 0.4 },
+		extra = { name = "GazeGlints", texture = SPARKLES, accel = Vector3.new(0, 1, 0),
+			speed = NumberRange.new(0.5, 1.5), lifetime = NumberRange.new(0.6, 1.2), size = 0.15 },
+	},
 	necro = { -- âmes violettes qui s'élèvent en spirale + étincelles de chandelle
 		main = { texture = SMOKE, accel = Vector3.new(0, 3, 0), speed = 0.8, rot = 240, light = 0.9 },
 		extra = { name = "CandleSparks", texture = SPARKLES, accel = Vector3.new(0, 1.5, 0),

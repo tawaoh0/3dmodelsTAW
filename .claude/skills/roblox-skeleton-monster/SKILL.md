@@ -76,7 +76,8 @@ de markhor, ailes en cape, fonctions `chain` et `candle`, `grave_horse.py` cheva
 matrice et sabots en feu, `grave_raven.py` oiseau aux ailes repliées perché sur une tombe, `grave_bat.py`
 chauve-souris qui marche sur les poignets, `grave_spider.py` araignée 8 pattes à abdomen-cage et toile, `myth_minotaur.py`
 bipède à crâne de buffle, labrys tenue à pleine main, `myth_fenrir.py` loup colossal agrandi par
-`Matrix.Scale` global, Gleipnir brisé, `myth_anubis.py` bipède élancé, fonction `grip_hand` pour tenir un objet).
+`Matrix.Scale` global, Gleipnir brisé, `myth_anubis.py` bipède élancé, fonction `grip_hand` pour tenir un objet, `myth_kitsune.py`
+renard à 9 queues (`tail_path`), `myth_basilisk.py` serpent dressé à tête de coq et repère `frame` du corps).
 S'en inspirer pour la structure (rig → crâne → détails de tête → colonne → cage → membres),
 mais **concevoir un crâne neuf** : c'est la partie que l'utilisateur regarde en premier.
 Le crâne doit être **ajouré et fait d'os séparés** (boîte crânienne courte + barres de museau,
@@ -99,7 +100,7 @@ Le module définit :
   (utilisées par le script d'effets) ;
 - `TEST_POSE` : rotations (degrés) d'os qui montrent que le rig marche (gueule ouverte,
   cou levé, une patte avancée, queue fléchie, aile repliée) ;
-- `EFFECT_THEME` : `fire`, `acid`, `souls`, `frost`, `abyss`, `blood`, `gold`, `vent` (fumée noire + braises) `lure` (points lumineux flottants) `moon` (éclats d'argent qui tombent + brume), `phoenix` (flammes dorées + étincelles) `magma` (fumée lourde + gouttes de lave), `sulfur` (fumée de soufre + flammèches) `hellfire` (flammes cramoisies + cendres) `aurora` (voiles d'aurore + neige), `blizzard` (neige soufflée), `wraith` (brume spectrale), `polar` (souffle glacé + flocons), `crystal` (éclats de cristal) `jungle` (spores + poison turquoise), `quetzal` (plumes au vent + venin) `ruins` (poussière d'or + feuilles), `orchid` (pétales + pollen), `swamp` (bulles de marais + brume) `necro` (âmes violettes + étincelles de chandelle), `nightmare` (flammes spectrales + braises) `ravens` (plumes noires qui tombent), `vampire` (gouttes de sang + brume) `soulweb` (âmes pâles + éclats de toile) `labyrinth` (poussière d'or + éclats de pierre), `ragnarok` (runes qui s'envolent + souffle glacé) ou `duat` (sable doré + esprits bleus) (particules du script Roblox) ;
+- `EFFECT_THEME` : `fire`, `acid`, `souls`, `frost`, `abyss`, `blood`, `gold`, `vent` (fumée noire + braises) `lure` (points lumineux flottants) `moon` (éclats d'argent qui tombent + brume), `phoenix` (flammes dorées + étincelles) `magma` (fumée lourde + gouttes de lave), `sulfur` (fumée de soufre + flammèches) `hellfire` (flammes cramoisies + cendres) `aurora` (voiles d'aurore + neige), `blizzard` (neige soufflée), `wraith` (brume spectrale), `polar` (souffle glacé + flocons), `crystal` (éclats de cristal) `jungle` (spores + poison turquoise), `quetzal` (plumes au vent + venin) `ruins` (poussière d'or + feuilles), `orchid` (pétales + pollen), `swamp` (bulles de marais + brume) `necro` (âmes violettes + étincelles de chandelle), `nightmare` (flammes spectrales + braises) `ravens` (plumes noires qui tombent), `vampire` (gouttes de sang + brume) `soulweb` (âmes pâles + éclats de toile) `labyrinth` (poussière d'or + éclats de pierre), `ragnarok` (runes qui s'envolent + souffle glacé) `duat` (sable doré + esprits bleus), `foxfire` (feux de renard + sakura) ou `petrify` (poussière de pierre + éclats verts) (particules du script Roblox) ;
 - `VIEW` : direction de caméra des aperçus, choisie pour qu'aucune grande pièce n'en cache
   une autre (ailes vues de face, collerette pas masquée par les cornes) ;
 - `build(pal)` qui renvoie le `Rig`.
