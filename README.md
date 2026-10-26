@@ -404,7 +404,9 @@ déchirés qui pendent du collier runique et des entraves (thème `ragnarok`). P
 
 Dieu guerrier massif (épaules très larges, épaulières à plaques or et lapis, os épais) au
 crâne de chacal fin, aux oreilles immenses de lapis-lazuli bordées d'or, os d'obsidienne,
-diadème à uraeus, trait de khôl d'or, collier ousekh de perles or / lapis / turquoise, pagne
+coiffe némès rayée or / lapis (pans jusqu'aux épaules, rabat arrière), diadème à
+uraeus, barbe postiche tressée, arcades d'or, museau clouté, plaques de joue incrustées,
+trait de khôl d'or, collier ousekh de perles or / lapis / turquoise, pagne
 de lin plissé à tablier d'hiéroglyphes lumineux, bracelets, sceptre ouas tenu à pleine main et
 planté au sol, ankh pendue à l'autre main (thème `duat`). Pièces : corps, Head, Arms, Legs.
 

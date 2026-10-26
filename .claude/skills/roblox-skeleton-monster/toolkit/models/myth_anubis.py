@@ -140,6 +140,8 @@ def build_head(rig):
     a.cut(skull, [a.hole_x((0, EYE[0], EYE[1]), 0.12, 0.11),
                   a.hole_x((0, -0.2, 0.0), 0.16, 0.13),
                   a.hole_x((0, -1.15, -0.08), 0.24, 0.05),
+                  a.hole_x((0, -1.55, 0.0), 0.13, 0.035),
+                  a.hole_along((0, -0.3, 0.33), (0, 0, 1), (1, 0, 0), 0.07, 0.12, depth=0.3),
                   a.hole_along((0, -1.85, -0.08), (0, 1, 0), (1, 0, 0), 0.06, 0.08, depth=0.3)])
     rig.add(skull, H, "bone", **HEAD)
 
@@ -222,6 +224,47 @@ def build_head(rig):
     for o in [o for o in bpy.context.scene.objects if o.type == "MESH" and o.name not in jaw_before]:
         o.data.transform(_jm @ o.matrix_basis)
         o.matrix_basis = Matrix.Identity(4)
+    # --- Couches de détail : arcades d'or, os nasaux cloutés, plaques de joue, coiffe némès, barbe
+    for s in (-1, 1):
+        rig.add(a.blade(f"GoldBrow{s}", (s * 0.12, -0.85, 0.27), (s * 0.34, -0.5, 0.3), 0.08, 0.04, width_end=0.05,
+                        normal=(s * 0.2, -0.3, 1)), H, "gold", **HEAD)
+        rig.add(r.tube(f"NasalBone{s}", [tuple(top(s * 0.07, y) + Vector((0, 0, 0.012))) for y in (-0.8, -1.25, -1.7)],
+                       [0.028, 0.025, 0.02], segments=4), H, "bone_shade", **HEAD)
+        for k in range(5):
+            q = top(s * 0.12, -0.85 - 0.2 * k)
+            if q is not None:
+                rig.add(r.ico(f"SnoutStud{s}{k}", 0.025, subdivisions=1, location=q + Vector((0, 0, 0.01))), H, "gold",
+                        **HEAD)
+        cw = a.side_width(SKULL, -0.95, -0.1)
+        rig.add(a.blade(f"CheekPlate{s}", (s * (cw + 0.01), -0.75, -0.1), (s * (cw - 0.04), -1.25, -0.12), 0.14, 0.03,
+                        width_end=0.07, normal=(s, 0, 0.1)), H, "gold", **HEAD)
+        rig.add(a.blade(f"CheekInlay{s}", (s * (cw + 0.03), -0.8, -0.1), (s * (cw - 0.02), -1.15, -0.12), 0.07, 0.02,
+                        width_end=0.03, normal=(s, 0, 0.1)), H, "lapis", **HEAD)
+        rig.add(r.tube(f"Maxilla{s}", [(s * a.side_width(SKULL, y, -0.15) * 1.0, y, -0.15) for y in (-0.5, -0.9, -1.35, -1.7)],
+                       [0.035, 0.035, 0.03, 0.022], segments=4), H, "bone_shade", **HEAD)
+        # Pans rayés de la coiffe némès : de derrière les oreilles jusqu'aux épaules
+        lap = a.smooth_path([(s * 0.3, 0.02, 0.18), (s * 0.42, 0.12, -0.25), (s * 0.48, 0.05, -0.75),
+                             (s * 0.46, -0.08, -1.15)], 9)
+        for k in range(8):
+            rig.add(a.blade(f"Nemes{s}{k}", lap[k], lap[k + 1], 0.34 + 0.03 * k, 0.04, width_end=0.36 + 0.03 * k,
+                            normal=(s, 0.1, 0.1), bevel=0), H, "gold" if k % 2 == 0 else "lapis", **HEAD)
+        rig.add(r.tube(f"NemesHem{s}", [tuple(p + Vector((0, -0.17 - 0.015 * i, 0))) for i, p in enumerate(lap)], 0.022,
+                       segments=4), H, "gold", **HEAD)
+    for k in range(5):    # rabat arrière de la coiffe
+        z0 = 0.15 - 0.22 * k
+        rig.add(a.blade(f"NemesBack{k}", (0, 0.15 + 0.04 * k, z0), (0, 0.19 + 0.04 * k, z0 - 0.22), 0.55 + 0.05 * k, 0.04,
+                        width_end=0.6 + 0.05 * k, normal=(0, 1, 0.15), bevel=0), H, "gold" if k % 2 == 0 else "lapis", **HEAD)
+    rig.add(r.tube("NemesBand", [(-0.33, -0.05, 0.12), (-0.2, -0.32, 0.36), (0.2, -0.32, 0.36), (0.33, -0.05, 0.12)], 0.035,
+                   segments=4), H, "lapis", **HEAD)
+    # Barbe postiche tressée (or / lapis) sous le menton, portée par la mâchoire
+    beard = [_jm @ Vector((0, -1.7, -0.32 - 0.07 * k)) + Vector((0, 0.02 * k, 0)) for k in range(7)]
+    rig.add(r.tube("Beard", [tuple(p) for p in beard], [0.06, 0.065, 0.065, 0.065, 0.065, 0.06, 0.07], segments=6), J,
+            "lapis", **HEAD)
+    for k in range(1, 6):
+        rig.add(a.ring_around(f"BeardBand{k}", beard[k], beard[k] - beard[k - 1], 0.07, 0.02, segments=8), J, "gold",
+                **HEAD)
+    rig.add(a.blade("BeardTip", beard[-1], beard[-1] + (beard[-1] - beard[-2]) * 1.2, 0.14, 0.04, width_end=0.18,
+                    normal=(0, -1, 0)), J, "gold", **HEAD)
     rig.add(r.ico("Throat", 0.08, subdivisions=2, location=(0, -0.8, -0.25), scale=(1.2, 3, 0.6)), H, "glow", glow=True)
     for o in [o for o in bpy.context.scene.objects if o.type == "MESH" and o.name not in before]:
         o.data.transform(HEAD_M @ o.matrix_basis)

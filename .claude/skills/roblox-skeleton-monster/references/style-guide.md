@@ -153,7 +153,10 @@ collier, armure). « Plus impressionnant » = plus grand (`Matrix.Scale` global 
 `build`, os du rig compris), silhouette hérissée (collerette, crinière, piques aux
 articulations), plus de couches de détail sur le crâne. Une tête trop « crocodile » se
 corrige avec une matrice de tête non uniforme (`Matrix.Diagonal`, Y plus court, Z plus haut).
-« Plus massif » = épaules plus larges, os plus épais, cage plus grande, épaulières. Porter l'arme sur le côté visible de l'aperçu
+« Plus massif » = épaules plus larges, os plus épais, cage plus grande, épaulières.
+Tête « trop simple / plate » (Anubis) : ajouter du volume autour du crâne (coiffe à pans
+qui tombent, rabat, barbe postiche) et des couches sur le crâne (arcades, os nasaux,
+rangées de clous, plaques de joue incrustées, ouvertures en plus). Porter l'arme sur le côté visible de l'aperçu
 (+X). Ceintures : bande `a.band` qui suit l'ellipse de la taille + rebords, motifs, boucle
 ornée, jupe en lanières sur 2 rangs avec rivets, jamais un simple anneau. Bipèdes : torse
 dressé, poitrail dégagé, jambes écartées ; la tête ne doit pas masquer le torse
