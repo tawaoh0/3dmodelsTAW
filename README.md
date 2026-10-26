@@ -371,6 +371,20 @@ aux filières (thème `soulweb`). Pièces : corps, Head, Legs.
 
 ![araignée profil](previews/grave_spider_head.png) ![araignée face](previews/grave_spider_head_front.png)
 
+## Pack 7 — Mythologie
+
+| Minotaure squelette | Pose de test (rig) |
+|---|---|
+| ![minotaure](previews/myth_minotaur.png) | ![minotaure pose](previews/myth_minotaur_pose.png) |
+
+Crâne de buffle du Cap (bouclier frontal de corne, cornes tombantes en crochet à pointes de
+bronze), os de marbre, voûté et massif, armure grecque en bronze (épaulière, brassards,
+jambières, ceinture à méandres et jupe de lanières), labrys en main droite, fil d'Ariane rouge
+lumineux enroulé au bras gauche jusqu'à sa pelote au sol, médaillon-labyrinthe sur le cœur
+(thème `labyrinth`). Pièces : corps, Head, Arms, Legs.
+
+![minotaure profil](previews/myth_minotaur_head.png) ![minotaure face](previews/myth_minotaur_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |

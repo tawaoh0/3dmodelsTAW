@@ -153,6 +153,11 @@ local THEMES = {
 		extra = { name = "WebGlints", texture = SPARKLES, accel = Vector3.new(0, 0, 0),
 			speed = NumberRange.new(0, 0.2), lifetime = NumberRange.new(1, 2), size = 0.15 },
 	},
+	labyrinth = { -- poussière d'or du labyrinthe + éclats de pierre qui tombent
+		main = { texture = SMOKE, accel = Vector3.new(0, 0.5, 0), speed = 0.4, rot = 30, light = 0.6 },
+		extra = { name = "StoneChips", texture = SPARKLES, accel = Vector3.new(0, -4, 0),
+			speed = NumberRange.new(0.5, 1.5), lifetime = NumberRange.new(0.6, 1.2), size = 0.12 },
+	},
 	necro = { -- âmes violettes qui s'élèvent en spirale + étincelles de chandelle
 		main = { texture = SMOKE, accel = Vector3.new(0, 3, 0), speed = 0.8, rot = 240, light = 0.9 },
 		extra = { name = "CandleSparks", texture = SPARKLES, accel = Vector3.new(0, 1.5, 0),
