@@ -378,10 +378,11 @@ aux filières (thème `soulweb`). Pièces : corps, Head, Legs.
 | ![minotaure](previews/myth_minotaur.png) | ![minotaure pose](previews/myth_minotaur_pose.png) |
 
 Crâne de buffle du Cap (bouclier frontal de corne, cornes tombantes en crochet à pointes de
-bronze), os de marbre, voûté et massif, armure grecque en bronze (épaulière, brassards,
-jambières, ceinture à méandres et jupe de lanières), labrys en main droite, fil d'Ariane rouge
-lumineux enroulé au bras gauche jusqu'à sa pelote au sol, médaillon-labyrinthe sur le cœur
-(thème `labyrinth`). Pièces : corps, Head, Arms, Legs.
+bronze), os de marbre, debout poitrail bombé et jambes écartées, labrys minoenne (lames en
+croissant à tranchant lumineux, douille, manche gainé) posée sur l'épaule et tenue à pleine
+main (doigts enroulés autour du manche), épaulière à plaques, large ceinture de bronze à
+méandres et boucle-labyrinthe lumineuse, jupe de ptéryges en deux rangs rivetés, fil d'Ariane
+rouge lumineux enroulé au bras droit jusqu'à sa pelote au sol (thème `labyrinth`). Pièces : corps, Head, Arms, Legs.
 
 ![minotaure profil](previews/myth_minotaur_head.png) ![minotaure face](previews/myth_minotaur_head_front.png)
 

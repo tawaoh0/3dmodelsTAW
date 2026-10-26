@@ -34,6 +34,8 @@ COLORS = {
     "disc": "#5b554b",
     "gold": "#b8783a",
     "leather": "#5a3a24",
+    "leather_dark": "#3a2416",
+    "wood": "#6b4a2f",
     "gum": "#6a2a2a",
     "ink": "#0c0a08",
     "glow": "#ffc54a",
@@ -54,7 +56,7 @@ TEST_POSE = {
 
 VIEW = (0.9, -1.0, 0.3)
 
-SPINE = a.smooth_path([(0, 0.35, 3.6), (0, 0.15, 4.5), (0, -0.3, 5.25), (0, -0.85, 5.7)], 16)
+SPINE = a.smooth_path([(0, 0.3, 3.75), (0, 0.3, 4.6), (0, 0.05, 5.4), (0, -0.3, 6.0)], 16)
 TAIL = a.smooth_path([(0, 0.6, 3.55), (0, 1.15, 3.1), (0.2, 1.45, 2.4), (0.05, 1.55, 1.7)], 12)
 # Crâne d'aurochs en repère canonique : chignon (sommet entre les cornes) à l'origine,
 # mufle vers -Y. (y, demi-larg. dessus, joues, bord dentaire, z dessus, z bas)
@@ -64,15 +66,15 @@ SKULL = [(0.0, 0.55, 0.6, 0.45, 0.12, -0.55), (-0.4, 0.6, 0.66, 0.5, 0.15, -0.6)
 EYE = (-0.55, -0.12)
 HINGE = (0.42, -0.35, -0.6)
 CHIN = (0.0, -1.95, -0.86)
-HEAD_AT = Vector((0, -1.55, 6.4))
-HEAD_PITCH = 0.7        # tête basse, cornes en avant (charge)
+HEAD_AT = Vector((0, -0.75, 6.85))
+HEAD_PITCH = 0.55       # tête haute, cornes en avant, poitrail dégagé
 HEAD = dict(part="Head")
 ARMS = dict(part="Arms")
 LEGS = dict(part="Legs")
 
 
 def head_matrix():
-    return Matrix.Translation(HEAD_AT) @ Matrix.Rotation(HEAD_PITCH, 4, "X")
+    return Matrix.Translation(HEAD_AT) @ Matrix.Rotation(HEAD_PITCH, 4, "X") @ Matrix.Scale(0.85, 4)
 
 
 def place(objs, m):
@@ -94,13 +96,23 @@ def spine_bone(i):
 
 
 def arm_points(s):
-    return (Vector((s * 1.3, -0.75, 5.5)), Vector((s * 1.8, -0.55, 4.15)),
-            Vector((s * 1.8, -1.45, 3.0)), Vector((s * 1.85, -1.65, 2.55)))
+    if s > 0:   # bras gauche : poing devant le poitrail, labrys posée sur l'épaule
+        return (Vector((1.25, -0.25, 5.85)), Vector((1.8, -0.35, 4.55)),
+                Vector((1.35, -1.15, 4.7)), Vector((1.2, -1.35, 4.85)))
+    return (Vector((-1.25, -0.25, 5.85)), Vector((-1.75, -0.1, 4.45)),
+            Vector((-1.85, -0.6, 3.3)), Vector((-1.9, -0.8, 2.85)))
 
 
 def leg_points(s):
-    return (Vector((s * 0.55, 0.35, 3.55)), Vector((s * 0.7, -0.45, 2.4)),
-            Vector((s * 0.72, 0.45, 1.15)), Vector((s * 0.74, 0.1, 0.32)))
+    """Jambes écartées, genoux fléchis (posture de lutteur)."""
+    return (Vector((s * 0.62, 0.35, 3.6)), Vector((s * 0.95, -0.45, 2.45)),
+            Vector((s * 1.0, 0.45, 1.2)), Vector((s * 1.05, 0.05, 0.32)))
+
+
+# Labrys : poing, axe du manche, centre de la tête
+GRIP = Vector((1.2, -1.42, 4.9))
+HAFT = Vector((0.1, 1.0, 1.0)).normalized()
+AXE_C = GRIP + HAFT * 3.0
 
 
 # ---------------------------------------------------------------- rig
@@ -130,8 +142,8 @@ def build_rig(rig):
         rig.fx(f"Nostril{side}", m @ Vector((s * 0.15, -2.3, -0.3)), "Head")
         rig.fx(f"HornTip{side}", m @ Vector((s * 1.35, -0.95, 0.7)), "Head")
     rig.fx("Heart", (0, -0.4, 4.6), "Spine2")
-    rig.fx("Labrys", (-1.9, -1.55, 5.0), "Hand_R")
-    rig.fx("Thread", (1.6, -2.4, 0.1), "Hand_L")
+    rig.fx("Labrys", AXE_C, "Hand_L")
+    rig.fx("Thread", (-1.25, -2.3, 0.14), "Hand_R")
 
 
 # ---------------------------------------------------------------- tête (repère canonique)
@@ -281,17 +293,9 @@ def build_body(rig):
         sternum.append(SPINE[i] + Vector((0, -0.3, -depth)))
     rig.add(r.tube("Sternum", [tuple(p) for p in sternum[1:-1:2]], 0.1, segments=6), "Spine2",
             "bone_shade")
-    # Médaillon-labyrinthe lumineux sur le cœur (anneaux concentriques + pierre centrale)
-    heart = Vector((0, -0.75, 4.25))
-    for k, rad in enumerate((0.34, 0.24, 0.14)):
-        rig.add(a.ring_around(f"Labyrinth{k}", heart, (0, -1, 0.2), rad, 0.03, segments=12), "Spine2", "glow",
-                glow=True)
-    rig.add(a.crystal("LabyrinthCore", heart, 0.07, 0.2, sides=4), "Spine2", "glow", glow=True)
-    for k in range(4):
-        ang = math.pi / 4 + k * math.pi / 2
-        rig.add(r.tube(f"LabyrinthWall{k}", [tuple(heart + Vector((0.14 * math.cos(ang), 0, 0.14 * math.sin(ang)))),
-                                             tuple(heart + Vector((0.34 * math.cos(ang), 0, 0.34 * math.sin(ang))))],
-                       0.025, segments=4), "Spine2", "gold")
+    for k, (dx, h) in enumerate(((0, 0.7), (0.18, 0.5), (-0.18, 0.55))):
+        rig.add(a.crystal(f"HeartGold{k}", (dx, -0.3, 4.55), 0.12 if k == 0 else 0.08, h, sides=4), "Spine2",
+                "glow", glow=True)
     # Omoplates, clavicules, bassin
     for s in (-1, 1):
         sh = arm_points(s)[0]
@@ -323,17 +327,50 @@ def build_body(rig):
         ang = 2 * math.pi * k / 5
         rig.add(a.claw(f"TailTuft{k}", TAIL[-1], (0.4 * math.cos(ang), 0.4 * math.sin(ang), -1), 0.35, 0.04,
                        curl=0.2, segments=4), "Tail2", "bone_shade")
-    # Armure grecque : ceinture de bronze à méandres, jupe de lanières de cuir (ptéryges)
-    belt_c = SPINE[1] + Vector((0, -0.15, -0.25))
-    rig.add(a.ring_around("Belt", belt_c, (0, 0.1, 1), 0.85, 0.07, segments=16), "Spine1", "gold")
-    for k in range(12):
-        ang = 2 * math.pi * k / 12
-        d = Vector((math.cos(ang), math.sin(ang) * 0.9, 0))
-        if d.y > 0.6:
-            continue
-        rig.add(a.blade(f"Pteryx{k}", belt_c + d * 0.85, belt_c + d * 1.0 + Vector((0, 0, -0.75)), 0.2, 0.03,
-                        width_end=0.18, normal=d, bevel=0), "Spine1", "leather")
-        rig.add(r.box(f"Meander{k}", (0.1, 0.03, 0.08), location=belt_c + d * 0.93), "Spine1", "gold")
+    # Armure grecque : large ceinture de bronze (zôster) à méandres, boucle-labyrinthe lumineuse,
+    # jupe de ptéryges en deux rangs de lanières de cuir rivetées
+    belt_c = Vector((0, 0.2, 3.55))
+    rx, ry = 0.92, 0.72
+
+    def ring_pt(deg, scale=1.0, dz=0.0):
+        a_ = math.radians(deg)
+        return belt_c + Vector((rx * scale * math.sin(a_), -ry * scale * math.cos(a_), dz))
+
+    angles = [-160 + 20 * k for k in range(17)]
+    rig.add(a.band("Belt", [ring_pt(d) for d in angles], 0.34, 0.07, up=(0, 0, 1), offset=0.5), "Spine1", "gold")
+    for dz in (-0.17, 0.17):
+        rig.add(r.tube(f"BeltRim{dz}", [tuple(ring_pt(d, 1.05, dz)) for d in angles], 0.04, segments=4),
+                "Spine1", "gold")
+    for k, d in enumerate(angles[1:-1]):
+        out = (ring_pt(d) - belt_c).normalized()
+        for j, (dx, dz, w, h) in enumerate(((0, 0.05, 0.12, 0.03), (0.045, -0.02, 0.03, 0.12))):
+            g = r.box(f"Meander{k}{j}", (w, 0.02, h))
+            a.oriented(g, ring_pt(d + dx * 40, 1.06, dz), out)
+            rig.add(g, "Spine1", "leather_dark")
+    buckle = ring_pt(0, 1.07)
+    rig.add(r.tube("Buckle", [tuple(buckle + Vector((0, 0.04, 0))), tuple(buckle + Vector((0, -0.03, 0)))],
+                   0.27, segments=12), "Spine1", "gold")
+    for k, rad in enumerate((0.21, 0.14, 0.07)):
+        rig.add(a.ring_around(f"BuckleMaze{k}", buckle + Vector((0, -0.04, 0)), (0, -1, 0), rad, 0.022,
+                              segments=12), "Spine1", "glow", glow=True)
+    for k in range(4):
+        ang = math.pi / 4 + k * math.pi / 2
+        rig.add(r.box(f"BuckleWall{k}", (0.03, 0.03, 0.14), location=buckle + Vector(
+            (0.14 * math.cos(ang), -0.05, 0.14 * math.sin(ang))), rotation=(0, -ang + math.pi / 2, 0)),
+            "Spine1", "leather_dark")
+    for layer, (step0, length, scale, color) in enumerate(((0, 0.9, 1.03, "leather"),
+                                                           (10, 0.62, 1.1, "leather_dark"))):
+        for k, d in enumerate(range(-150 + step0, 151, 20)):
+            if layer == 1 and abs(d) > 140:
+                continue
+            base = ring_pt(d, scale, -0.17)
+            out = (base - belt_c).normalized()
+            out.z = 0
+            end = base + out * (0.22 + 0.08 * layer) + Vector((0, 0, -length))
+            rig.add(a.blade(f"Pteryx{layer}{k}", base, end, 0.19, 0.03, width_end=0.23, normal=out, bevel=0),
+                    "Spine1", color)
+            rig.add(r.ico(f"PteryxStud{layer}{k}", 0.035, subdivisions=1, location=end + out * 0.03
+                          + Vector((0, 0, 0.08))), "Spine1", "gold")
 
 def build_arms(rig):
     for s, side in ((1, "L"), (-1, "R")):
@@ -353,6 +390,8 @@ def build_arms(rig):
                     "gold", **ARMS)
         # Main : métacarpes + 4 doigts griffus
         rig.add(r.ico(f"Wrist{s}", 0.14, subdivisions=1, location=wr), hb, "bone_shade", **ARMS)
+        if s > 0:
+            continue        # main gauche : poing fermé sur le manche (build_gear)
         lat = Vector((s, 0, 0))
         for j in range(4):
             off_j = (j - 1.5) * 0.12
@@ -367,42 +406,88 @@ def build_arms(rig):
 
 
 def build_gear(rig):
-    """Labrys en main droite, épaulière, fil d'Ariane enroulé au bras gauche."""
-    sh, el, wr, hd = arm_points(-1)
-    grip = hd + Vector((0, -0.1, -0.1))
-    bottom, top_ = grip + Vector((0.05, 0.25, -1.5)), grip + Vector((-0.1, 0.15, 2.6))
-    rig.add(r.tube("LabrysHaft", [tuple(bottom), tuple(grip), tuple(top_)], [0.07, 0.08, 0.07], segments=6),
-            "Hand_R", "leather", **ARMS)
-    for k, f in enumerate((0.45, 0.62, 0.8)):
-        rig.add(a.ring_around(f"HaftRing{k}", bottom.lerp(top_, f), top_ - bottom, 0.09, 0.025, segments=8),
-                "Hand_R", "gold", **ARMS)
-    head = bottom.lerp(top_, 0.9)
-    up = (top_ - bottom).normalized()
-    for sy in (-1, 1):
-        rig.add(a.blade(f"LabrysBlade{sy}", head, head + Vector((0, sy * 0.95, 0)), 0.35, 0.06, width_end=1.05,
-                        mid=0.55, normal=(1, 0, 0)), "Hand_R", "gold", **ARMS)
-        rig.add(r.tube(f"LabrysEdge{sy}", [tuple(head + Vector((0, sy * 0.9, 0.52))),
-                                           tuple(head + Vector((0, sy * 1.0, 0))),
-                                           tuple(head + Vector((0, sy * 0.9, -0.52)))], 0.03, segments=4),
-                "Hand_R", "glow", glow=True)
-    rig.add(a.claw("LabrysSpike", top_, up, 0.35, 0.06, curl=0, segments=4), "Hand_R", "gold", **ARMS)
-    # Épaulière de bronze sur l'épaule droite
-    rig.add(a.band("Pauldron", [sh + Vector((0.25, -0.35, 0.05)), sh + Vector((-0.05, 0, 0.3)),
-                                sh + Vector((0.2, 0.35, 0.05))], [0.5, 0.6, 0.5], 0.06, up=(-1, 0, -0.3),
-                   offset=0.2), "UpperArm_R", "gold", **ARMS)
-    # Fil d'Ariane : spirale autour de l'avant-bras gauche puis pelote qui traîne au sol
+    """Labrys posée sur l'épaule gauche tenue à pleine main, épaulière, fil d'Ariane."""
+    hb = "Hand_L"
+    side, up = a._basis(HAFT)
+    blade_dir = HAFT.cross(Vector((1, 0, 0))).normalized()
+    normal = HAFT.cross(blade_dir).normalized()
+    bottom, top_ = GRIP - HAFT * 0.95, GRIP + HAFT * 3.35
+    rig.add(r.tube("LabrysHaft", [tuple(bottom), tuple(top_)], [0.075, 0.065], segments=8), hb, "wood", **ARMS)
+    for k in range(7):    # poignée gainée de cuir
+        rig.add(a.ring_around(f"HaftWrap{k}", GRIP + HAFT * (-0.45 + 0.13 * k), HAFT, 0.085, 0.022, segments=8),
+                hb, "leather_dark", **ARMS)
+    for k, f in enumerate((0.0, 1.25, 2.55)):
+        rig.add(a.ring_around(f"HaftRing{k}", GRIP + HAFT * (f - 0.95 if k == 0 else f), HAFT, 0.095, 0.03,
+                              segments=8), hb, "gold", **ARMS)
+    rig.add(r.ico("Pommel", 0.12, subdivisions=1, location=bottom - HAFT * 0.05), hb, "gold", **ARMS)
+    # Douille et deux lames en croissant (labrys minoenne), tranchant lumineux, nervure centrale
+    rig.add(r.tube("Socket", [tuple(AXE_C - HAFT * 0.35), tuple(AXE_C + HAFT * 0.35)], 0.13, segments=10), hb,
+            "gold", **ARMS)
+    for f in (-0.35, 0.35):
+        rig.add(a.ring_around(f"SocketRim{f}", AXE_C + HAFT * f, HAFT, 0.14, 0.03, segments=10), hb,
+                "leather_dark", **ARMS)
+    L = 0.95
+    outline = [(0.12, 0.2), (0.4, 0.25), (0.7, 0.48), (0.9, 0.64), (1.0, 0.42), (1.04, 0.0), (1.0, -0.42),
+               (0.9, -0.64), (0.7, -0.48), (0.4, -0.25), (0.12, -0.2)]
+    for sg in (-1, 1):
+        def bp(u, v, n=0.0):
+            return AXE_C + blade_dir * sg * u * L + HAFT * v * L + normal * n
+        rig.add(r.loft(f"LabrysBlade{sg}", [[tuple(bp(u, v, n)) for u, v in outline] for n in (0.035, -0.035)]),
+                hb, "gold", **ARMS)
+        rig.add(r.tube(f"LabrysEdge{sg}", [tuple(bp(u + 0.02, v)) for u, v in outline[3:8]], 0.028, segments=4),
+                hb, "glow", glow=True)
+        for n in (0.045, -0.045):
+            rig.add(r.tube(f"Midrib{sg}{n}", [tuple(bp(0.15, 0, n)), tuple(bp(0.8, 0, n))], 0.025, segments=4),
+                    hb, "leather_dark", **ARMS)
+            for v in (0.12, -0.12):
+                rig.add(r.ico(f"Rivet{sg}{n}{v}", 0.03, subdivisions=1, location=bp(0.22, v, n)), hb,
+                        "leather_dark", **ARMS)
+    rig.add(a.claw("LabrysSpike", top_, HAFT, 0.4, 0.07, curl=0, segments=5), hb, "gold", **ARMS)
+    # Poing fermé : 4 doigts qui s'enroulent autour du manche + pouce par-dessus
     sh, el, wr, hd = arm_points(1)
+    back = (wr - GRIP) - HAFT * (wr - GRIP).dot(HAFT)
+    back.normalize()
+    wrap = HAFT.cross(back)
+    rr = 0.15
+    for j in range(4):
+        o = GRIP + HAFT * ((j - 1.5) * 0.13)
+        pts = [o + (back * math.cos(an) + wrap * math.sin(an)) * rr
+               for an in (math.radians(d) for d in (0, 80, 160, 240))]
+        rig.add(a.long_bone(f"GripMetacarpal{j}", wr + HAFT * ((j - 1.5) * 0.05), pts[0], 0.055, condyles=False,
+                            segments=5), hb, "bone", **ARMS)
+        for k in range(3):
+            rig.add(a.long_bone(f"GripPhalanx{j}{k}", pts[k], pts[k + 1], 0.05 - 0.006 * k, condyles=False,
+                                segments=5), hb, "bone", **ARMS)
+            rig.add(r.ico(f"GripKnuckle{j}{k}", 0.055 - 0.006 * k, subdivisions=1, location=pts[k]), hb,
+                    "bone_shade", **ARMS)
+        rig.add(a.claw(f"GripClaw{j}", pts[3], pts[3] - pts[2], 0.14, 0.035, curl=0.3, segments=4), hb, "horn",
+                **ARMS)
+    t0 = GRIP + HAFT * 0.32 + back * rr * 0.6
+    t1 = GRIP + HAFT * 0.2 - wrap * rr * 1.1
+    t2 = GRIP + HAFT * 0.05 - back * rr * 0.9
+    rig.add(a.long_bone("GripThumb0", wr - wrap * 0.08, t0, 0.06, condyles=False, segments=5), hb, "bone", **ARMS)
+    rig.add(a.long_bone("GripThumb1", t0, t1, 0.055, condyles=False, segments=5), hb, "bone", **ARMS)
+    rig.add(a.long_bone("GripThumb2", t1, t2, 0.05, condyles=False, segments=5), hb, "bone", **ARMS)
+    rig.add(a.claw("GripThumbClaw", t2, t2 - t1, 0.13, 0.035, curl=0.3, segments=4), hb, "horn", **ARMS)
+    # Épaulière de bronze (plaques superposées) sur l'épaule qui porte la hache
+    for k in range(3):
+        c0 = sh + Vector((0.12 + 0.12 * k, 0, 0.32 - 0.17 * k))
+        rig.add(a.band(f"Pauldron{k}", [c0 + Vector((0, -0.38, -0.08)), c0 + Vector((0.05, 0, 0.05)),
+                                        c0 + Vector((0, 0.38, -0.08))], [0.3, 0.32, 0.3], 0.05,
+                       up=(1, 0, -0.6), offset=0.5), "UpperArm_L", "gold", **ARMS)
+    # Fil d'Ariane : spirale autour de l'avant-bras droit puis traîne jusqu'à la pelote au sol
+    sh, el, wr, hd = arm_points(-1)
     axis = (wr - el).normalized()
-    side = axis.cross(Vector((0, 1, 0))).normalized()
-    up2 = axis.cross(side)
-    coil = [tuple(el.lerp(wr, 0.1 + 0.8 * k / 23) + (side * math.cos(k * 0.9) + up2 * math.sin(k * 0.9)) * 0.16)
+    s2 = axis.cross(Vector((0, 1, 0))).normalized()
+    u2 = axis.cross(s2)
+    coil = [tuple(el.lerp(wr, 0.1 + 0.8 * k / 23) + (s2 * math.cos(k * 0.9) + u2 * math.sin(k * 0.9)) * 0.16)
             for k in range(24)]
-    rig.add(r.tube("ThreadCoil", coil, 0.022, segments=4), "ForeArm_L", "glow_thread", glow=True)
-    trail = a.smooth_path([coil[-1], tuple(wr + Vector((0.25, -0.3, -0.9))), (2.1, -2.0, 0.5), (1.6, -2.4, 0.08),
-                           (0.8, -2.9, 0.05)], 12)
-    rig.add(r.tube("ThreadTrail", [tuple(p) for p in trail], 0.02, segments=4), "Hand_L", "glow_thread",
+    rig.add(r.tube("ThreadCoil", coil, 0.022, segments=4), "ForeArm_R", "glow_thread", glow=True)
+    trail = a.smooth_path([coil[-1], tuple(hd + Vector((0.1, -0.2, -0.6))), (-1.9, -1.6, 0.6), (-1.6, -2.1, 0.1),
+                           (-1.25, -2.3, 0.08)], 12)
+    rig.add(r.tube("ThreadTrail", [tuple(p) for p in trail], 0.02, segments=4), "Hand_R", "glow_thread",
             glow=True)
-    rig.add(r.ico("ThreadBall", 0.14, subdivisions=2, location=(0.8, -2.9, 0.14)), "Root", "glow_thread",
+    rig.add(r.ico("ThreadBall", 0.14, subdivisions=2, location=(-1.25, -2.3, 0.14)), "Root", "glow_thread",
             glow=True)
 
 

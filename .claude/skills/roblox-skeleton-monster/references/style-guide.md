@@ -139,6 +139,17 @@ cercueils, lanternes d'âme (pas de croix : refusé par l'utilisateur).
 Mythologie : **un objet du mythe par créature** (Minotaure : labrys + fil d'Ariane), armure
 ou bijoux de la culture d'origine (bronze grec à méandres…). Une seconde couleur lumineuse
 `glow_<nom>` (ex. `glow_thread`) distingue l'objet mythique de la lueur principale.
+
+**Armes et objets tenus (corrigé par l'utilisateur sur le Minotaure)** : une arme n'est pas
+une lame plate au bout d'un bâton. La modéliser en vrai objet : lames découpées en contour
+(`r.loft` de 2 contours décalés, tranchant lumineux en `r.tube`), douille, bagues, nervure,
+rivets, poignée gainée, pommeau, pointe. La **main la tient vraiment** : doigts en phalanges qui
+s'enroulent autour du manche (points sur un cercle autour de l'axe), pouce par-dessus,
+griffes au bout (`myth_minotaur.build_gear`). Porter l'arme sur le côté visible de l'aperçu
+(+X). Ceintures : bande `a.band` qui suit l'ellipse de la taille + rebords, motifs, boucle
+ornée, jupe en lanières sur 2 rangs avec rivets, jamais un simple anneau. Bipèdes : torse
+dressé, poitrail dégagé, jambes écartées ; la tête ne doit pas masquer le torse
+(`Matrix.Scale` dans la matrice de tête si elle est trop grosse).
 Réutiliser ces fonctions d'un modèle à l'autre (import depuis `models.<nom>`).
 
 Une grande surface lisse et vide fait « pas fini ». Règle : aucune zone plate de plus
