@@ -349,6 +349,28 @@ Pièces : corps, Head, Wings.
 
 ![corbeau profil](previews/grave_raven_head.png) ![corbeau face](previews/grave_raven_head_front.png)
 
+| Chauve-souris vampire squelette | Pose de test (rig) |
+|---|---|
+| ![chauve-souris](previews/grave_bat.png) | ![chauve-souris pose](previews/grave_bat_pose.png) |
+
+Vampire commun : crâne rond à crête sagittale, feuille nasale, incisives en lames de rasoir et
+canines énormes gouttant de sang, oreilles immenses à armature d'os, marche sur les poignets
+ailes repliées en cape, collier de fer clouté à camée, chaînes brisées aux poignets (thème
+`vampire`). Pièces : corps, Head, Wings.
+
+![chauve-souris profil](previews/grave_bat_head.png) ![chauve-souris face](previews/grave_bat_head_front.png)
+
+| Araignée tisseuse d'âmes squelette | Pose de test (rig) |
+|---|---|
+| ![araignée](previews/grave_spider.png) | ![araignée pose](previews/grave_spider_pose.png) |
+
+Mygale : carapace ajourée à fovéa et sillons, 8 yeux lumineux cerclés, chélicères à dents et
+crochets noirs (venin), pédipalpes, 8 pattes coudées épineuses, abdomen en cage d'os où
+flottent des âmes prisonnières, toile d'âmes lumineuse sur piquets d'os, cocon-cercueil pendu
+aux filières (thème `soulweb`). Pièces : corps, Head, Legs.
+
+![araignée profil](previews/grave_spider_head.png) ![araignée face](previews/grave_spider_head_front.png)
+
 ## Bonus — Forêt maudite
 
 | Loup-garou squelette | Pose de test (rig) |

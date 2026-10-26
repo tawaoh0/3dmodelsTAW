@@ -143,6 +143,16 @@ local THEMES = {
 		extra = { name = "Feathers", texture = SPARKLES, accel = Vector3.new(0, -1.5, 0),
 			speed = NumberRange.new(0.3, 1), lifetime = NumberRange.new(1.5, 3), size = 0.25 },
 	},
+	vampire = { -- gouttes de sang qui tombent + brume pourpre au ras du sol
+		main = { texture = SMOKE, accel = Vector3.new(0, 0.2, 0), speed = 0.3, rot = 40, light = 0.6 },
+		extra = { name = "BloodDrops", texture = SPARKLES, accel = Vector3.new(0, -6, 0),
+			speed = NumberRange.new(0, 0.3), lifetime = NumberRange.new(0.5, 1), size = 0.12 },
+	},
+	soulweb = { -- âmes pâles prisonnières qui flottent + éclats de toile qui scintillent
+		main = { texture = SMOKE, accel = Vector3.new(0, 1.5, 0), speed = 0.4, rot = 120, light = 0.9 },
+		extra = { name = "WebGlints", texture = SPARKLES, accel = Vector3.new(0, 0, 0),
+			speed = NumberRange.new(0, 0.2), lifetime = NumberRange.new(1, 2), size = 0.15 },
+	},
 	necro = { -- âmes violettes qui s'élèvent en spirale + étincelles de chandelle
 		main = { texture = SMOKE, accel = Vector3.new(0, 3, 0), speed = 0.8, rot = 240, light = 0.9 },
 		extra = { name = "CandleSparks", texture = SPARKLES, accel = Vector3.new(0, 1.5, 0),
